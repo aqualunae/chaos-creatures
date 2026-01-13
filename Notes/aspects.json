@@ -1,0 +1,45 @@
+[
+    {
+        "list": ["standard", "earth", "air", "water", "fire", "plant", "angel", "demon"]
+    },
+    {
+        "aspect": "standard",
+        "advantage": null,
+        "disadvantage": null
+    },
+    {
+        "aspect": "earth",
+        "advantage": "air",
+        "disadvantage": "plant"
+    },
+    {
+        "aspect": "air",
+        "advantage": "water",
+        "disadvantage": "earth"
+    },
+    {
+        "aspect": "water",
+        "advantage": "fire",
+        "disadvantage": "air"
+    },
+    {
+        "aspect": "fire",
+        "advantage": "plant",
+        "disadvantage": "water"
+    },
+    {
+        "aspect": "plant",
+        "advantage": "earth",
+        "disadvantage": "fire"
+    },
+    {
+        "aspect": "angel",
+        "advantage": "demon",
+        "disadvantage": "demon"
+    },
+    {
+        "aspect": "demon",
+        "advantage": "angel",
+        "disadvantage": "angel"
+    }
+]

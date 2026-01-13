@@ -1,0 +1,538 @@
+{
+    "Creature": {
+        "id": 1,
+        "name": "",
+        "combat_level": [1, 50],
+        "friendship_level": [1, 10],
+        "species_id": 1,
+        "genes": {
+            "base": {
+                "main_color": "",
+                "pattern": "",
+                "pattern_color": "",
+                "eye_color": ""
+            },
+            "primary": {
+                "shape": "",
+                "main_color": "",
+                "pattern": "",
+                "pattern_color": ""
+            },
+            "secondary": {
+                "shape": "",
+                "main_color": "",
+                "pattern": "",
+                "pattern_color": ""
+            },
+            "tertiary": {
+                "shape": "",
+                "main_color": "",
+                "pattern": "",
+                "pattern_color": ""
+            }
+        },
+        "combat_stats": {
+            "hp": [10, 100],
+            "attack": [1, 50], 
+            "defense": [1, 50], 
+            "speed": [1, 50],
+            "critical": [1, 100],
+            "aspect": ["standard", "earth", "air", "water", "fire", "plant", "angel", "demon"]
+        },
+        "leveling_stats": {
+            "hp": [0, 5],
+            "attack": [0, 5], 
+            "defense": [0, 5], 
+            "speed": [0, 5],
+            "critical": [0, 5]
+        },
+        "skillset": [
+            {
+                "skill_id": 1,
+                "active": true
+            }
+        ],
+        "bracelet": {
+            "style": ["beads", "paracord", "floss"],
+            "main_color": "",
+            "pattern_color": ""
+        },
+        "charms": [
+            {
+                "title": "",
+                "description": "",
+                "status": {
+                    "stat": ["attack", "defense", "speed", "critical"],
+                    "multiplier": [0, 1]
+                },
+                "breeding": {
+                    "enabled": false,
+                    "gene_effects": [
+                        {
+                            "target": ["base", "primary", "secondary", "tertiary"],
+                            "shape": {
+                                "option": "",
+                                "chance_multiplier": [0, 1]
+                            },
+                            "main_color": {
+                                "option": "",
+                                "chance_multiplier": [0, 1]
+                            },
+                            "pattern_color": {
+                                "option": "",
+                                "chance_multiplier": [0, 1]
+                            },
+                            "pattern": {
+                                "option": "",
+                                "chance_multiplier": [0, 1]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "Species": {
+        "id": 1,
+        "title": "",
+        "description": "",
+        "combat": {
+            "possible_aspects": [
+                ["standard", "earth", "air", "water", "fire", "plant", "angel", "demon"]
+            ],
+            "possible_skill_ids": [
+                1
+            ],
+            "leveling_stats": {
+                "hp": [0, 5],
+                "attack": [0, 5], 
+                "defense": [0, 5], 
+                "speed": [0, 5],
+                "critical": [0, 5]
+            }
+        },
+        "genetics": {
+            "base": {
+                "main_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "eye_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ]
+            },
+            "primary": {
+                "shape": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "main_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ]
+            },
+            "secondary": {
+                "shape": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "main_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ]
+            },
+            "tertiary": {
+                "shape": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "main_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ],
+                "pattern_color": [
+                    {
+                        "option": "",
+                        "base_chance": [1, 100]
+                    }
+                ]
+            }
+        }
+    },
+    "Player": {
+        "name": "",
+        "party": [
+            {
+                "creature_id": 1
+            }
+        ],
+        "storage": [
+            {
+                "creature_id": 1
+            }
+        ],
+        "currency": 0,
+        "inventory": [
+            {
+                "item_id": 1,
+                "amount": [1, 99]
+            }   
+        ],
+        "appearance": {},
+        "progression": {
+            "maps": [
+                {
+                    "map_id": 1,
+                    "access": false
+                }
+            ],
+            "quests": {
+                "complete": [
+                    1
+                ],
+                "active": [
+                    {
+                        "quest_id": 1,
+                        "steps_complete": 0
+                    }
+                ]
+            },
+            "combat_record": [
+                {
+                    "character_id": 1,
+                    "player_victory": 0,
+                    "player_defeat": 0
+                }
+            ],
+            "creature_collection": [
+                {
+                    "species": "",
+                    "colors_seen": [0, 100],
+                    "patterns_seen": [0, 100],
+                    "colors_befriended": [0, 100],
+                    "patterns_befriended": [0, 100]
+                }
+            ],
+            "charm_collection": [
+                {
+                    "charm_id": 1,
+                    "obtained": false
+                }
+            ]
+        },
+        "location": {
+            "map_id": 1,
+            "coords": {
+                "x": 0,
+                "y": 0
+            }
+        }
+    },
+    "Character": {
+        "name": "",
+        "party": [
+            {
+                "creature_id": 1
+            }
+        ],
+        "appearance": {},
+        "score": {
+            "player_victory": 0,
+            "player_defeat": 0
+        },
+        "reward_currency": 0,
+        "reward_items": [
+            {
+                "item_id": 1,
+                "amount": [1, 99]
+            }
+        ],
+        "location": {
+            "map_id": 1,
+            "coords": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "dialogue": {
+            "intro": "",
+            "challenge": "",
+            "victory": "",
+            "defeat": "",
+            "rematch": ""
+        },
+        "quest_ids": [
+            1
+        ]
+    },
+    "Item": {
+        "id": 1,
+        "title": "",
+        "description": "",
+        "category": ["charm", "material", "combat", "key"],
+        "equip_effect": {
+            "title": "",
+            "description": "",
+            "status": {
+                "stat": ["attack", "defense", "speed", "critical"],
+                "multiplier": [0, 1]
+            },
+            "breeding": {
+                "enabled": false,
+                "gene_effects": [
+                    {
+                        "target": ["base", "primary", "secondary", "tertiary"],
+                        "shape": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "main_color": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "pattern_color": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "pattern": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        }
+                    }
+                ]
+            }
+        },
+        "use_effect": {
+            "power": [-50, 50],
+            "aoe": false,
+            "self_target": true,
+            "status": {
+                "stat": ["attack", "defense", "speed", "critical"],
+                "multiplier": [0, 1]
+            },
+            "bracelet": {
+                "capture": [80, 100],
+                "style": ["beads", "paracord", "floss"],
+                "main_color": "",
+                "pattern_color": ""
+            }
+        }
+    },
+    "Skill": {
+        "id": 1,
+        "title": "",
+        "description": "",
+        "power": [-50, 50], 
+        "critical": [0, 100],
+        "aoe": false,
+        "self_target": false,
+        "status": {
+            "stat": ["attack", "defense", "speed", "critical"],
+            "multiplier": [0, 1]
+        },
+        "aspect": ["standard", "earth", "air", "water", "fire", "plant", "angel", "demon"],
+        "minimum_level": [1, 50]
+    },
+    "Quest": {
+        "id": 1,
+        "title": "",
+        "description": "",
+        "available": true,
+        "required_quest_ids": [
+            1
+        ],
+        "accepted": false,
+        "complete": false,
+        "steps": [
+            {
+                "description": "",
+                "flag": "",
+                "complete": false,
+                "hint_dialogue": ""
+            }
+        ],
+        "dialogue": {
+            "intro": "",
+            "accept": "",
+            "complete": ""
+        }
+    },
+    "Cutscene": {
+        "id": 1,
+        "title": "",
+        "available": false,
+        "required_quest_ids": [
+            1
+        ],
+        "map_id": "",
+        "complete": false,
+        "frames": [
+            {
+                "character_positions": [
+                    {
+                        "character_id": 1,
+                        "coords": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    }
+                ],
+                "dialogue": [
+                    {
+                        "character_id": 1,
+                        "quote": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "Map": {
+        "id": 1,
+        "character_ids": [
+            1
+        ],
+        "cutscene_ids": [
+            1
+        ],
+        "exits": [
+            {
+                "source_id": 1,
+                "target_id": 2,
+                "coords": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        ],
+        "species_available": [
+            {
+                "species_id": 1,
+                "encounter_rate": [1, 100],
+                "gene_effects": [
+                    {
+                        "target": ["base", "primary", "secondary", "tertiary"],
+                        "shape": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "main_color": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "pattern_color": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        },
+                        "pattern": {
+                            "option": "",
+                            "chance_multiplier": [0, 1]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "Shop": {
+        "id": 1,
+        "vendor_name": "",
+        "appearance": {},
+        "location": {
+            "map_id": 1,
+            "coords": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "available": false,
+        "required_quest_ids": [
+            1
+        ],
+        "dialogue": {
+            "shop_unavailable": "",
+            "greet_vendor": "",
+            "open_shop": "",
+            "buy_item": "",
+            "insufficient_funds": "",
+            "sell_item": "",
+            "leave_shop": ""
+        },
+        "items": [
+            {
+                "item_id": 1,
+                "price": [1, 9999]
+            }
+        ]
+    },
+    "Recipe": {
+        "id": 1,
+        "result": {
+            "item_id": 1,
+            "quantity": [1, 99]
+        },
+        "materials": [
+            {
+                "item_id": 1,
+                "quantity": [1, 99]
+            }
+        ]
+    }
+}
