@@ -330,8 +330,6 @@
         "description": "",
         "category": ["charm", "material", "combat", "key"],
         "equip_effect": {
-            "title": "",
-            "description": "",
             "status": {
                 "stat": ["attack", "defense", "speed", "critical"],
                 "multiplier": [0, 1]
@@ -370,7 +368,7 @@
                 "multiplier": [0, 1]
             },
             "bracelet": {
-                "capture": [80, 100],
+                "capture": [60, 100],
                 "style": ["beads", "paracord", "floss"],
                 "main_color": "",
                 "pattern_color": ""

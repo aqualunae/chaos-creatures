@@ -1,5 +1,6 @@
 using UnityEngine;
 using Assets.Scripts.Creatures;
+using Assets.Scripts.Creatures.Combat;
 using UnityEditor;
 using System.Linq;
 using System;
@@ -9,73 +10,72 @@ public class ChaosCreature : MonoBehaviour
     [Header("Info")]
 
     [SerializeField]
-    private string creatureSpecies;
+    protected string creatureSpecies;
+
+    #region Genetics
 
     [Header("Features")]
 
     [SerializeField]
-    private Feature eyes;
+    protected Feature eyes;
 
     [SerializeField]
-    private Feature body;
+    protected Feature body;
 
     [SerializeField]
-    private Feature[] primary;
+    protected Feature[] primary;
 
     [SerializeField]
-    private Feature[] secondary;
+    protected Feature[] secondary;
 
     [SerializeField]
-    private Feature[] tertiary;
+    protected Feature[] tertiary;
 
     [Header("Options")]
 
     [SerializeField]
-    private bool primaryUsesBodyColor = true;
+    protected bool primaryUsesBodyColor = true;
 
     [SerializeField]
-    private bool secondaryUsesBodyColor = false;
+    protected bool secondaryUsesBodyColor = false;
 
     [SerializeField]
-    private bool tertiaryUsesBodyColor = false;
+    protected bool tertiaryUsesBodyColor = false;
 
     [SerializeField]
-    private CreatureOptions options;
+    protected CreatureOptions options;
 
     [Header("Sprites")]
 
     [SerializeField]
-    private string spritesheetFilename;
+    protected string spritesheetFilename;
 
     [SerializeField]
-    private SpriteRenderer eyeBase;
+    protected SpriteRenderer eyeBase;
 
     [SerializeField]
-    private SpriteRenderer bodyBase;
+    protected SpriteRenderer bodyBase;
 
     [SerializeField]
-    private SpriteRenderer bodyPattern;
+    protected SpriteRenderer bodyPattern;
 
     [SerializeField]
-    private SpriteRenderer primaryBase;
+    protected SpriteRenderer primaryBase;
 
     [SerializeField]
-    private SpriteRenderer primaryPattern;
+    protected SpriteRenderer primaryPattern;
 
     [SerializeField]
-    private SpriteRenderer secondaryBase;
+    protected SpriteRenderer secondaryBase;
 
     [SerializeField]
-    private SpriteRenderer secondaryPattern;
+    protected SpriteRenderer secondaryPattern;
 
     [SerializeField]
-    private SpriteRenderer tertiaryBase;
+    protected SpriteRenderer tertiaryBase;
 
     [SerializeField]
-    private SpriteRenderer tertiaryPattern;
-
-    private string givenName;
-    private int chaosLevel;
+    protected SpriteRenderer tertiaryPattern;
 
     private CreatureDetails details;
 
@@ -151,6 +151,55 @@ public class ChaosCreature : MonoBehaviour
             tertiaryBaseColorRarity = defaultBaseColorRarity,
             tertiaryAccentColorRarity = defaultAccentColorRarity,
         };
+    }
+
+    public GeneticOdds GetEffectedOdds(GeneEffect[] effects)
+    {
+        GeneticOdds odds = GetGeneticOdds();
+
+        foreach (GeneEffect effect in effects)
+        {
+            if (effect.location == GeneLocation.body)
+            {
+                if (effect.geneAspect == GeneAspect.pattern)
+                {
+                    for (int i = 0; i < options.bodyPatterns.Length; i++)
+                    {
+                        if (options.bodyPatterns[i].title == effect.option)
+                        {
+                            odds.bodyPatternRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.bodyPatterns, false), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.mainColor)
+                {
+                    for (int i = 0; i < options.baseColors.Length; i++)
+                    {
+                        if (options.baseColors[i].title == effect.option)
+                        {
+                            odds.bodyBaseColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.baseColors), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.accentColor)
+                {
+                    for (int i = 0; i < options.accentColors.Length; i++)
+                    {
+                        if (options.accentColors[i].title == effect.option)
+                        {
+                            odds.bodyAccentColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.accentColors), i);
+                            odds.eyeColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.accentColors), i);
+                        }
+                    }
+                }
+            }
+            else if (effect.location == GeneLocation.primary)
+            {
+                // surely this could be refactored
+            }
+        }
+
+        return odds;
     }
 
     private void Validate()
@@ -246,10 +295,8 @@ public class ChaosCreature : MonoBehaviour
         }
     }
 
-    public void Initialize(int eyeColor, Trait body, Trait primary, Trait secondary, Trait tertiary, int level = 1)
+    public void Initialize(int eyeColor, Trait body, Trait primary, Trait secondary, Trait tertiary)
     {
-        givenName = creatureSpecies;
-        chaosLevel = level;
         details.eyeColorIndex = eyeColor;
         details.body = body;
         details.primary = primary;
@@ -328,4 +375,51 @@ public class ChaosCreature : MonoBehaviour
         ColorUtility.TryParseHtmlString(options.accentColors[details.tertiary.accentColorIndex].hexcode, out Color tertiaryAccentColor);
         tertiaryPattern.color = tertiaryPattern.sprite != null ? tertiaryAccentColor : Color.clear;
     }
+
+    #endregion
+
+    #region Combat
+
+    [Header("Combat")]
+
+    [SerializeField, Range(1, 10)]
+    private Vector2Int hpGain;
+
+    [SerializeField, Range(1, 10)]
+    private Vector2Int attackGain;
+
+    [SerializeField, Range(1, 10)]
+    private Vector2Int defenseGain;
+
+    [SerializeField, Range(1, 10)]
+    private Vector2Int speedGain;
+
+    [SerializeField, Range(1, 10)]
+    private Vector2Int criticalGain;
+
+    private int level;
+
+    private Stats stats;
+
+    public void LevelUp()
+    {
+        level++;
+        stats.hp *= UnityEngine.Random.Range(hpGain.x / 100, hpGain.y / 100) + 1;
+        stats.attack *= UnityEngine.Random.Range(attackGain.x / 100, attackGain.y / 100) + 1;
+        stats.defense *= UnityEngine.Random.Range(defenseGain.x / 100, defenseGain.y / 100) + 1;
+        stats.speed *= UnityEngine.Random.Range(speedGain.x / 100, speedGain.y / 100) + 1;
+        stats.critical *= UnityEngine.Random.Range(criticalGain.x / 100, criticalGain.y / 100) + 1;
+
+        Debug.Log(JsonUtility.ToJson(stats).ToString());  
+    }
+
+    public void AssignLevel(int levelInput)
+    {
+        for (int i = level; i <= levelInput; i++)
+        {
+            LevelUp();
+        }
+    }
+
+    #endregion
 }

@@ -89,4 +89,29 @@ namespace Assets.Scripts.Creatures
         public Trait secondary;
         public Trait tertiary;
     }
+
+    public enum GeneLocation
+    {
+        body,
+        primary,
+        secondary,
+        tertiary
+    }
+
+    public enum GeneAspect
+    {
+        shape,
+        mainColor,
+        accentColor,
+        pattern
+    }
+
+    [System.Serializable]
+    public class GeneEffect
+    {
+        public GeneLocation location;
+        public GeneAspect geneAspect;
+        public string option;
+        public float chance;
+    }
 }

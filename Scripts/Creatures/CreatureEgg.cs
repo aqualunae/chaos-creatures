@@ -28,28 +28,11 @@ public class CreatureEgg : MonoBehaviour
         Initialize(creature.GetGeneticOdds());
     }
 
-    /// <summary>
-    /// Bias the odds in favor of two indices. If the indices match, the effect is increased.
-    /// </summary>
-    private int[] AdjustOdds(int[] defaultOdds, int firstIndex, int secondIndex)
+    public void InitializeSingle(GeneEffect[] effects)
     {
-        int[] adjustedOdds = new int[defaultOdds.Length];
-        for (int i = 0; i < defaultOdds.Length; i++)
-        {
-            if (i == firstIndex && i == secondIndex)
-            {
-                adjustedOdds[i] = defaultOdds[i] * 5;
-            }
-            else if (i == firstIndex || i == secondIndex)
-            {
-                adjustedOdds[i] = defaultOdds[i] * 2;
-            }
-            else
-            {
-                adjustedOdds[i] = (int)(defaultOdds[i] * 0.6);
-            }
-        }
-        return adjustedOdds;
+        GeneticOdds odds = creature.GetEffectedOdds(effects);
+
+        Initialize(odds);
     }
 
     /// <summary>
@@ -73,25 +56,25 @@ public class CreatureEgg : MonoBehaviour
             secondaryUsesBodyColor = defaultOdds.secondaryUsesBodyColor,
             tertiaryUsesBodyColor = defaultOdds.tertiaryUsesBodyColor,
 
-            bodyPatternRarity = AdjustOdds(defaultOdds.bodyPatternRarity, first.body.patternIndex, second.body.patternIndex),
-            eyeColorRarity = AdjustOdds(defaultOdds.eyeColorRarity, first.eyeColorIndex, second.eyeColorIndex),
-            bodyBaseColorRarity = AdjustOdds(defaultOdds.bodyBaseColorRarity, first.body.baseColorIndex, second.body.baseColorIndex),
-            bodyAccentColorRarity = AdjustOdds(defaultOdds.bodyAccentColorRarity, first.body.accentColorIndex, second.body.accentColorIndex),
+            bodyPatternRarity = CreatureUtility.AdjustOdds(defaultOdds.bodyPatternRarity, first.body.patternIndex, second.body.patternIndex),
+            eyeColorRarity = CreatureUtility.AdjustOdds(defaultOdds.eyeColorRarity, first.eyeColorIndex, second.eyeColorIndex),
+            bodyBaseColorRarity = CreatureUtility.AdjustOdds(defaultOdds.bodyBaseColorRarity, first.body.baseColorIndex, second.body.baseColorIndex),
+            bodyAccentColorRarity = CreatureUtility.AdjustOdds(defaultOdds.bodyAccentColorRarity, first.body.accentColorIndex, second.body.accentColorIndex),
 
-            primaryTraitRarity = AdjustOdds(defaultOdds.primaryTraitRarity, (int)first.primary.rarity, (int)second.primary.rarity),
-            primaryPatternRarity = AdjustOdds(defaultOdds.primaryPatternRarity, first.primary.patternIndex, second.primary.patternIndex),
-            primaryBaseColorRarity = AdjustOdds(defaultOdds.primaryBaseColorRarity, first.primary.baseColorIndex, second.primary.baseColorIndex),
-            primaryAccentColorRarity = AdjustOdds(defaultOdds.primaryAccentColorRarity, first.primary.accentColorIndex, second.primary.accentColorIndex),
+            primaryTraitRarity = CreatureUtility.AdjustOdds(defaultOdds.primaryTraitRarity, (int)first.primary.rarity, (int)second.primary.rarity),
+            primaryPatternRarity = CreatureUtility.AdjustOdds(defaultOdds.primaryPatternRarity, first.primary.patternIndex, second.primary.patternIndex),
+            primaryBaseColorRarity = CreatureUtility.AdjustOdds(defaultOdds.primaryBaseColorRarity, first.primary.baseColorIndex, second.primary.baseColorIndex),
+            primaryAccentColorRarity = CreatureUtility.AdjustOdds(defaultOdds.primaryAccentColorRarity, first.primary.accentColorIndex, second.primary.accentColorIndex),
 
-            secondaryTraitRarity = AdjustOdds(defaultOdds.secondaryTraitRarity, (int)first.secondary.rarity, (int)second.secondary.rarity),
-            secondaryPatternRarity = AdjustOdds(defaultOdds.secondaryPatternRarity, first.secondary.patternIndex, second.secondary.patternIndex),
-            secondaryBaseColorRarity = AdjustOdds(defaultOdds.secondaryBaseColorRarity, first.secondary.baseColorIndex, second.secondary.baseColorIndex),
-            secondaryAccentColorRarity = AdjustOdds(defaultOdds.secondaryAccentColorRarity, first.secondary.accentColorIndex, second.secondary.accentColorIndex),
+            secondaryTraitRarity = CreatureUtility.AdjustOdds(defaultOdds.secondaryTraitRarity, (int)first.secondary.rarity, (int)second.secondary.rarity),
+            secondaryPatternRarity = CreatureUtility.AdjustOdds(defaultOdds.secondaryPatternRarity, first.secondary.patternIndex, second.secondary.patternIndex),
+            secondaryBaseColorRarity = CreatureUtility.AdjustOdds(defaultOdds.secondaryBaseColorRarity, first.secondary.baseColorIndex, second.secondary.baseColorIndex),
+            secondaryAccentColorRarity = CreatureUtility.AdjustOdds(defaultOdds.secondaryAccentColorRarity, first.secondary.accentColorIndex, second.secondary.accentColorIndex),
 
-            tertiaryTraitRarity = AdjustOdds(defaultOdds.tertiaryTraitRarity, (int)first.tertiary.rarity, (int)second.tertiary.rarity),
-            tertiaryPatternRarity = AdjustOdds(defaultOdds.tertiaryPatternRarity, first.tertiary.patternIndex, second.tertiary.patternIndex),
-            tertiaryBaseColorRarity = AdjustOdds(defaultOdds.tertiaryBaseColorRarity, first.tertiary.baseColorIndex, second.tertiary.baseColorIndex),
-            tertiaryAccentColorRarity = AdjustOdds(defaultOdds.tertiaryAccentColorRarity, first.tertiary.accentColorIndex, second.tertiary.accentColorIndex),
+            tertiaryTraitRarity = CreatureUtility.AdjustOdds(defaultOdds.tertiaryTraitRarity, (int)first.tertiary.rarity, (int)second.tertiary.rarity),
+            tertiaryPatternRarity = CreatureUtility.AdjustOdds(defaultOdds.tertiaryPatternRarity, first.tertiary.patternIndex, second.tertiary.patternIndex),
+            tertiaryBaseColorRarity = CreatureUtility.AdjustOdds(defaultOdds.tertiaryBaseColorRarity, first.tertiary.baseColorIndex, second.tertiary.baseColorIndex),
+            tertiaryAccentColorRarity = CreatureUtility.AdjustOdds(defaultOdds.tertiaryAccentColorRarity, first.tertiary.accentColorIndex, second.tertiary.accentColorIndex),
         };
 
         Initialize(adjustedOdds);
@@ -196,12 +179,13 @@ public class CreatureEgg : MonoBehaviour
         return 0;
     }
 
-    public void Hatch()
+    public ChaosCreature Hatch()
     {
         gameObject.SetActive(false);
         ChaosCreature instantiatedCreature = Instantiate(creature);
         instantiatedCreature.Initialize(eyeColorIndex, body, primary, secondary, tertiary);
         instantiatedCreature.transform.localScale = Vector2.one;
         instantiatedCreature.transform.position = new Vector2(0.48f, -0.32f);
+        return instantiatedCreature;
     }
 }
