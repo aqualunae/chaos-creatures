@@ -18,6 +18,6 @@ public class RandomEncounter : ScriptableObject
         instantiatedEgg.InitializeSingle(geneEffects);
         ChaosCreature creature = instantiatedEgg.Hatch();
         int level = Random.Range(levelRange.x, levelRange.y);
-
+        creature.AssignLevel(level);
     }
 }

@@ -14,9 +14,9 @@ I would like to make Chaos Creatures into a fully playable game. It will not be 
 
 ### Phase One - Core Development
 
-- Creature mechanics: encounters, battling, capture, leveling, storage, and breeding.
+- Creature mechanics: encounters, battling, capture, leveling, storage, and pairing.
 - Progression mechanics: saving, quests, dialogue, tutorials, cutscenes.
-- Other mechanics: inventory, traveling between maps, menus, crafting.
+- Other mechanics: inventory, menus, traveling between maps, crafting.
 
 Within each category, the mechanics are listed in order of priority.
 
@@ -98,7 +98,7 @@ Phase three should end with a full-featured game that is ready for alpha testing
 - Equip Item to Creature
 - Craft
 
-#### Breeding
+#### Pairing
 - Assign Parents
 - Obtain Egg
 - Hatch Egg

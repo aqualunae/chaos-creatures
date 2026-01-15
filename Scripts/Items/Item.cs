@@ -25,6 +25,12 @@ public class Item : ScriptableObject
     [SerializeField]
     protected string description;
 
+    [SerializeField]
+    protected Sprite sprite;
+
+    [SerializeField]
+    protected Color color;
+
     public virtual bool UseItem()
     {
         return false;
