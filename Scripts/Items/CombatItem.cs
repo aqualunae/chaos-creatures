@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item_Combat_", menuName = "Items/Combat")]
+[CreateAssetMenu(fileName = "Item Combat ", menuName = "Items/Combat")]
 public class CombatItem : Item
 {
     [SerializeField]

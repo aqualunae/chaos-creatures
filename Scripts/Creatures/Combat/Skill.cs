@@ -1,7 +1,8 @@
 using Assets.Scripts.Creatures.Combat;
 using UnityEngine;
+using static Item;
 
-[CreateAssetMenu(fileName = "Skill_", menuName = "Scriptable Objects/Skill")]
+[CreateAssetMenu(fileName = "Skill ", menuName = "Scriptable Objects/Skill")]
 public class Skill : ScriptableObject
 {
     [SerializeField]
@@ -24,6 +25,12 @@ public class Skill : ScriptableObject
 
     [SerializeField]
     private Aspect aspect;
+
+    [SerializeField]
+    private StatAffected statAffected;
+
+    [SerializeField, Range(0.1f, 2)]
+    private float multiplier;
 
     [SerializeField, Range(1, 50)]
     private int minimumLevel;

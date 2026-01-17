@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Bracelet_", menuName = "Items/Bracelet")]
+[CreateAssetMenu(fileName = "Item Bracelet ", menuName = "Items/Bracelet")]
 public class Bracelet : Item
 {
     public enum BraceletStyle

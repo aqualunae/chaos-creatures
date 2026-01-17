@@ -1,7 +1,7 @@
 using UnityEngine;
 using Assets.Scripts.Creatures;
 
-[CreateAssetMenu(fileName = "Item_Gear_", menuName = "Items/Gear")]
+[CreateAssetMenu(fileName = "Item Gear ", menuName = "Items/Gear")]
 public class GearItem : Item
 {
     [SerializeField]

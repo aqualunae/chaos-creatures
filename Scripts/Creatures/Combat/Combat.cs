@@ -12,6 +12,7 @@ namespace Assets.Scripts.Creatures.Combat
         demon
     }
 
+    [System.Serializable]
     public class Stats
     {
         public int hp;

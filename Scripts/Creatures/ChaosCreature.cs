@@ -410,6 +410,9 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField, Tooltip("min: 1; max: 10")]
     private Vector2Int criticalGain = new Vector2Int(3, 6);
 
+    [SerializeField]
+    private Skill[] possibleSkills;
+
     private int level;
 
     private Stats stats;

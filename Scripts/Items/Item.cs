@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item_", menuName = "Items/Generic")]
+[CreateAssetMenu(fileName = "Item ", menuName = "Items/Generic")]
 public class Item : ScriptableObject
 {
     public enum ItemCategory
@@ -13,6 +13,7 @@ public class Item : ScriptableObject
 
     public enum StatAffected
     {
+        none,
         attack,
         defense,
         speed,

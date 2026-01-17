@@ -13,6 +13,8 @@
 
 - set up start menu buttons
 - set up combat screen layout
+- created creature presets
+- created initial skills
 
 ## Next Up
 
