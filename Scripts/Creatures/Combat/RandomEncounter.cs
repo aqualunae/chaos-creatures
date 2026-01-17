@@ -12,6 +12,7 @@ public class RandomEncounter : ScriptableObject
     [SerializeField, Range(1, 50)]
     private Vector2Int levelRange;
 
+    // move this to the combat initializer script
     private void Awake()
     {
         CreatureEgg instantiatedEgg = Instantiate(egg);

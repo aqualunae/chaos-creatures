@@ -1,7 +1,7 @@
 using Assets.Scripts.Creatures.Combat;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Skill", menuName = "Scriptable Objects/Skill")]
+[CreateAssetMenu(fileName = "Skill_", menuName = "Scriptable Objects/Skill")]
 public class Skill : ScriptableObject
 {
     [SerializeField]

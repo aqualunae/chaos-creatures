@@ -4,6 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Can be a literal egg or the creature initializer.
+/// </summary>
 public class CreatureEgg : MonoBehaviour
 {
     [SerializeField]

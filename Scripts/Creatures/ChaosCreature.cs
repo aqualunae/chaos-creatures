@@ -376,26 +376,39 @@ public class ChaosCreature : MonoBehaviour
         tertiaryPattern.color = tertiaryPattern.sprite != null ? tertiaryAccentColor : Color.clear;
     }
 
+    public void FlipFacing()
+    {
+        eyeBase.flipX = true;
+        bodyBase.flipX = true;
+        bodyPattern.flipX = true;
+        primaryBase.flipX = true;
+        primaryPattern.flipX = true;
+        secondaryBase.flipX = true;
+        secondaryPattern.flipX = true;
+        tertiaryBase.flipX = true;
+        tertiaryPattern.flipX = true;
+    }
+
     #endregion
 
     #region Combat
 
     [Header("Combat")]
 
-    [SerializeField, Range(1, 10)]
-    private Vector2Int hpGain;
+    [SerializeField, Tooltip("min: 1; max: 10")]
+    private Vector2Int hpGain = new Vector2Int(3, 6);
 
-    [SerializeField, Range(1, 10)]
-    private Vector2Int attackGain;
+    [SerializeField, Tooltip("min: 1; max: 10")]
+    private Vector2Int attackGain = new Vector2Int(3, 6);
 
-    [SerializeField, Range(1, 10)]
-    private Vector2Int defenseGain;
+    [SerializeField, Tooltip("min: 1; max: 10")]
+    private Vector2Int defenseGain = new Vector2Int(3, 6);
 
-    [SerializeField, Range(1, 10)]
-    private Vector2Int speedGain;
+    [SerializeField, Tooltip("min: 1; max: 10")]
+    private Vector2Int speedGain = new Vector2Int(3, 6);
 
-    [SerializeField, Range(1, 10)]
-    private Vector2Int criticalGain;
+    [SerializeField, Tooltip("min: 1; max: 10")]
+    private Vector2Int criticalGain = new Vector2Int(3, 6);
 
     private int level;
 
