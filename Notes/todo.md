@@ -16,6 +16,13 @@
 - created creature presets
 - created initial skills
 
+- ability to add creature presets to party
+- combat window, combat stats, skill button scripts
+- combat window can access party creatures
+- creature renderer for ui
+- added default ui event system
+- stats converted from int to float to facilitate gradual increase
+
 ## Next Up
 
 - scene change: start menu to campground and back
@@ -23,6 +30,9 @@
 - player movement
 - camera following player movement
 - npc prefab
+
+- make combat buttons clickable
+- connect opponent
 
 ## Combat Flow
 

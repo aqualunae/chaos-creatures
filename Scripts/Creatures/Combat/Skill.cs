@@ -77,6 +77,6 @@ public class Skill : ScriptableObject
 
     public void UseSkill(ChaosCreature user, ChaosCreature target)
     {
-        
+        Debug.Log(title);
     }
 }

@@ -18,9 +18,9 @@ public class CreatureEgg : MonoBehaviour
     private Trait secondary;
     private Trait tertiary;
 
-    public string GetSpecies()
+    public string Species
     {
-        return creature.GetSpecies();
+        get => creature.Species;
     }
 
     /// <summary>
@@ -43,15 +43,15 @@ public class CreatureEgg : MonoBehaviour
     /// </summary>
     public void InitializePair(ChaosCreature firstParent, ChaosCreature secondParent)
     {
-        if (!firstParent.GetSpecies().Equals(secondParent.GetSpecies()))
+        if (!firstParent.Species.Equals(secondParent.Species))
         {
             Debug.Log("Mismatched Creatures");
             return;
         }
 
         GeneticOdds defaultOdds = firstParent.GetGeneticOdds();
-        CreatureDetails first = firstParent.GetDetails();
-        CreatureDetails second = secondParent.GetDetails();
+        CreatureDetails first = firstParent.Details;
+        CreatureDetails second = secondParent.Details;
 
         GeneticOdds adjustedOdds = new GeneticOdds()
         {

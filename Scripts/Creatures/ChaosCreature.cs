@@ -77,16 +77,27 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer tertiaryPattern;
 
-    private CreatureDetails details;
+    [SerializeField]
+    protected SpriteRenderer eyeShine;
 
-    public string GetSpecies()
+    private CreatureDetails details;
+    private string creatureName;
+
+    public string Species
     {
-        return creatureSpecies;
+        get => creatureSpecies;
     }
 
-    public CreatureDetails GetDetails()
+    public CreatureDetails Details
     {
-        return details;
+        get => details;
+        set => details = value;
+    }
+
+    public string Name
+    {
+        get => creatureName;
+        set => creatureName = value;
     }
 
     private int[] GeneticsToIntArray(GeneColor[] colorInput)
@@ -307,6 +318,18 @@ public class ChaosCreature : MonoBehaviour
         DrawCreature();
     }
 
+    public void Initialize()
+    {
+        if (details == null)
+        {
+            Debug.Log("No creature details!");
+            return;
+        }
+
+        Validate();
+        DrawCreature();
+    }
+
     private void DrawCreature()
     {
         // Assign base and pattern sprites
@@ -387,6 +410,7 @@ public class ChaosCreature : MonoBehaviour
         secondaryPattern.flipX = true;
         tertiaryBase.flipX = true;
         tertiaryPattern.flipX = true;
+        eyeShine.flipX = true;
     }
 
     #endregion
@@ -417,21 +441,42 @@ public class ChaosCreature : MonoBehaviour
 
     private Stats stats;
 
+    public int Level
+    {
+        get => level;
+    }
+
+    public Stats Stats
+    {
+        get => stats;
+    }
+
+    public void SetStats(Stats inStats, int inLevel)
+    {
+        stats = inStats;
+        level = inLevel;
+    }
+
+    public Skill[] GetSkills()
+    {
+        return possibleSkills.Where(skill => skill.MinimumLevel <= level).ToArray();
+    }
+
     public void LevelUp()
     {
         level++;
-        stats.hp *= UnityEngine.Random.Range(hpGain.x / 100, hpGain.y / 100) + 1;
-        stats.attack *= UnityEngine.Random.Range(attackGain.x / 100, attackGain.y / 100) + 1;
-        stats.defense *= UnityEngine.Random.Range(defenseGain.x / 100, defenseGain.y / 100) + 1;
-        stats.speed *= UnityEngine.Random.Range(speedGain.x / 100, speedGain.y / 100) + 1;
-        stats.critical *= UnityEngine.Random.Range(criticalGain.x / 100, criticalGain.y / 100) + 1;
+        stats.hp *= UnityEngine.Random.Range((float)hpGain.x / 100, (float)hpGain.y / 100) + 1;
+        stats.attack *= UnityEngine.Random.Range((float)attackGain.x / 100, (float)attackGain.y / 100) + 1;
+        stats.defense *= UnityEngine.Random.Range((float)defenseGain.x / 100, (float)defenseGain.y / 100) + 1;
+        stats.speed *= UnityEngine.Random.Range((float)speedGain.x / 100, (float)speedGain.y / 100) + 1;
+        stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1;
 
         Debug.Log(JsonUtility.ToJson(stats).ToString());  
     }
 
     public void AssignLevel(int levelInput)
     {
-        for (int i = level; i <= levelInput; i++)
+        for (int i = level; i < levelInput; i++)
         {
             LevelUp();
         }

@@ -15,11 +15,11 @@ namespace Assets.Scripts.Creatures.Combat
     [System.Serializable]
     public class Stats
     {
-        public int hp;
-        public int attack;
-        public int defense;
-        public int speed;
-        public int critical;
+        public float hp;
+        public float attack;
+        public float defense;
+        public float speed;
+        public float critical;
         public Aspect aspect;
     }
 }
