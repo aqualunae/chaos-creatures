@@ -15,8 +15,6 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected string creatureSpecies;
 
-    #region Genetics
-
     [Header("Features")]
 
     [SerializeField]
@@ -99,6 +97,59 @@ public class ChaosCreature : MonoBehaviour
         get => creatureName;
         set => creatureName = value;
     }
+
+    /// <summary>
+    /// Used in the Generator, may be legacy now.
+    /// </summary>
+    public void Initialize(int eyeColor, Trait body, Trait primary, Trait secondary, Trait tertiary)
+    {
+        details.eyeColorIndex = eyeColor;
+        details.body = body;
+        details.primary = primary;
+        details.secondary = secondary;
+        details.tertiary = tertiary;
+
+        Validate();
+        DrawCreature();
+    }
+
+    /// <summary>
+    /// Used in the Combat Window, may be legacy now.
+    /// </summary>
+    public void Initialize()
+    {
+        if (details == null)
+        {
+            Debug.Log("No creature details!");
+            return;
+        }
+
+        Validate();
+        DrawCreature();
+    }
+
+    /// <summary>
+    /// Preferred way to initialize a creature.
+    /// </summary>
+    /// <param name="instance">The creature's data</param>
+    public void Initialize(CreatureInstance instance)
+    {
+        if (!instance.Species.Equals(creatureSpecies))
+        {
+            Debug.Log("Mismatch between instance and prefab creatures.");
+            return;
+        }
+        
+        creatureName = instance.CreatureName;
+        level = instance.Level;
+        stats = instance.Stats;
+        details = instance.Details;
+
+        Validate();
+        DrawCreature();
+    }
+
+    #region Genetics & Rendering
 
     private int[] GeneticsToIntArray(GeneColor[] colorInput)
     {
@@ -304,30 +355,6 @@ public class ChaosCreature : MonoBehaviour
         {
             details.tertiary.patternIndex = (int)(options.tertiaryFeaturePatterns.Length / 2) - 1;
         }
-    }
-
-    public void Initialize(int eyeColor, Trait body, Trait primary, Trait secondary, Trait tertiary)
-    {
-        details.eyeColorIndex = eyeColor;
-        details.body = body;
-        details.primary = primary;
-        details.secondary = secondary;
-        details.tertiary = tertiary;
-
-        Validate();
-        DrawCreature();
-    }
-
-    public void Initialize()
-    {
-        if (details == null)
-        {
-            Debug.Log("No creature details!");
-            return;
-        }
-
-        Validate();
-        DrawCreature();
     }
 
     private void DrawCreature()

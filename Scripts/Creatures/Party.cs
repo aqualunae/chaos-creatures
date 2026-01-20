@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Party : SaveableBehaviour
@@ -9,60 +10,42 @@ public class Party : SaveableBehaviour
     private int partySize;
 
     [SerializeField]
-    private CreatureEgg[] eggs;
+    private CreatureInstance[] presetParty;
 
-    [SerializeField]
-    private CreaturePreset[] presetParty;
-
-    private Dictionary<int, ChaosCreature> creatures;
-    private Dictionary<string, CreatureEgg> labelledEggs;
+    private Dictionary<int, CreatureInstance> creatures;
     private bool initialized = false;
 
     private void Awake()
     {
         instances.Add(this);
-        labelledEggs = new Dictionary<string, CreatureEgg>();
-        for (int i = 0; i < eggs.Length; i++)
-        {
-            string eggSpecies = eggs[i].Species;
-            if (!labelledEggs.ContainsKey(eggSpecies))
-            {
-                labelledEggs.Add(eggSpecies, eggs[i]);
-            }
-        }
     }
 
-    private void Start()
+    public override void OnNewGame()
     {
-        if (!initialized)
-        {
-            Initialize();
-        }
-    }
-
-    private void Initialize()
-    {
-        creatures = new Dictionary<int, ChaosCreature>();
+        Debug.Log("new file");
+        creatures = new Dictionary<int, CreatureInstance>();
         for (int i = 0; i < partySize; i++)
         {
             if (presetParty.Length > i)
             {
-                ChaosCreature presetCreature = presetParty[i].Creature;
-                presetCreature.Name = presetParty[i].CreatureName;
-                presetCreature.SetStats(presetParty[i].Stats, presetParty[i].Level);
-                presetCreature.Details = presetParty[i].Details;
-                creatures.Add(i, presetCreature);
+                creatures.Add(i, presetParty[i]);
             }
             else
             {
                 creatures.Add(i, null);
             }
         }
+        initialized = true;
     }
 
-    public ChaosCreature GetFirst()
+    public CreatureInstance GetIndex(int index)
     {
-        return creatures[0];
+        if (index >= partySize)
+        {
+            Debug.Log("Party index out of bounds.");
+            return null;
+        }
+        return creatures[index];
     }
 
     public bool AddToParty(ChaosCreature creature)
@@ -71,24 +54,21 @@ public class Party : SaveableBehaviour
         {
             if (creatures[i] == null)
             {
-                creatures[i] = creature;
+                CreatureInstance instance = new CreatureInstance(creature.Species, creature.Name, creature.Level, creature.Stats, creature.Details);
+                creatures[i] = instance;
                 return true;
             }
         }
         return false;
     }
 
-    public bool AddToParty(CreaturePreset preset)
+    public bool AddToParty(CreatureInstance instance)
     {
         for (int i = 0; i < partySize; i++)
         {
             if (creatures[i] == null)
             {
-                ChaosCreature presetCreature = preset.Creature;
-                presetCreature.Name = preset.CreatureName;
-                presetCreature.SetStats(preset.Stats, preset.Level);
-                presetCreature.Details = preset.Details;
-                creatures[i] = presetCreature;
+                creatures[i] = instance;
                 return true;
             }
         }
@@ -105,18 +85,21 @@ public class Party : SaveableBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Not used; where is the egg going?
+    /// </summary>
     public bool PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
     {
         if (creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
         {
             if (creatures[firstCreatureIndex].Species.Equals(creatures[secondCreatureIndex].Species))
             {
-                CreatureEgg egg = labelledEggs[creatures[firstCreatureIndex].Species];
-                CreatureEgg instantiatedEgg = Instantiate(egg);
-                instantiatedEgg.InitializePair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
-                instantiatedEgg.transform.localScale = Vector2.one;
-                instantiatedEgg.transform.position = new Vector2(0.48f, -0.32f);
-                return true;
+                // CreatureEgg egg = labelledEggs[creatures[firstCreatureIndex].Species];
+                // CreatureEgg instantiatedEgg = Instantiate(egg);
+                // instantiatedEgg.InitializePair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
+                // instantiatedEgg.transform.localScale = Vector2.one;
+                // instantiatedEgg.transform.position = new Vector2(0.48f, -0.32f);
+                // return true;
             }
         }
         return false;
@@ -124,38 +107,26 @@ public class Party : SaveableBehaviour
 
     #region Saving
 
-    // class-specific save data
-    [System.Serializable]
-    public class CreatureSaveData
-    {
-        public string species;
-        public CreatureDetails details;
-        public Stats stats;
-        public string creatureName;
-        public int level;
-    }
-
     public class PartySaveData
     {
-        public List<CreatureSaveData> creatures;
+        public List<SaveableCreature> creatures;
     }
 
     public override Saveable OnSave()
     {
-        List<CreatureSaveData> savedCreatures = new List<CreatureSaveData>();
+        List<SaveableCreature> savedCreatures = new List<SaveableCreature>();
         for (int i = 0; i < partySize; i++)
         {
             if (creatures[i] != null)
             {
-                CreatureSaveData saveData = new CreatureSaveData()
+                savedCreatures.Add(new SaveableCreature()
                 {
                     species = creatures[i].Species,
-                    details = creatures[i].Details,
+                    creatureName = creatures[i].CreatureName,
+                    level = creatures[i].Level,
                     stats = creatures[i].Stats,
-                    creatureName = creatures[i].Name,
-                    level = creatures[i].Level
-                };
-                savedCreatures.Add(saveData);
+                    details = creatures[i].Details
+                });
             }
         }
 
@@ -165,6 +136,7 @@ public class Party : SaveableBehaviour
         };
         
         string data = JsonUtility.ToJson(partySave);
+        Debug.Log(data);
         string identifier = $"{typeof(Party)}_{id}";
 
         Saveable saveable = new Saveable()
@@ -178,17 +150,14 @@ public class Party : SaveableBehaviour
 
     public override void OnLoad(Saveable saveable)
     {
-        creatures = new Dictionary<int, ChaosCreature>();
+        Debug.Log("loading");
+        creatures = new Dictionary<int, CreatureInstance>();
         PartySaveData saveData = JsonUtility.FromJson<PartySaveData>(saveable.data);
         for (int i = 0; i < partySize; i++)
         {
             if (saveData.creatures.Count > i)
             {
-                ChaosCreature partyCreature = labelledEggs[saveData.creatures[i].species].Creature;
-                partyCreature.Name = saveData.creatures[i].creatureName;
-                partyCreature.SetStats(saveData.creatures[i].stats, saveData.creatures[i].level);
-                partyCreature.Details = saveData.creatures[i].details;
-                creatures.Add(i, partyCreature);
+                creatures.Add(i, new CreatureInstance(saveData.creatures[i].species, saveData.creatures[i].creatureName, saveData.creatures[i].level, saveData.creatures[i].stats, saveData.creatures[i].details));
             }
             else
             {

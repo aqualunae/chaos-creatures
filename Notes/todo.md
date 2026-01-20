@@ -25,6 +25,8 @@
 
 - created save system
 - party became saveable behaviour
+- moved species list to its own variable
+- refactored creatures to separate species and rendering from instance data
 
 ## Next Up
 
@@ -36,11 +38,10 @@
 
 - connect opponent to combat screen
 
-- create scriptable object for specific creature, with current hp, level, name, etc
-    - instantiate preset programmatically or create a separate class?
-- connect party to that instead of the species base prefab
-- renderers to connect the species prefab to the scriptable object (combat, menu, etc)
-- how can menus access the save data / saveablebehaviour instances?
+- menus access the save master
+- allow saveables to trigger saves on state change
+
+- code commenting
 
 ## Combat Flow
 

@@ -42,8 +42,15 @@ public class SaveSystem : MonoBehaviour
         HashSet<SaveableBehaviour> saveableBehaviors = SaveableBehaviour.Instances;
         foreach(SaveableBehaviour saveableBehavior in saveableBehaviors)
         {
-            SaveableBehaviour.Saveable saveData = saveMaster.saveables.Find(saveable => saveable.id.Contains(saveableBehavior.ID));
-            saveableBehavior.OnLoad(saveData);
+            if (saveMaster.saveables.Exists(saveable => saveable.id.Contains(saveableBehavior.ID)))
+            {
+                SaveableBehaviour.Saveable saveData = saveMaster.saveables.Find(saveable => saveable.id.Contains(saveableBehavior.ID));
+                saveableBehavior.OnLoad(saveData);
+            }
+            else
+            {
+                saveableBehavior.OnNewGame();
+            }
         }
         reader.Close();
     }

@@ -29,6 +29,8 @@ public abstract class SaveableBehaviour : MonoBehaviour
         get => id;
     }
 
+    public abstract void OnNewGame();
+
     public abstract Saveable OnSave();
 
     public abstract void OnLoad(Saveable saveable);

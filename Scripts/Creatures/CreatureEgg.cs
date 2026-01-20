@@ -46,7 +46,7 @@ public class CreatureEgg : MonoBehaviour
     /// <summary>
     /// Initializes a Creature Egg that is more likely to look like its parents.
     /// </summary>
-    public void InitializePair(ChaosCreature firstParent, ChaosCreature secondParent)
+    public void InitializePair(CreatureInstance firstParent, CreatureInstance secondParent)
     {
         if (!firstParent.Species.Equals(secondParent.Species))
         {
@@ -54,7 +54,7 @@ public class CreatureEgg : MonoBehaviour
             return;
         }
 
-        GeneticOdds defaultOdds = firstParent.GetGeneticOdds();
+        GeneticOdds defaultOdds = creature.GetGeneticOdds();
         CreatureDetails first = firstParent.Details;
         CreatureDetails second = secondParent.Details;
 

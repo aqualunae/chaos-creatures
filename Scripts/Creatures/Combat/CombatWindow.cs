@@ -27,18 +27,19 @@ public class CombatWindow : MonoBehaviour
     [SerializeField]
     private Party playerParty;
 
+    [SerializeField]
+    private EggListVariable speciesList;
+
     private void Awake()
     {
-        ChaosCreature partyCreature = playerParty.GetFirst();
-        ChaosCreature player = Instantiate(partyCreature, playerLocation.transform.parent);
-        player.Name = partyCreature.Name;
-        player.SetStats(partyCreature.Stats, partyCreature.Level);
-        player.Details = partyCreature.Details;
+        CreatureInstance partyCreature = playerParty.GetIndex(0);
+        ChaosCreature speciesRef = speciesList.GetCreature(partyCreature.Species);
+        ChaosCreature player = Instantiate(speciesRef, playerLocation.transform.parent);
+        player.Initialize(partyCreature);
         player.transform.localScale = playerLocation.transform.localScale;
         player.transform.position = playerLocation.transform.position;
         playerLocation.gameObject.SetActive(false);
         player.gameObject.SetActive(true);
-        player.Initialize();
         playerStats.Initialize(player.Name, player.Species, player.Level, player.Stats.hp, player.Stats.hp);
         player.FlipFacing();
         log.text = "You've encountered a hostile creature!";

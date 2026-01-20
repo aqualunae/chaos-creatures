@@ -1,3 +1,4 @@
+using Assets.Scripts.Creatures.Combat;
 using UnityEditor;
 using UnityEngine;
 
@@ -113,5 +114,18 @@ namespace Assets.Scripts.Creatures
         public GeneAspect geneAspect;
         public string option;
         public float chance;
+    }
+
+    /// <summary>
+    /// Used to save creatures
+    /// </summary>
+    [System.Serializable]
+    public class SaveableCreature
+    {
+        public string species;
+        public string creatureName;
+        public int level;
+        public Stats stats;
+        public CreatureDetails details;
     }
 }
