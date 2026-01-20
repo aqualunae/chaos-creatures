@@ -31,7 +31,6 @@
 - camera following player movement
 - npc prefab
 
-- make combat buttons clickable
 - connect opponent
 
 ## Combat Flow
