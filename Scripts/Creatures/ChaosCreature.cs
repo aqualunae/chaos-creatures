@@ -5,6 +5,9 @@ using UnityEditor;
 using System.Linq;
 using System;
 
+/// <summary>
+/// Contains data for a species of creature
+/// </summary>
 public class ChaosCreature : MonoBehaviour
 {
     [Header("Info")]
@@ -46,9 +49,6 @@ public class ChaosCreature : MonoBehaviour
     protected CreatureOptions options;
 
     [Header("Sprites")]
-
-    [SerializeField]
-    protected string spritesheetFilename;
 
     [SerializeField]
     protected SpriteRenderer eyeBase;
@@ -333,7 +333,7 @@ public class ChaosCreature : MonoBehaviour
     private void DrawCreature()
     {
         // Assign base and pattern sprites
-        Sprite[] sprites = Resources.LoadAll<Sprite>($"Sprites/Creatures/{spritesheetFilename}");
+        Sprite[] sprites = Resources.LoadAll<Sprite>($"Sprites/Creatures/{creatureSpecies}");
         foreach (Sprite sprite in sprites)
         {
             if (sprite.name == eyes.baseSpriteTitle)
@@ -483,4 +483,52 @@ public class ChaosCreature : MonoBehaviour
     }
 
     #endregion
+
+    // #region Saving
+
+    
+    // // class-specific save data
+    // public class SaveData
+    // {
+    //     public string species;
+    //     public CreatureDetails details;
+    //     public Stats stats;
+    //     public string creatureName;
+    //     public int level;
+    // }
+
+    // public override Saveable OnSave()
+    // {
+    //     SaveData saveData = new SaveData()
+    //     {
+    //         species = this.creatureSpecies,
+    //         details = this.details,
+    //         stats = this.stats,
+    //         creatureName = this.creatureName,
+    //         level = this.level
+    //     };
+    //     string data = JsonUtility.ToJson(saveData);
+    //     string identifier = $"{typeof(ChaosCreature)}_{id}";
+
+    //     Saveable saveable = new Saveable()
+    //     {
+    //         id = identifier,
+    //         data = data
+    //     };
+
+    //     return saveable;
+    // }
+
+    // public override void OnLoad(Saveable saveable)
+    // {
+    //     SaveData saveData = JsonUtility.FromJson<SaveData>(saveable.data);
+    //     creatureSpecies = saveData.species;
+    //     details = saveData.details;
+    //     stats = saveData.stats;
+    //     creatureName = saveData.creatureName;
+    //     level = saveData.level;
+    //     id = saveable.id.Split("_")[1];
+    // }
+
+    // #endregion
 }

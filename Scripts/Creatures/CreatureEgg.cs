@@ -23,6 +23,11 @@ public class CreatureEgg : MonoBehaviour
         get => creature.Species;
     }
 
+    public ChaosCreature Creature
+    {
+        get => creature;
+    }
+
     /// <summary>
     /// Initializes a Creature Egg with base probability.
     /// </summary>

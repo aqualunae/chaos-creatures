@@ -23,6 +23,9 @@
 - added default ui event system
 - stats converted from int to float to facilitate gradual increase
 
+- created save system
+- party became saveable behaviour
+
 ## Next Up
 
 - scene change: start menu to campground and back
@@ -31,7 +34,13 @@
 - camera following player movement
 - npc prefab
 
-- connect opponent
+- connect opponent to combat screen
+
+- create scriptable object for specific creature, with current hp, level, name, etc
+    - instantiate preset programmatically or create a separate class?
+- connect party to that instead of the species base prefab
+- renderers to connect the species prefab to the scriptable object (combat, menu, etc)
+- how can menus access the save data / saveablebehaviour instances?
 
 ## Combat Flow
 
@@ -52,3 +61,23 @@
     - bonus: find pixel vfx
 - flee -> close combat window
 - victory and defeat pop-ups
+
+## Save Flow
+
+- source of truth: central save system
+    - can be accessed by menus
+    - can read/write to file easily
+    - may duplicate information stored in various objects
+- during gameplay
+    - saveable monobehavior objects report their state to the save system
+    - menus can draw on the save system's information
+- on save
+    - save system writes all the data it contains to a file
+- on load
+    - save system reads the file
+    - saveable objects receive their state from the system
+
+### Resources
+
+- https://www.answermind.blog/unlock-unity-master-persistent-data-path-flawless-game-saves
+- https://stackoverflow.com/a/65495834
