@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class RandomEncounter : ScriptableObject
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Species of creature")]
     private CreatureEgg egg;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Probability adjustments for appearance")]
     private GeneEffect[] geneEffects;
 
-    [SerializeField, Range(1, 50)]
+    [SerializeField, Range(1, 50), Tooltip("Range for the level of the creature")]
     private Vector2Int levelRange;
 
     // move this to the combat initializer script

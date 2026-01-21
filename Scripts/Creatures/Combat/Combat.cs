@@ -1,5 +1,6 @@
 namespace Assets.Scripts.Creatures.Combat
 {
+    // aspect advantages described in Notes/aspects.json
     public enum Aspect
     {
         standard,
@@ -12,6 +13,9 @@ namespace Assets.Scripts.Creatures.Combat
         demon
     }
 
+    /// <summary>
+    /// Used for combat
+    /// </summary>
     [System.Serializable]
     public class Stats
     {

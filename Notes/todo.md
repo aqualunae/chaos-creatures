@@ -30,19 +30,22 @@
 - refactored creatures to separate species and rendering from instance data
 
 - added commenting to scripts in the Creatures folder (not Combat)
+- added commenting to scripts in the Combat, Characters, and Systems folders
 
 ## Next Up
 
 - scene change: start menu to campground and back
-- player movement
+- player movement fixes
 - camera following player movement
 
 - connect opponent to combat screen
+- logic for handling combat
 
+- menus: select initial creature, view party, return to title
 - menus access the save master
 - allow saveables to trigger saves on state change
 
-- code commenting
+- code commenting in items folder
 
 - use a quasi-enum instead of a string field for species references
     - https://discussions.unity.com/t/how-to-make-a-custom-enumeration-for-unity-full-guide-code/894441/12

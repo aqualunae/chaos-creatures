@@ -5,22 +5,28 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class SkillButton : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Field that displays the title.")]
     private TextMeshProUGUI title;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Field that displays the aspect.")]
     private TextMeshProUGUI aspect;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Field that displays the power.")]
     private TextMeshProUGUI power;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Field that displays the description, where possible.")]
     private TextMeshProUGUI description;
 
     private Skill skill;
     private ChaosCreature user;
     private ChaosCreature target;
 
+    /// <summary>
+    /// Initialize the button with skill data.
+    /// </summary>
+    /// <param name="skill">Skill to display</param>
+    /// <param name="player">Skill user</param>
+    /// <param name="opponent">Default skill target</param>
     public void Initialize(Skill skill, ChaosCreature player, ChaosCreature opponent = null)
     {
         this.skill = skill;
@@ -33,18 +39,24 @@ public class SkillButton : MonoBehaviour
         else if (skill.Power < 0)
         {
             power.text = $"{skill.Power * -1}";
-            power.color = Color.green;
+            power.color = Color.darkGreen; // change this color
         }
         description.text = skill.Description;
         user = player;
         target = opponent;
     }
 
+    /// <summary>
+    /// Change the default target of the skill.
+    /// </summary>
     public void SetTarget(ChaosCreature target)
     {
         this.target = target;
     }
 
+    /// <summary>
+    /// Activate the skill. Requires a target to be set.
+    /// </summary>
     public void UseSkill()
     {
         Debug.Log("clicked");
