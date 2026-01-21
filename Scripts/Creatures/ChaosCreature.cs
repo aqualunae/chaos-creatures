@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 
 /// <summary>
-/// Contains data for a species of creature
+/// Contains data and rendering instructions for a species of creature. Not a SaveableBehaviour; use SaveableCreature class for data of specific creatures, and initialize it into this class as needed.
 /// </summary>
 public class ChaosCreature : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected string creatureSpecies;
 
-    [Header("Features")]
+    [Header("Features"), Tooltip("The possible shapes of the species.")]
 
     [SerializeField]
     protected Feature eyes;
@@ -32,7 +32,7 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected Feature[] tertiary;
 
-    [Header("Options")]
+    [Header("Options"), Tooltip("The possible colors and patterns of the species.")]
 
     [SerializeField]
     protected bool primaryUsesBodyColor = true;
@@ -46,7 +46,7 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected CreatureOptions options;
 
-    [Header("Sprites")]
+    [Header("Sprites"), Tooltip("For rendering.")]
 
     [SerializeField]
     protected SpriteRenderer eyeBase;
@@ -78,6 +78,7 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer eyeShine;
 
+    // details for one specific creature to be rendered
     private CreatureDetails details;
     private string creatureName;
 
@@ -99,7 +100,28 @@ public class ChaosCreature : MonoBehaviour
     }
 
     /// <summary>
-    /// Used in the Generator, may be legacy now.
+    /// Preferred way to initialize a creature.
+    /// </summary>
+    /// <param name="instance">The creature's data</param>
+    public void Initialize(CreatureInstance instance)
+    {
+        if (!instance.Species.Equals(creatureSpecies))
+        {
+            Debug.Log("Mismatch between instance and prefab creatures.");
+            return;
+        }
+        
+        creatureName = instance.CreatureName;
+        level = instance.Level;
+        stats = instance.Stats;
+        details = instance.Details;
+
+        Validate();
+        DrawCreature();
+    }
+
+    /// <summary>
+    /// Used in Hatch for the Generator, may be legacy now.
     /// </summary>
     public void Initialize(int eyeColor, Trait body, Trait primary, Trait secondary, Trait tertiary)
     {
@@ -128,29 +150,10 @@ public class ChaosCreature : MonoBehaviour
         DrawCreature();
     }
 
-    /// <summary>
-    /// Preferred way to initialize a creature.
-    /// </summary>
-    /// <param name="instance">The creature's data</param>
-    public void Initialize(CreatureInstance instance)
-    {
-        if (!instance.Species.Equals(creatureSpecies))
-        {
-            Debug.Log("Mismatch between instance and prefab creatures.");
-            return;
-        }
-        
-        creatureName = instance.CreatureName;
-        level = instance.Level;
-        stats = instance.Stats;
-        details = instance.Details;
-
-        Validate();
-        DrawCreature();
-    }
-
     #region Genetics & Rendering
 
+    /// <param name="colorInput">An array of named gene colors.</param>
+    /// <returns>An int array that can be used for randomization.</returns>
     private int[] GeneticsToIntArray(GeneColor[] colorInput)
     {
         int[] value = new int[colorInput.Length];
@@ -161,6 +164,9 @@ public class ChaosCreature : MonoBehaviour
         return value;
     }
 
+    /// <param name="patternInput">An array of named patterns.</param>
+    /// <param name="hasRecessive">Are the items in the array duplicated to show dominant and recessive shapes?</param>
+    /// <returns>An int array that can be used for randomization.</returns>
     private int[] GeneticsToIntArray(Pattern[] patternInput, bool hasRecessive)
     {
         int arrayLength = hasRecessive ? patternInput.Length / 2 : patternInput.Length;
@@ -172,6 +178,8 @@ public class ChaosCreature : MonoBehaviour
         return value;
     }
 
+    /// <param name="featureInput">An array of named features (shapes).</param>
+    /// <returns>An int array that can be used for randomization.</returns>
     private int[] GeneticsToIntArray(Feature[] featureInput)
     {
         int[] value = new int[featureInput.Length];
@@ -182,6 +190,9 @@ public class ChaosCreature : MonoBehaviour
         return value;
     }
 
+    /// <summary>
+    /// Get the default genetic odds for this species.
+    /// </summary>
     public GeneticOdds GetGeneticOdds()
     {
         int[] defaultBaseColorRarity = GeneticsToIntArray(options.baseColors);
@@ -215,7 +226,11 @@ public class ChaosCreature : MonoBehaviour
         };
     }
 
-    public GeneticOdds GetEffectedOdds(GeneEffect[] effects)
+    /// <summary>
+    /// Get the genetic odds for this creature with modifiers.
+    /// </summary>
+    /// <param name="effects">Modifiers to the appearance probabilities.</param>
+    public GeneticOdds GetGeneticOdds(GeneEffect[] effects)
     {
         GeneticOdds odds = GetGeneticOdds();
 
@@ -264,6 +279,9 @@ public class ChaosCreature : MonoBehaviour
         return odds;
     }
 
+    /// <summary>
+    /// If indices in the details are higher than the lengths of the arrays they correspond to, set them to the highest available index.
+    /// </summary>
     private void Validate()
     {
         if (details.eyeColorIndex >= options.accentColors.Length)
@@ -303,7 +321,7 @@ public class ChaosCreature : MonoBehaviour
 
         // dominant and recessive trait versions of the pattern are stored as separate entries, dominant first
         if (
-            details.primary.rarity == TraitRarity.dominant &&
+            details.primary.rarity == FeatureRarity.dominant &&
             details.primary.patternIndex >= options.primaryFeaturePatterns.Length / 2
         )
         {
@@ -326,7 +344,7 @@ public class ChaosCreature : MonoBehaviour
         }
 
         if (
-            details.secondary.rarity == TraitRarity.dominant &&
+            details.secondary.rarity == FeatureRarity.dominant &&
             details.secondary.patternIndex >= options.secondaryFeaturePatterns.Length / 2
         )
         {
@@ -349,7 +367,7 @@ public class ChaosCreature : MonoBehaviour
         }
 
         if (
-            details.tertiary.rarity == TraitRarity.dominant &&
+            details.tertiary.rarity == FeatureRarity.dominant &&
             details.tertiary.patternIndex >= options.tertiaryFeaturePatterns.Length / 2
         )
         {
@@ -357,6 +375,9 @@ public class ChaosCreature : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Assign all sprites and colors to the renderers.
+    /// </summary>
     private void DrawCreature()
     {
         // Assign base and pattern sprites
@@ -426,6 +447,9 @@ public class ChaosCreature : MonoBehaviour
         tertiaryPattern.color = tertiaryPattern.sprite != null ? tertiaryAccentColor : Color.clear;
     }
 
+    /// <summary>
+    /// Flip all sprite renderers on the horizontal axis.
+    /// </summary>
     public void FlipFacing()
     {
         eyeBase.flipX = true;
@@ -445,6 +469,7 @@ public class ChaosCreature : MonoBehaviour
     #region Combat
 
     [Header("Combat")]
+    [Header("Bounds of randomzied percent increase to stats when leveling up.")]
 
     [SerializeField, Tooltip("min: 1; max: 10")]
     private Vector2Int hpGain = new Vector2Int(3, 6);
@@ -461,11 +486,12 @@ public class ChaosCreature : MonoBehaviour
     [SerializeField, Tooltip("min: 1; max: 10")]
     private Vector2Int criticalGain = new Vector2Int(3, 6);
 
-    [SerializeField]
+    [Header("Skills")]
+    [SerializeField, Tooltip("The skills that this species is able to learn.")]
     private Skill[] possibleSkills;
 
+    // Data belonging to a specific instance of creature.
     private int level;
-
     private Stats stats;
 
     public int Level
@@ -478,17 +504,24 @@ public class ChaosCreature : MonoBehaviour
         get => stats;
     }
 
+    /// <summary>
+    /// Assign stats and level without modifying them.
+    /// </summary>
     public void SetStats(Stats inStats, int inLevel)
     {
         stats = inStats;
         level = inLevel;
     }
 
+    /// <returns>Array of skills that the creature is able to use at its current level.</returns>
     public Skill[] GetSkills()
     {
         return possibleSkills.Where(skill => skill.MinimumLevel <= level).ToArray();
     }
 
+    /// <summary>
+    /// Increase level by one and stats by a random amount within species bounds.
+    /// </summary>
     public void LevelUp()
     {
         level++;
@@ -496,11 +529,13 @@ public class ChaosCreature : MonoBehaviour
         stats.attack *= UnityEngine.Random.Range((float)attackGain.x / 100, (float)attackGain.y / 100) + 1;
         stats.defense *= UnityEngine.Random.Range((float)defenseGain.x / 100, (float)defenseGain.y / 100) + 1;
         stats.speed *= UnityEngine.Random.Range((float)speedGain.x / 100, (float)speedGain.y / 100) + 1;
-        stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1;
-
-        Debug.Log(JsonUtility.ToJson(stats).ToString());  
+        stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1; 
     }
 
+    /// <summary>
+    /// Assign level and apply level ups for each level above current. Useful for randomly generated creatures.
+    /// </summary>
+    /// <param name="levelInput">New level of the creature.</param>
     public void AssignLevel(int levelInput)
     {
         for (int i = level; i < levelInput; i++)
@@ -510,52 +545,4 @@ public class ChaosCreature : MonoBehaviour
     }
 
     #endregion
-
-    // #region Saving
-
-    
-    // // class-specific save data
-    // public class SaveData
-    // {
-    //     public string species;
-    //     public CreatureDetails details;
-    //     public Stats stats;
-    //     public string creatureName;
-    //     public int level;
-    // }
-
-    // public override Saveable OnSave()
-    // {
-    //     SaveData saveData = new SaveData()
-    //     {
-    //         species = this.creatureSpecies,
-    //         details = this.details,
-    //         stats = this.stats,
-    //         creatureName = this.creatureName,
-    //         level = this.level
-    //     };
-    //     string data = JsonUtility.ToJson(saveData);
-    //     string identifier = $"{typeof(ChaosCreature)}_{id}";
-
-    //     Saveable saveable = new Saveable()
-    //     {
-    //         id = identifier,
-    //         data = data
-    //     };
-
-    //     return saveable;
-    // }
-
-    // public override void OnLoad(Saveable saveable)
-    // {
-    //     SaveData saveData = JsonUtility.FromJson<SaveData>(saveable.data);
-    //     creatureSpecies = saveData.species;
-    //     details = saveData.details;
-    //     stats = saveData.stats;
-    //     creatureName = saveData.creatureName;
-    //     level = saveData.level;
-    //     id = saveable.id.Split("_")[1];
-    // }
-
-    // #endregion
 }

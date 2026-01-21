@@ -9,9 +9,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Preset Creature ", menuName = "Scriptable Objects/Creature Instance")]
 public class CreatureInstance : ScriptableObject
 {
-    // [SerializeField]
-    // private ChaosCreature creature;
-
     [SerializeField]
     private string species;
 

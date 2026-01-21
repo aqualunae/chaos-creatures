@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Used by the Generator.
+/// </summary>
 public class ResetEgg : MonoBehaviour
 {
     [SerializeField]

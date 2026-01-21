@@ -38,7 +38,7 @@ public class CreatureEgg : MonoBehaviour
 
     public void InitializeSingle(GeneEffect[] effects)
     {
-        GeneticOdds odds = creature.GetEffectedOdds(effects);
+        GeneticOdds odds = creature.GetGeneticOdds(effects);
 
         Initialize(odds);
     }
@@ -88,6 +88,10 @@ public class CreatureEgg : MonoBehaviour
         Initialize(adjustedOdds);
     }
 
+    /// <summary>
+    /// Initialize a creature which has specific appearance chances.
+    /// </summary>
+    /// <param name="odds">Chance of each possibility</param>
     private void Initialize(GeneticOdds odds)
     {
         eyeColorIndex = WeightedRandom(odds.eyeColorRarity);
@@ -99,7 +103,7 @@ public class CreatureEgg : MonoBehaviour
 
         body = new Trait()
         {
-            rarity = (TraitRarity)bodyTraitIndex,
+            rarity = (FeatureRarity)bodyTraitIndex,
             baseColorIndex = bodyBaseIndex,
             accentColorIndex = bodyAccentIndex,
             patternIndex = bodyPatternIndex
@@ -119,7 +123,7 @@ public class CreatureEgg : MonoBehaviour
 
         primary = new Trait()
         {
-            rarity = (TraitRarity)primaryTraitIndex,
+            rarity = (FeatureRarity)primaryTraitIndex,
             baseColorIndex = odds.primaryUsesBodyColor ? bodyBaseIndex : primaryBaseIndex,
             accentColorIndex = primaryAccentIndex,
             patternIndex = primaryPatternIndex
@@ -138,7 +142,7 @@ public class CreatureEgg : MonoBehaviour
 
         secondary = new Trait()
         {
-            rarity = (TraitRarity)secondaryTraitIndex,
+            rarity = (FeatureRarity)secondaryTraitIndex,
             baseColorIndex = odds.secondaryUsesBodyColor ? bodyBaseIndex : secondaryBaseIndex,
             accentColorIndex = secondaryAccentIndex,
             patternIndex = secondaryPatternIndex
@@ -157,7 +161,7 @@ public class CreatureEgg : MonoBehaviour
 
         tertiary = new Trait()
         {
-            rarity = (TraitRarity)tertiaryTraitIndex,
+            rarity = (FeatureRarity)tertiaryTraitIndex,
             baseColorIndex = odds.tertiaryUsesBodyColor ? bodyBaseIndex : tertiaryBaseIndex,
             accentColorIndex = tertiaryAccentIndex,
             patternIndex = tertiaryPatternIndex
@@ -187,13 +191,20 @@ public class CreatureEgg : MonoBehaviour
         return 0;
     }
 
+    /// <summary>
+    /// Instantiates a creature that can be rendered to the screen or saved.
+    /// </summary>
+    /// <returns>The creature generated.</returns>
     public ChaosCreature Hatch()
     {
         gameObject.SetActive(false);
         ChaosCreature instantiatedCreature = Instantiate(creature);
         instantiatedCreature.Initialize(eyeColorIndex, body, primary, secondary, tertiary);
+
+        // should the transform be changed in this script?
         instantiatedCreature.transform.localScale = Vector2.one;
         instantiatedCreature.transform.position = new Vector2(0.48f, -0.32f);
+        
         return instantiatedCreature;
     }
 }

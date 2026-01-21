@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Converts the collection of sprites in sprite renderers for a creature into a flat texture that is then applied to an image, such as for UI elements. Could also be used for characters.
+/// </summary>
 [RequireComponent(typeof(Camera))]
 public class CreatureRenderer : MonoBehaviour
 {

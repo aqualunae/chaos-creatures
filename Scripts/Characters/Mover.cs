@@ -21,15 +21,16 @@ public class Mover : MonoBehaviour
         {
             StopCoroutine(movementCoroutine);
         }
-        movementCoroutine = StartCoroutine(Movement(direction));
+        movementCoroutine = StartCoroutine(Movement());
     }
 
-    private IEnumerator Movement(Vector2 direction)
+    private IEnumerator Movement()
     {
         Vector3 originalPosition = transform.position;
         while (Vector2.Distance(transform.position, originalPosition + direction3) > 0.1f)
         {
             transform.Translate(speed * Time.deltaTime * direction3);
+            yield return new WaitForEndOfFrame();
         }
         transform.position = originalPosition + direction3;
         yield return null;

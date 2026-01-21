@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Used by buttons on the Generator.
+/// </summary>
 public class HatchEgg : MonoBehaviour
 {
     [SerializeField]

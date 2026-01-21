@@ -4,21 +4,31 @@ using UnityEngine;
 
 namespace Assets.Scripts.Creatures
 {
-    public enum TraitRarity
+    /// <summary>
+    /// Is the feature (shape) more or less likely to appear?
+    /// </summary>
+    public enum FeatureRarity
     {
         dominant,
         recessive
     }
 
+    /// <summary>
+    /// A body part shape and its rarity for a species.
+    /// </summary>
     [System.Serializable]
-    public class Trait
+    public class Feature
     {
-        public TraitRarity rarity;
-        public int baseColorIndex;
-        public int accentColorIndex;
-        public int patternIndex;
+        public string title;
+        public FeatureRarity rarity;
+        // public string lineartSpriteTitle;
+        public string baseSpriteTitle;
+        public int chance;
     }
 
+    /// <summary>
+    /// A color and its rarity for a species.
+    /// </summary>
     [System.Serializable]
     public class GeneColor
     {
@@ -27,25 +37,21 @@ namespace Assets.Scripts.Creatures
         public int chance;
     }
 
+    /// <summary>
+    /// A pattern and its rarity for one body part of a species.
+    /// </summary>
     [System.Serializable]
     public class Pattern
     {
         public string title;
-        public TraitRarity rarity;
+        public FeatureRarity rarity;
         public string spriteTitle;
         public int chance;
     }
 
-    [System.Serializable]
-    public class Feature
-    {
-        public string title;
-        public TraitRarity rarity;
-        // public string lineartSpriteTitle;
-        public string baseSpriteTitle;
-        public int chance;
-    }
-
+    /// <summary>
+    /// All possible visual options for a creature.
+    /// </summary>
     [System.Serializable]
     public class CreatureOptions
     {
@@ -57,6 +63,9 @@ namespace Assets.Scripts.Creatures
         public Pattern[] tertiaryFeaturePatterns;
     }
 
+    /// <summary>
+    /// The data needed to randomize a creature's appearance, with no text descriptors.
+    /// </summary>
     [System.Serializable]
     public class GeneticOdds
     {
@@ -81,6 +90,21 @@ namespace Assets.Scripts.Creatures
         public int[] tertiaryAccentColorRarity;
     }
 
+    /// <summary>
+    /// The details of one body part belonging to one specific creature.
+    /// </summary>
+    [System.Serializable]
+    public class Trait
+    {
+        public FeatureRarity rarity;
+        public int baseColorIndex;
+        public int accentColorIndex;
+        public int patternIndex;
+    }
+
+    /// <summary>
+    /// The visual information about one specific creature.
+    /// </summary>
     [System.Serializable]
     public class CreatureDetails
     {
@@ -91,6 +115,9 @@ namespace Assets.Scripts.Creatures
         public Trait tertiary;
     }
 
+    /// <summary>
+    /// The areas of a creature that can be changed.
+    /// </summary>
     public enum GeneLocation
     {
         body,
@@ -99,6 +126,9 @@ namespace Assets.Scripts.Creatures
         tertiary
     }
 
+    /// <summary>
+    /// The specifics that can be changed on one area of a creature.
+    /// </summary>
     public enum GeneAspect
     {
         shape,
@@ -107,6 +137,9 @@ namespace Assets.Scripts.Creatures
         pattern
     }
 
+    /// <summary>
+    /// Modifier to the genetic chances of a species. Generally used in an array.
+    /// </summary>
     [System.Serializable]
     public class GeneEffect
     {
@@ -117,7 +150,7 @@ namespace Assets.Scripts.Creatures
     }
 
     /// <summary>
-    /// Used to save creatures
+    /// Used to save specific creatures
     /// </summary>
     [System.Serializable]
     public class SaveableCreature

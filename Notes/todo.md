@@ -23,18 +23,19 @@
 - added default ui event system
 - stats converted from int to float to facilitate gradual increase
 
+- created player and guide prefabs
 - created save system
 - party became saveable behaviour
 - moved species list to its own variable
 - refactored creatures to separate species and rendering from instance data
 
+- added commenting to scripts in the Creatures folder (not Combat)
+
 ## Next Up
 
 - scene change: start menu to campground and back
-- player prefab
 - player movement
 - camera following player movement
-- npc prefab
 
 - connect opponent to combat screen
 
@@ -42,6 +43,9 @@
 - allow saveables to trigger saves on state change
 
 - code commenting
+
+- use a quasi-enum instead of a string field for species references
+    - https://discussions.unity.com/t/how-to-make-a-custom-enumeration-for-unity-full-guide-code/894441/12
 
 ## Combat Flow
 
