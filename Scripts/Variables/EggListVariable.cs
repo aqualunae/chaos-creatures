@@ -3,9 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Source of truth for the list of possible species. Only create one.
+/// Legacy. Do not use.
 /// </summary>
-[CreateAssetMenu(fileName = "Species List", menuName = "Variables/Egg List")]
 public class EggListVariable : Variable<CreatureEgg[]>
 {
     public Dictionary<string, CreatureEgg> GetEggDictionary()

@@ -32,6 +32,11 @@
 - added commenting to scripts in the Creatures folder (not Combat)
 - added commenting to scripts in the Combat, Characters, and Systems folders
 
+### Week of January 21
+
+- refactored creatures to separate species from individual from rendering
+- separated creature renderer (sprites, can be used in overworld) from creature camera (creates an image for use in the ui)
+
 ## Next Up
 
 - scene change: start menu to campground and back
@@ -44,11 +49,9 @@
 - menus: select initial creature, view party, return to title
 - menus access the save master
 - allow saveables to trigger saves on state change
+- method for saveables to remove themselves from save system
 
 - code commenting in items folder
-
-- use a quasi-enum instead of a string field for species references
-    - https://discussions.unity.com/t/how-to-make-a-custom-enumeration-for-unity-full-guide-code/894441/12
 
 ## Combat Flow
 

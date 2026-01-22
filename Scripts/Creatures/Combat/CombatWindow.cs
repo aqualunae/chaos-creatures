@@ -1,13 +1,14 @@
+using Assets.Scripts.Creatures;
 using TMPro;
 using UnityEngine;
 
 public class CombatWindow : MonoBehaviour
 {
     [SerializeField, Tooltip("Position where the player's creature should be rendered.")]
-    private ChaosCreature playerLocation;
+    private GameObject playerLocation;
 
     [SerializeField, Tooltip("Position where the opponent's creature should be rendered.")]
-    private ChaosCreature opponentLocation;
+    private GameObject opponentLocation;
 
     [SerializeField, Tooltip("Window that will display the stats of the player's creature.")]
     private CombatStats playerStats;
@@ -28,29 +29,32 @@ public class CombatWindow : MonoBehaviour
     private Party playerParty;
 
     [SerializeField, Tooltip("List of possible species, used to instantiate creatures to render.")]
-    private EggListVariable speciesList;
+    private SpeciesListVariable speciesList;
+
+    [SerializeField, Tooltip("")]
+    private CreatureRenderer rendererPrefab;
 
     private void Awake()
     {
         // Initialize and draw the first creature in the player's party.
-        CreatureInstance partyCreature = playerParty.GetIndex(0);
-        ChaosCreature speciesRef = speciesList.GetCreature(partyCreature.Species);
-        ChaosCreature player = Instantiate(speciesRef, playerLocation.transform.parent);
-        player.Initialize(partyCreature);
-        player.transform.localScale = playerLocation.transform.localScale;
-        player.transform.position = playerLocation.transform.position;
-        playerLocation.gameObject.SetActive(false);
-        player.gameObject.SetActive(true);
-        playerStats.Initialize(player.Name, player.Species, player.Level, player.Stats.hp, player.Stats.hp);
-        player.FlipFacing();
+        SaveableCreature partyCreature = playerParty.GetByIndex(0);
+        CreatureSpecies speciesRef = speciesList.GetSpecies(partyCreature.species);
+        CreatureRenderer playerRenderer = Instantiate(rendererPrefab, playerLocation.transform.parent);
+        playerRenderer.Initialize(speciesRef, partyCreature.details);
+        playerRenderer.transform.localScale = playerLocation.transform.localScale;
+        playerRenderer.transform.position = playerLocation.transform.position;
+        playerLocation.SetActive(false);
+        playerRenderer.gameObject.SetActive(true);
+        playerStats.Initialize(partyCreature.creatureName, partyCreature.species, partyCreature.level, partyCreature.stats.hp, partyCreature.stats.hp);
+        playerRenderer.FlipFacing();
         log.text = "You've encountered a hostile creature!";
 
         // Show what skills the player has available.
-        Skill[] playerSkills = player.GetSkills();
+        Skill[] playerSkills = speciesRef.GetSkills(partyCreature.level);
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
-            button.Initialize(playerSkills[i], player);
+            button.Initialize(playerSkills[i], partyCreature);
         }
     }
 

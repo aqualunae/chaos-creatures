@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 770a7b21c1f2c38428d5cf0d700c5fc2, type: 3}
+  m_Name: Old Species List
+  m_EditorClassIdentifier: Assembly-CSharp::EggListVariable
+  runtimeValue:
+  - {fileID: -5356272697235425458, guid: 7e23e4ff5c5f336409720f8a61a3a1a8, type: 3}
+  - {fileID: -5356272697235425458, guid: 0970b16d9bf412846984daae798ee45d, type: 3}
+  - {fileID: -5356272697235425458, guid: 3e85a4a442084964181a6a253204da0e, type: 3}
+  - {fileID: -5356272697235425458, guid: d2003ae6cf1533442813a3feb972b2ed, type: 3}
+  - {fileID: -5356272697235425458, guid: dd443a8fa20e8154f8edd11d67013874, type: 3}
+  - {fileID: -5356272697235425458, guid: 1ca3b345d8f800440a1a72d8d0c44735, type: 3}
+  - {fileID: -5356272697235425458, guid: 9bd7c79479ab75d45a3f10d15fa3dcb6, type: 3}

@@ -1,3 +1,4 @@
+using Assets.Scripts.Creatures;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,16 +19,13 @@ public class SkillButton : MonoBehaviour
     private TextMeshProUGUI description;
 
     private Skill skill;
-    private ChaosCreature user;
-    private ChaosCreature target;
+    private SaveableCreature user;
+    private SaveableCreature target;
 
     /// <summary>
     /// Initialize the button with skill data.
     /// </summary>
-    /// <param name="skill">Skill to display</param>
-    /// <param name="player">Skill user</param>
-    /// <param name="opponent">Default skill target</param>
-    public void Initialize(Skill skill, ChaosCreature player, ChaosCreature opponent = null)
+    public void Initialize(Skill skill, SaveableCreature user, SaveableCreature defaultTarget = null)
     {
         this.skill = skill;
         title.text = skill.Title;
@@ -42,14 +40,14 @@ public class SkillButton : MonoBehaviour
             power.color = Color.darkGreen; // change this color
         }
         description.text = skill.Description;
-        user = player;
-        target = opponent;
+        this.user = user;
+        this.target = defaultTarget;
     }
 
     /// <summary>
     /// Change the default target of the skill.
     /// </summary>
-    public void SetTarget(ChaosCreature target)
+    public void SetTarget(SaveableCreature target)
     {
         this.target = target;
     }

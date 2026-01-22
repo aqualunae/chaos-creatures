@@ -1,3 +1,4 @@
+using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using UnityEngine;
 using static Item;
@@ -75,7 +76,7 @@ public class Skill : ScriptableObject
         get => minimumLevel;
     }
 
-    public void UseSkill(ChaosCreature user, ChaosCreature target)
+    public void UseSkill(SaveableCreature user, SaveableCreature target)
     {
         Debug.Log(title);
     }

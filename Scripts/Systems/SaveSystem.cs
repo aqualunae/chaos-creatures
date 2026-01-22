@@ -22,7 +22,7 @@ public class SaveSystem : MonoBehaviour
     /// <returns>Full filepath of the save data.</returns>
     private string GetSavePath()
     {
-        return Path.Combine(Application.persistentDataPath, filename, ".json");
+        return $"{Path.Combine(Application.persistentDataPath, filename)}.json";
     }
 
     /// <summary>

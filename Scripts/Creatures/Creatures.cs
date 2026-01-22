@@ -21,8 +21,8 @@ namespace Assets.Scripts.Creatures
     {
         public string title;
         public FeatureRarity rarity;
-        // public string lineartSpriteTitle;
         public string baseSpriteTitle;
+        public Sprite sprite;
         public int chance;
     }
 
@@ -34,11 +34,12 @@ namespace Assets.Scripts.Creatures
     {
         public string title;
         public string hexcode;
+        public Color color;
         public int chance;
     }
 
     /// <summary>
-    /// A pattern and its rarity for one body part of a species.
+    /// Legacy. A pattern and its rarity for one body part of a species.
     /// </summary>
     [System.Serializable]
     public class Pattern
@@ -50,7 +51,7 @@ namespace Assets.Scripts.Creatures
     }
 
     /// <summary>
-    /// All possible visual options for a creature.
+    /// Legacy. All possible visual options for a creature.
     /// </summary>
     [System.Serializable]
     public class CreatureOptions
@@ -61,6 +62,20 @@ namespace Assets.Scripts.Creatures
         public Pattern[] primaryFeaturePatterns;
         public Pattern[] secondaryFeaturePatterns;
         public Pattern[] tertiaryFeaturePatterns;
+    }
+
+    // <summary>
+    /// All possible visual genetic options for a species.
+    /// </summary>
+    [System.Serializable]
+    public class SpeciesOptions
+    {
+        public GeneColor[] baseColors;
+        public GeneColor[] accentColors;
+        public Feature[] bodyPatterns;
+        public Feature[] primaryFeaturePatterns;
+        public Feature[] secondaryFeaturePatterns;
+        public Feature[] tertiaryFeaturePatterns;
     }
 
     /// <summary>
@@ -123,7 +138,8 @@ namespace Assets.Scripts.Creatures
         body,
         primary,
         secondary,
-        tertiary
+        tertiary,
+        eyes
     }
 
     /// <summary>

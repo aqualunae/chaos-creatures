@@ -16,7 +16,7 @@ public class Party : SaveableBehaviour
     private CreatureInstance[] presetParty;
 
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
-    private Dictionary<int, CreatureInstance> creatures;
+    private Dictionary<int, SaveableCreature> creatures;
 
     // this needs to be Awake so that it's called before the save system calls OnLoad through Start
     private void Awake()
@@ -32,12 +32,19 @@ public class Party : SaveableBehaviour
     {
         Debug.Log("new file");
         // create the party using the presets, if any
-        creatures = new Dictionary<int, CreatureInstance>();
+        creatures = new Dictionary<int, SaveableCreature>();
         for (int i = 0; i < partySize; i++)
         {
             if (presetParty.Length > i)
             {
-                creatures.Add(i, presetParty[i]);
+                creatures.Add(i, new SaveableCreature()
+                {
+                    species = presetParty[i].Species.Species,
+                    creatureName = presetParty[i].CreatureName,
+                    level = presetParty[i].Level,
+                    stats = presetParty[i].Stats,
+                    details = presetParty[i].Details
+                });
             }
             else
             {
@@ -49,7 +56,7 @@ public class Party : SaveableBehaviour
     /// <summary>
     /// Get a party member by index, for example in combat.
     /// </summary>
-    public CreatureInstance GetIndex(int index)
+    public SaveableCreature GetByIndex(int index)
     {
         if (index >= partySize)
         {
@@ -63,31 +70,13 @@ public class Party : SaveableBehaviour
     /// Add a creature instance to party.
     /// </summary>
     /// <returns>True if successful.</returns>
-    public bool AddToParty(CreatureInstance instance)
+    public bool AddToParty(SaveableCreature creature)
     {
         for (int i = 0; i < partySize; i++)
         {
             if (creatures[i] == null)
             {
-                creatures[i] = instance;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Convert a renderable creature to a creature instance and add it to party.
-    /// </summary>
-    /// <returns>True if successful.</returns>
-    public bool AddToParty(ChaosCreature creature)
-    {
-        for (int i = 0; i < partySize; i++)
-        {
-            if (creatures[i] == null)
-            {
-                CreatureInstance instance = new CreatureInstance(creature.Species, creature.Name, creature.Level, creature.Stats, creature.Details);
-                creatures[i] = instance;
+                creatures[i] = creature;
                 return true;
             }
         }
@@ -100,7 +89,7 @@ public class Party : SaveableBehaviour
     /// <param name="index">Index of the party member.</param>
     /// <param name="creature">Updated creature.</param>
     /// <returns>True if successful.</returns>
-    public bool UpdatePartyMember(int index, CreatureInstance creature)
+    public bool UpdatePartyMember(int index, SaveableCreature creature)
     {
         if (creatures[index] == null)
         {
@@ -108,7 +97,7 @@ public class Party : SaveableBehaviour
             return false;
         }
 
-        if (!creatures[index].Species.Equals(creature.Species))
+        if (creatures[index].species != creature.species)
         {
             Debug.Log("Not the same creature.");
             return false;
@@ -137,18 +126,18 @@ public class Party : SaveableBehaviour
     /// </summary>
     public bool PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
     {
-        if (creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
-        {
-            if (creatures[firstCreatureIndex].Species.Equals(creatures[secondCreatureIndex].Species))
-            {
-                // CreatureEgg egg = labelledEggs[creatures[firstCreatureIndex].Species];
-                // CreatureEgg instantiatedEgg = Instantiate(egg);
-                // instantiatedEgg.InitializePair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
-                // instantiatedEgg.transform.localScale = Vector2.one;
-                // instantiatedEgg.transform.position = new Vector2(0.48f, -0.32f);
-                // return true;
-            }
-        }
+        // if (creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
+        // {
+        //     if (creatures[firstCreatureIndex].Species.Equals(creatures[secondCreatureIndex].Species))
+        //     {
+        //         CreatureEgg egg = labelledEggs[creatures[firstCreatureIndex].Species];
+        //         CreatureEgg instantiatedEgg = Instantiate(egg);
+        //         instantiatedEgg.InitializePair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
+        //         instantiatedEgg.transform.localScale = Vector2.one;
+        //         instantiatedEgg.transform.position = new Vector2(0.48f, -0.32f);
+        //         return true;
+        //     }
+        // }
         return false;
     }
 
@@ -172,14 +161,7 @@ public class Party : SaveableBehaviour
         {
             if (creatures[i] != null)
             {
-                savedCreatures.Add(new SaveableCreature()
-                {
-                    species = creatures[i].Species,
-                    creatureName = creatures[i].CreatureName,
-                    level = creatures[i].Level,
-                    stats = creatures[i].Stats,
-                    details = creatures[i].Details
-                });
+                savedCreatures.Add(creatures[i]);
             }
         }
 
@@ -209,13 +191,13 @@ public class Party : SaveableBehaviour
     /// <param name="saveable">Data to load.</param>
     public override void OnLoad(Saveable saveable)
     {
-        creatures = new Dictionary<int, CreatureInstance>();
+        creatures = new Dictionary<int, SaveableCreature>();
         PartySaveData saveData = JsonUtility.FromJson<PartySaveData>(saveable.data);
         for (int i = 0; i < partySize; i++)
         {
             if (saveData.creatures.Count > i)
             {
-                creatures.Add(i, new CreatureInstance(saveData.creatures[i].species, saveData.creatures[i].creatureName, saveData.creatures[i].level, saveData.creatures[i].stats, saveData.creatures[i].details));
+                creatures.Add(i, saveData.creatures[i]);
             }
             else
             {

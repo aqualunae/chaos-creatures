@@ -6,11 +6,11 @@ using UnityEngine;
 /// <summary>
 /// Used to create preset Creatures with fixed stats and appearance.
 /// </summary>
-[CreateAssetMenu(fileName = "Preset Creature ", menuName = "Scriptable Objects/Creature Instance")]
+[CreateAssetMenu(fileName = "Preset Creature ", menuName = "Creatures/Creature Instance")]
 public class CreatureInstance : ScriptableObject
 {
     [SerializeField]
-    private string species;
+    private CreatureSpecies species;
 
     [SerializeField]
     private string creatureName;
@@ -24,7 +24,7 @@ public class CreatureInstance : ScriptableObject
     [SerializeField]
     private CreatureDetails details;
 
-    public CreatureInstance(string species, string creatureName, int level, Stats stats, CreatureDetails details)
+    public CreatureInstance(CreatureSpecies species, string creatureName, int level, Stats stats, CreatureDetails details)
     {
         this.species = species;
         this.creatureName = creatureName;
@@ -33,7 +33,7 @@ public class CreatureInstance : ScriptableObject
         this.details = details;
     }
 
-    public string Species
+    public CreatureSpecies Species
     {
         get => species;
     }
