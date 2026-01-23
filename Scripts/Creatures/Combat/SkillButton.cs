@@ -18,6 +18,9 @@ public class SkillButton : MonoBehaviour
     [SerializeField, Tooltip("Field that displays the description, where possible.")]
     private TextMeshProUGUI description;
 
+    [SerializeField]
+    private Color healColor = Color.darkGreen;
+
     private Skill skill;
     private SaveableCreature user;
     private SaveableCreature target;
@@ -25,7 +28,7 @@ public class SkillButton : MonoBehaviour
     /// <summary>
     /// Initialize the button with skill data.
     /// </summary>
-    public void Initialize(Skill skill, SaveableCreature user, SaveableCreature defaultTarget = null)
+    public void Initialize(Skill skill, SaveableCreature user, SaveableCreature defaultTarget)
     {
         this.skill = skill;
         title.text = skill.Title;
@@ -37,7 +40,7 @@ public class SkillButton : MonoBehaviour
         else if (skill.Power < 0)
         {
             power.text = $"{skill.Power * -1}";
-            power.color = Color.darkGreen; // change this color
+            power.color = healColor;
         }
         description.text = skill.Description;
         this.user = user;
@@ -45,7 +48,7 @@ public class SkillButton : MonoBehaviour
     }
 
     /// <summary>
-    /// Change the default target of the skill.
+    /// Change the default target of the skill. This won't be used until/unless group combat is implemented.
     /// </summary>
     public void SetTarget(SaveableCreature target)
     {

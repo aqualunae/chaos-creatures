@@ -37,13 +37,18 @@
 - refactored creatures to separate species from individual from rendering
 - separated creature renderer (sprites, can be used in overworld) from creature camera (creates an image for use in the ui)
 
+- implemented randomcreature
+- moved some functionality from creaturegg (legacy) to creaturespecies and creatureutility
+- created scriptable events
+- added random encounters on grass only
+- code commenting
+
 ## Next Up
 
 - scene change: start menu to campground and back
-- player movement fixes
+- stop player movement when menus are open
 - camera following player movement
 
-- connect opponent to combat screen
 - logic for handling combat
 
 - menus: select initial creature, view party, return to title

@@ -158,7 +158,7 @@ public class CreatureRenderer : MonoBehaviour
         eyeBase.sprite = species.GetSprite(GeneLocation.eyes);
         eyeBase.color = species.GetColor(false, details.eyeColorIndex);
         eyeBase.sortingOrder = species.GetSortOrder(GeneLocation.eyes, true);
-        eyeShine.sprite = species.GetSprite(GeneLocation.eyes, FeatureRarity.recessive);
+        eyeShine.sprite = species.GetSprite(GeneLocation.eyes, FeatureRarity.recessive, 1);
         eyeShine.sortingOrder = species.GetSortOrder(GeneLocation.eyes, false);
 
         bodyBase.sprite = species.GetSprite(GeneLocation.body);

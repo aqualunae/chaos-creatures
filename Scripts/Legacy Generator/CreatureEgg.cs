@@ -165,9 +165,7 @@ public class CreatureEgg : MonoBehaviour
             baseColorIndex = odds.tertiaryUsesBodyColor ? bodyBaseIndex : tertiaryBaseIndex,
             accentColorIndex = tertiaryAccentIndex,
             patternIndex = tertiaryPatternIndex
-        };
-
-        Debug.Log(JsonUtility.ToJson(tertiary).ToString());  
+        }; 
     }
 
     /// <summary>

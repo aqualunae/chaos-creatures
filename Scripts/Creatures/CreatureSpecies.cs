@@ -87,6 +87,14 @@ public class CreatureSpecies : ScriptableObject
         return possibleSkills.Where(skill => skill.MinimumLevel <= level).ToArray();
     }
 
+    // could probably stand to refactor so that patternIndex is before rarity
+    /// <summary>
+    /// Get a specific sprite for this creature species. Eyeshine is at eyes with a positive patternIndex.
+    /// </summary>
+    /// <param name="location">Body part</param>
+    /// <param name="rarity">Rarity of the feature, if applicable</param>
+    /// <param name="patternIndex">Index of the pattern, if applicable. Recessive patterns are expected to be included indices, and not calculated by this method.</param>
+    /// <returns>Sprite to render.</returns>
     public Sprite GetSprite(GeneLocation location, FeatureRarity rarity = FeatureRarity.dominant, int patternIndex = -1)
     {
         if (patternIndex == -1)
@@ -96,7 +104,7 @@ public class CreatureSpecies : ScriptableObject
                 case GeneLocation.body:
                     return body;
                 case GeneLocation.eyes:
-                    return rarity == FeatureRarity.dominant ? eyes : eyeShine;
+                    return eyes;
                 case GeneLocation.primary:
                     return primary[(int)rarity].sprite;
                 case GeneLocation.secondary:
@@ -107,20 +115,18 @@ public class CreatureSpecies : ScriptableObject
         }
         else
         {
-            int index;
             switch (location)
             {
                 case GeneLocation.body:
                     return options.bodyPatterns[patternIndex].sprite;
+                case GeneLocation.eyes:
+                    return eyeShine;
                 case GeneLocation.primary:
-                    index = rarity == FeatureRarity.dominant ? patternIndex : patternIndex + (options.primaryFeaturePatterns.Length / 2);
-                    return options.primaryFeaturePatterns[index].sprite;
+                    return options.primaryFeaturePatterns[patternIndex].sprite;
                 case GeneLocation.secondary:
-                    index = rarity == FeatureRarity.dominant ? patternIndex : patternIndex + (options.secondaryFeaturePatterns.Length / 2);
-                    return options.secondaryFeaturePatterns[index].sprite;
+                    return options.secondaryFeaturePatterns[patternIndex].sprite;
                 case GeneLocation.tertiary:
-                    index = rarity == FeatureRarity.dominant ? patternIndex : patternIndex + (options.tertiaryFeaturePatterns.Length / 2);
-                    return options.tertiaryFeaturePatterns[index].sprite;
+                    return options.tertiaryFeaturePatterns[patternIndex].sprite;
             }
         }
 
@@ -128,6 +134,12 @@ public class CreatureSpecies : ScriptableObject
         return null;
     }
 
+    /// <summary>
+    /// Get a color this spcecies can be.
+    /// </summary>
+    /// <param name="isBaseColor">True for base color, false for accent color</param>
+    /// <param name="index">Color index</param>
+    /// <returns></returns>
     public Color GetColor(bool isBaseColor, int index)
     {
         if (isBaseColor)
@@ -265,5 +277,34 @@ public class CreatureSpecies : ScriptableObject
         }
 
         return odds;
+    }
+
+    /// <summary>
+    /// Get randomized stats for a level 1 creature of this species.
+    /// </summary>
+    public Stats GetBaseStats()
+    {
+        return new Stats()
+        {
+            hp = UnityEngine.Random.Range(hpGain.x, hpGain.y) * 5,
+            attack = UnityEngine.Random.Range(attackGain.x, attackGain.y),
+            defense = UnityEngine.Random.Range(defenseGain.x, defenseGain.y),
+            speed = UnityEngine.Random.Range(speedGain.x, speedGain.y),
+            critical = UnityEngine.Random.Range(criticalGain.x, criticalGain.y)
+        };
+    }
+
+    /// <summary>
+    /// Increase stats by a random amount within species bounds, generally for leveling up.
+    /// </summary>
+    public Stats IncrementStats(Stats stats)
+    {
+        stats.hp *= UnityEngine.Random.Range((float)hpGain.x / 100, (float)hpGain.y / 100) + 1;
+        stats.attack *= UnityEngine.Random.Range((float)attackGain.x / 100, (float)attackGain.y / 100) + 1;
+        stats.defense *= UnityEngine.Random.Range((float)defenseGain.x / 100, (float)defenseGain.y / 100) + 1;
+        stats.speed *= UnityEngine.Random.Range((float)speedGain.x / 100, (float)speedGain.y / 100) + 1;
+        stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1;
+
+        return stats;
     }
 }

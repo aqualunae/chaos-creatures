@@ -154,7 +154,7 @@ namespace Assets.Scripts.Creatures
     }
 
     /// <summary>
-    /// Modifier to the genetic chances of a species. Generally used in an array.
+    /// Used to increase the likelihood of the specified combination, generally in an array. 
     /// </summary>
     [System.Serializable]
     public class GeneEffect
@@ -162,7 +162,6 @@ namespace Assets.Scripts.Creatures
         public GeneLocation location;
         public GeneAspect geneAspect;
         public string option;
-        public float chance;
     }
 
     /// <summary>

@@ -5,10 +5,10 @@ using UnityEngine;
 public class CombatWindow : MonoBehaviour
 {
     [SerializeField, Tooltip("Position where the player's creature should be rendered.")]
-    private GameObject playerLocation;
+    private CreatureRenderer playerRenderer;
 
     [SerializeField, Tooltip("Position where the opponent's creature should be rendered.")]
-    private GameObject opponentLocation;
+    private CreatureRenderer opponentRenderer;
 
     [SerializeField, Tooltip("Window that will display the stats of the player's creature.")]
     private CombatStats playerStats;
@@ -34,19 +34,20 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("")]
     private CreatureRenderer rendererPrefab;
 
-    private void Awake()
+    public void Initialize(SaveableCreature opponent)
     {
-        // Initialize and draw the first creature in the player's party.
+        // Initialize the first creature in the player's party.
         SaveableCreature partyCreature = playerParty.GetByIndex(0);
         CreatureSpecies speciesRef = speciesList.GetSpecies(partyCreature.species);
-        CreatureRenderer playerRenderer = Instantiate(rendererPrefab, playerLocation.transform.parent);
         playerRenderer.Initialize(speciesRef, partyCreature.details);
-        playerRenderer.transform.localScale = playerLocation.transform.localScale;
-        playerRenderer.transform.position = playerLocation.transform.position;
-        playerLocation.SetActive(false);
-        playerRenderer.gameObject.SetActive(true);
         playerStats.Initialize(partyCreature.creatureName, partyCreature.species, partyCreature.level, partyCreature.stats.hp, partyCreature.stats.hp);
         playerRenderer.FlipFacing();
+
+        // Initialize the opponent
+        CreatureSpecies opponentSpecies = speciesList.GetSpecies(opponent.species);
+        opponentRenderer.Initialize(opponentSpecies, opponent.details);
+        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats.hp, opponent.stats.hp);
+
         log.text = "You've encountered a hostile creature!";
 
         // Show what skills the player has available.
@@ -54,12 +55,21 @@ public class CombatWindow : MonoBehaviour
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
-            button.Initialize(playerSkills[i], partyCreature);
+            button.Initialize(playerSkills[i], partyCreature, opponent);
+        }
+    }
+
+    private void OnDisable()
+    {
+        // since buttons are drawn every time this window is initialized, they need to be removed when the window is closed
+        SkillButton[] buttons = skillsContainer.GetComponentsInChildren<SkillButton>();
+        foreach (SkillButton button in buttons)
+        {
+            button.gameObject.SetActive(false);
         }
     }
 
     // TODO
-    // - Initialize opponent creature
     // - Skill use logic
     // - Update player's creature health when combat ends
     

@@ -6,9 +6,16 @@ public class Mover : MonoBehaviour
     [SerializeField, Tooltip("Speed of the object when in motion.")]
     private float speed;
 
+    [SerializeField]
+    private Vector3Event movementEvent;
+
+    [SerializeField, Range(0.01f, 0.32f), Tooltip("The movement may go to an increment that isn't valid. At what distance should it jump the player to the closest valid grid location?")]
+    private float gapCloseDistance = 0.1f;
+
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
     private Coroutine movementCoroutine;
     private Vector3 direction3;
+    private float gridSize = 0.32f;
 
     /// <summary>
     /// Move this object in a specific direction.
@@ -20,7 +27,7 @@ public class Mover : MonoBehaviour
             return;
         }
 
-        direction3 = new Vector3(direction.x, direction.y) * 0.32f;
+        direction3 = new Vector3(direction.x, direction.y) * gridSize;
         if (movementCoroutine != null)
         {
             StopCoroutine(movementCoroutine);
@@ -32,12 +39,15 @@ public class Mover : MonoBehaviour
     private IEnumerator Movement()
     {
         Vector3 originalPosition = transform.position;
-        while (Vector2.Distance(transform.position, originalPosition + direction3) > 0.1f)
+        while (Vector2.Distance(transform.position, originalPosition + direction3) > gapCloseDistance)
         {
             transform.Translate(speed * Time.deltaTime * direction3);
             yield return new WaitForEndOfFrame();
         }
         transform.position = originalPosition + direction3;
+
+        // tell any listeners that the player has moved
+        movementEvent.Invoke(transform.position);
         yield return null;
     }
 
@@ -48,9 +58,5 @@ public class Mover : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         StopCoroutine(movementCoroutine);
-        // Right now, this disables movement completely when collision occurs, because the object does not bounce back from the collision.
-        // Logic options:
-        // - Disable that direction only until the object has moved in a different direction.
-        // - Put collision on a cooldown. Could enable glitching through things?
     }
 }
