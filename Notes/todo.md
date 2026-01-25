@@ -41,7 +41,11 @@
 - moved some functionality from creaturegg (legacy) to creaturespecies and creatureutility
 - created scriptable events
 - added random encounters on grass only
-- code commenting
+- encounter code commenting
+
+- added basic pauze menu
+- implemented pauzing
+- can return to menu
 
 ## Next Up
 
@@ -97,3 +101,12 @@
 
 - https://www.answermind.blog/unlock-unity-master-persistent-data-path-flawless-game-saves
 - https://stackoverflow.com/a/65495834
+
+## Pauzing
+
+- when the game starts, it is not pauzed
+
+- pauzing:
+    - opens the pauze menu
+    - disables all movers
+

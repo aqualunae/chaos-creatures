@@ -12,17 +12,41 @@ public class Mover : MonoBehaviour
     [SerializeField, Range(0.01f, 0.32f), Tooltip("The movement may go to an increment that isn't valid. At what distance should it jump the player to the closest valid grid location?")]
     private float gapCloseDistance = 0.1f;
 
+    [SerializeField]
+    private BoolEvent gamePauzedEvent;
+
+    private bool gamePauzed = false;
+
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
     private Coroutine movementCoroutine;
     private Vector3 direction3;
     private float gridSize = 0.32f;
+
+    private void Awake()
+    {
+        gamePauzedEvent.AddListener(TogglePauze);
+    }
+
+    private void TogglePauze(bool pauzed)
+    {
+        this.gamePauzed = pauzed;
+    }
+
+    private void OnDisable()
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+        gamePauzedEvent.RemoveListener(TogglePauze);
+    }
 
     /// <summary>
     /// Move this object in a specific direction.
     /// </summary>
     public void Move(Vector2 direction)
     {
-        if (direction == Vector2.zero)
+        if (direction == Vector2.zero || gamePauzed)
         {
             return;
         }
