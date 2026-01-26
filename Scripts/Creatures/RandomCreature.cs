@@ -28,7 +28,7 @@ public class RandomCreature : ScriptableObject
         {
             stats = species.IncrementStats(stats);
         }
-        Debug.Log(JsonUtility.ToJson(stats).ToString());
+        // Debug.Log(JsonUtility.ToJson(stats).ToString());
 
         return new SaveableCreature()
         {

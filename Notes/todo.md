@@ -55,13 +55,16 @@
 
 ## Next Up
 
-- scene change: start menu to campground and back
-- stop player movement when menus are open
 - camera following player movement
 
 - logic for handling combat
+    - aspect influence
+    - opponent skill use
+    - skills that don't just do damage
+    - make sure stat changes are temporary
+    - allow targeting self / selecting target? or handle self-targeting skills automatically
 
-- menus: select initial creature, view party, return to title
+- menus: select initial creature, view party
 - menus access the save master
 - allow saveables to trigger saves on state change
 - method for saveables to remove themselves from save system
@@ -106,14 +109,12 @@
 
 ##### Formulas
 
-- Need to factor in target's defense.
+- Add aspect modifiers
 
-- Adjusted Attack: attack - defense // dash: 0, spark: 5, flare: 7
-
-- Base Damage: (movePower * 0.5) * (((attack - defense) * 0.01) + 1) // dash: 7, spark: 11 (7 reversed), flare: 16 (14 reversed)
-- Randomized Damage: Random.Range(baseDamage * 0.8, baseDamage * 1.2) // dash: 6-10, spark: 9-13, flare: 14-20
-- Crit Chance: (userCrit * 0.03) + moveCrit // dash: 0.06, spark: 0.19, flare: 0.12
-- Crit Effect: damage * ((userCrit * 0.1) + 1) // dash: 10, spark 14, flare 24
+- Base Damage: (movePower * 0.5) * (((attack - defense) * 0.01) + 1)
+- Randomized Damage: Random.Range(baseDamage * 0.8, baseDamage * 1.2)
+- Crit Chance: (userCrit * 0.03) + moveCrit
+- Crit Effect: damage * ((userCrit * 0.1) + 1)
 
 #### Friendship
 

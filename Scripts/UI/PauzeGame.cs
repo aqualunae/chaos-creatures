@@ -13,6 +13,7 @@ public class PauzeGame : MonoBehaviour
         gamePauzedEvent.AddListener(TogglePauzeByListener);
     }
 
+    // Only allow the pauze state to be toggled by the listener. Otherwise it results in unpredictable behaviour.
     private void TogglePauzeByListener(bool pauzed)
     {
         if (pauzed)
@@ -25,6 +26,7 @@ public class PauzeGame : MonoBehaviour
         }
     }
 
+    // If the pauze state needs to be toggled, invoke the listener.
     public void TogglePauze(bool pauzed)
     {
         gamePauzedEvent.Invoke(pauzed);

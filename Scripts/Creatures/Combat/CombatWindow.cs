@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Assets.Scripts.Creatures;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatWindow : MonoBehaviour
 {
@@ -36,6 +38,7 @@ public class CombatWindow : MonoBehaviour
 
     private SaveableCreature player;
     private SaveableCreature opponent;
+    private List<SkillButton> skillButtons;
 
     public void Initialize(SaveableCreature opponent)
     {
@@ -55,11 +58,13 @@ public class CombatWindow : MonoBehaviour
         log.text = $"You've encountered a hostile {opponent.species}!";
 
         // Show what skills the player has available.
+        skillButtons = new List<SkillButton>();
         Skill[] playerSkills = speciesRef.GetSkills(player.level);
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
             button.Initialize(playerSkills[i], player, opponent, this);
+            skillButtons.Add(button);
         }
 
         logUpdateEvent.AddListener(UpdateLog);
@@ -68,32 +73,53 @@ public class CombatWindow : MonoBehaviour
     private void OnDisable()
     {
         // since buttons are drawn every time this window is initialized, they need to be removed when the window is closed
-        SkillButton[] buttons = skillsContainer.GetComponentsInChildren<SkillButton>();
-        foreach (SkillButton button in buttons)
+        foreach (SkillButton button in skillButtons)
         {
             button.gameObject.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// Replace the player creature with an updated version.
+    /// </summary>
     public void UpdatePlayer(SaveableCreature update)
     {
         player = update;
         playerStats.UpdateHealth(player.stats.currentHP);
     }
 
+    /// <summary>
+    /// Replace the opponent creature with an updated version.
+    /// </summary>
     public void UpdateOpponent(SaveableCreature update)
     {
         opponent = update;
         opponentStats.UpdateHealth(opponent.stats.currentHP);
     }
 
+    /// <summary>
+    /// Toggle whose turn it is.
+    /// </summary>
+    /// <param name="state">True for player's turn, false for opponent's turn.</param>
+    public void TogglePlayerTurn(bool state)
+    {
+        foreach (SkillButton button in skillButtons)
+        {
+            button.GetComponent<Button>().interactable = state;
+        }
+    }
+
+    /// <summary>
+    /// Write a message to the combat window's visible log.
+    /// </summary>
+    /// <param name="text">Message</param>
     public void UpdateLog(string text)
     {
         log.text = text;
     }
 
     // TODO
-    // - Skill use logic
+    // - Opponent skill use logic
     // - Update player's creature health when combat ends
     
     // BONUS

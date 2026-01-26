@@ -65,13 +65,13 @@ public class SkillButton : MonoBehaviour
     /// </summary>
     public void UseSkill()
     {
-        Debug.Log("clicked");
-        Debug.Log(skill.Title);
         if (target == null)
         {
             Debug.Log("No target!");
             return;
         }
+
+        // Apply skill effects
         SaveableCreature updatedTarget = skill.UseSkill(user, target, logUpdateEvent);
         if (user != target)
         {
@@ -81,5 +81,8 @@ public class SkillButton : MonoBehaviour
         {
             combat.UpdatePlayer(updatedTarget);
         }
+
+        // The player's turn is over now that they've used a skill.
+        combat.TogglePlayerTurn(false);
     }
 }
