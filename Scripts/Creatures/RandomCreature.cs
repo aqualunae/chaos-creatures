@@ -22,12 +22,13 @@ public class RandomCreature : ScriptableObject
         GeneticOdds odds = species.GetGeneticOdds(geneEffects);
         CreatureDetails details = CreatureUtility.GetDetails(odds);
         string speciesName = species.Species;
-        int level = UnityEngine.Random.Range(levelRange.x, levelRange.y);
+        int level = UnityEngine.Random.Range(levelRange.x, levelRange.y + 1);
         Stats stats = species.GetBaseStats();
         for (int i = 0; i < level; i++)
         {
             stats = species.IncrementStats(stats);
         }
+        Debug.Log(JsonUtility.ToJson(stats).ToString());
 
         return new SaveableCreature()
         {

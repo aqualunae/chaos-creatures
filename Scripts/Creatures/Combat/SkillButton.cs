@@ -21,14 +21,18 @@ public class SkillButton : MonoBehaviour
     [SerializeField]
     private Color healColor = Color.darkGreen;
 
+    [SerializeField]
+    private StringEvent logUpdateEvent;
+
     private Skill skill;
     private SaveableCreature user;
     private SaveableCreature target;
+    private CombatWindow combat;
 
     /// <summary>
     /// Initialize the button with skill data.
     /// </summary>
-    public void Initialize(Skill skill, SaveableCreature user, SaveableCreature defaultTarget)
+    public void Initialize(Skill skill, SaveableCreature user, SaveableCreature defaultTarget, CombatWindow combat)
     {
         this.skill = skill;
         title.text = skill.Title;
@@ -45,6 +49,7 @@ public class SkillButton : MonoBehaviour
         description.text = skill.Description;
         this.user = user;
         this.target = defaultTarget;
+        this.combat = combat;
     }
 
     /// <summary>
@@ -67,6 +72,14 @@ public class SkillButton : MonoBehaviour
             Debug.Log("No target!");
             return;
         }
-        skill.UseSkill(user, target);
+        SaveableCreature updatedTarget = skill.UseSkill(user, target, logUpdateEvent);
+        if (user != target)
+        {
+            combat.UpdateOpponent(updatedTarget);
+        }
+        else
+        {
+            combat.UpdatePlayer(updatedTarget);
+        }
     }
 }

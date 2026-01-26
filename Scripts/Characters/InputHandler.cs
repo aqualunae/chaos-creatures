@@ -27,7 +27,6 @@ public class InputHandler : MonoBehaviour
         Vector2 direction = value.Get<Vector2>();
         if (direction != Vector2.zero)
         {
-            Debug.Log(direction);
             GetComponent<Mover>().Move(direction);
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using UnityEngine;
@@ -76,8 +77,26 @@ public class Skill : ScriptableObject
         get => minimumLevel;
     }
 
-    public void UseSkill(SaveableCreature user, SaveableCreature target)
+    public SaveableCreature UseSkill(SaveableCreature user, SaveableCreature target, StringEvent logUpdateEvent)
     {
-        Debug.Log(title);
+        logUpdateEvent.Invoke($"{title} was used!");
+
+        float adjustedAttack = user.stats.attack - target.stats.defense;
+        float baseDamage = (float)(power * 0.5f * ((adjustedAttack * 0.01) + 1));
+        float randomDamage = UnityEngine.Random.Range(baseDamage * 0.8f, baseDamage * 1.2f);
+
+        float critThreshold = (user.stats.critical * 0.03f) + critical;
+        bool criticalHit = UnityEngine.Random.Range(0f, 1f) < critThreshold;
+
+        float damage = criticalHit ? (float)(randomDamage * ((user.stats.critical * 0.1) + 1)) : randomDamage;
+        int finalDamage = (int)Math.Round(damage, 0);
+
+        target.stats.currentHP -= finalDamage;
+        if (target.stats.currentHP < 0)
+        {
+            target.stats.currentHP = 0;
+        }
+
+        return target;
     }
 }

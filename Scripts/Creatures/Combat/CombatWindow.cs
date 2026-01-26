@@ -31,32 +31,38 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("List of possible species, used to instantiate creatures to render.")]
     private SpeciesListVariable speciesList;
 
-    [SerializeField, Tooltip("")]
-    private CreatureRenderer rendererPrefab;
+    [SerializeField]
+    private StringEvent logUpdateEvent;
+
+    private SaveableCreature player;
+    private SaveableCreature opponent;
 
     public void Initialize(SaveableCreature opponent)
     {
         // Initialize the first creature in the player's party.
-        SaveableCreature partyCreature = playerParty.GetByIndex(0);
-        CreatureSpecies speciesRef = speciesList.GetSpecies(partyCreature.species);
-        playerRenderer.Initialize(speciesRef, partyCreature.details);
-        playerStats.Initialize(partyCreature.creatureName, partyCreature.species, partyCreature.level, partyCreature.stats.hp, partyCreature.stats.hp);
+        player = playerParty.GetByIndex(0);
+        CreatureSpecies speciesRef = speciesList.GetSpecies(player.species);
+        playerRenderer.Initialize(speciesRef, player.details);
+        playerStats.Initialize(player.creatureName, player.species, player.level, player.stats.currentHP, player.stats.hp);
         playerRenderer.FlipFacing();
 
         // Initialize the opponent
+        this.opponent = opponent;
         CreatureSpecies opponentSpecies = speciesList.GetSpecies(opponent.species);
         opponentRenderer.Initialize(opponentSpecies, opponent.details);
-        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats.hp, opponent.stats.hp);
+        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats.currentHP, opponent.stats.hp);
 
-        log.text = "You've encountered a hostile creature!";
+        log.text = $"You've encountered a hostile {opponent.species}!";
 
         // Show what skills the player has available.
-        Skill[] playerSkills = speciesRef.GetSkills(partyCreature.level);
+        Skill[] playerSkills = speciesRef.GetSkills(player.level);
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
-            button.Initialize(playerSkills[i], partyCreature, opponent);
+            button.Initialize(playerSkills[i], player, opponent, this);
         }
+
+        logUpdateEvent.AddListener(UpdateLog);
     }
 
     private void OnDisable()
@@ -67,6 +73,23 @@ public class CombatWindow : MonoBehaviour
         {
             button.gameObject.SetActive(false);
         }
+    }
+
+    public void UpdatePlayer(SaveableCreature update)
+    {
+        player = update;
+        playerStats.UpdateHealth(player.stats.currentHP);
+    }
+
+    public void UpdateOpponent(SaveableCreature update)
+    {
+        opponent = update;
+        opponentStats.UpdateHealth(opponent.stats.currentHP);
+    }
+
+    public void UpdateLog(string text)
+    {
+        log.text = text;
     }
 
     // TODO

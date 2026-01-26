@@ -60,6 +60,10 @@ public class CreatureSpecies : ScriptableObject
     }
 
     [Header("Combat")]
+
+    [SerializeField]
+    private Aspect aspect;
+
     [Header("Bounds of randomzied percent increase to stats when leveling up.")]
 
     [SerializeField, Tooltip("min: 1; max: 10")]
@@ -284,13 +288,17 @@ public class CreatureSpecies : ScriptableObject
     /// </summary>
     public Stats GetBaseStats()
     {
+        int hp = UnityEngine.Random.Range(hpGain.x, hpGain.y) * 5;
         return new Stats()
         {
-            hp = UnityEngine.Random.Range(hpGain.x, hpGain.y) * 5,
+            hp = hp,
             attack = UnityEngine.Random.Range(attackGain.x, attackGain.y),
             defense = UnityEngine.Random.Range(defenseGain.x, defenseGain.y),
             speed = UnityEngine.Random.Range(speedGain.x, speedGain.y),
-            critical = UnityEngine.Random.Range(criticalGain.x, criticalGain.y)
+            critical = UnityEngine.Random.Range(criticalGain.x, criticalGain.y),
+            aspect = aspect,
+            currentHP = hp,
+            exp = 0
         };
     }
 
@@ -304,6 +312,9 @@ public class CreatureSpecies : ScriptableObject
         stats.defense *= UnityEngine.Random.Range((float)defenseGain.x / 100, (float)defenseGain.y / 100) + 1;
         stats.speed *= UnityEngine.Random.Range((float)speedGain.x / 100, (float)speedGain.y / 100) + 1;
         stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1;
+        stats.aspect = aspect;
+        stats.currentHP = (int)stats.hp;
+        stats.exp = 0;
 
         return stats;
     }

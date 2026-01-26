@@ -7,7 +7,7 @@ using UnityEngine.Events;
 /// <typeparam name="T">Event parameter type</typeparam>
 public class ScriptableEvent<T> : ScriptableObject
 {
-    private UnityEvent<T> unityEvent;
+    private UnityEvent<T> unityEvent = new UnityEvent<T>();
 
     public void AddListener(UnityAction<T> unityAction)
     {

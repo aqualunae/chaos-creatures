@@ -47,6 +47,12 @@
 - implemented pauzing
 - can return to menu
 
+- added currentHP and exp to SaveableCreature
+- created initial damage and experience formulas
+- string event to update combat logs
+- starting to implement skills
+- fixed crash on new game
+
 ## Next Up
 
 - scene change: start menu to campground and back
@@ -81,6 +87,37 @@
     - bonus: find pixel vfx
 - flee -> close combat window
 - victory and defeat pop-ups
+
+### Math
+
+#### Experience
+
+- Experience total required to reach next level: (level * 5)^3 // level 1: 125, level 5: 15625
+- Experience to get from one level to the next: (((level - 1) * 5)^3) - ((level * 5)^3) // level 1: 125, level 5: 7625
+- Experience earned from one victory: (opponentLevel * 3)^3 // level 1: 27, level 5: 3375
+
+#### Damage
+
+##### Example Stats
+
+- Paradise Wolf Dash Lvl 1: 15 power, 0 moveCrit, 4 attack, 15 hp, 2 userCrit, 4 defense
+- Paradise Wolf Spark Lvl 3: 20 power, 0.1 moveCrit, 10 attack, 35 hp, 3 userCrit, 5 defense
+- Paradise Wolf Flare Lvl 5: 30 power, 0 crit, 13 attack, 46 hp, 4 userCrit, 6 defense
+
+##### Formulas
+
+- Need to factor in target's defense.
+
+- Adjusted Attack: attack - defense // dash: 0, spark: 5, flare: 7
+
+- Base Damage: (movePower * 0.5) * (((attack - defense) * 0.01) + 1) // dash: 7, spark: 11 (7 reversed), flare: 16 (14 reversed)
+- Randomized Damage: Random.Range(baseDamage * 0.8, baseDamage * 1.2) // dash: 6-10, spark: 9-13, flare: 14-20
+- Crit Chance: (userCrit * 0.03) + moveCrit // dash: 0.06, spark: 0.19, flare: 0.12
+- Crit Effect: damage * ((userCrit * 0.1) + 1) // dash: 10, spark 14, flare 24
+
+#### Friendship
+
+- Befriending Rate:
 
 ## Save Flow
 

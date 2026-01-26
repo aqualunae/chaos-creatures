@@ -25,5 +25,7 @@ namespace Assets.Scripts.Creatures.Combat
         public float speed;
         public float critical;
         public Aspect aspect;
+        public int currentHP;
+        public int exp;
     }
 }
