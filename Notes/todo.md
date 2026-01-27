@@ -53,16 +53,21 @@
 - starting to implement skills
 - fixed crash on new game
 
+- opponent skill use
+- victory and defeat
+- preliminary warp system
+- handled self-targeting skills
+- fixed experience error confusing ^ with Math.Pow()
+- added panel to view creature details
+
 ## Next Up
 
 - camera following player movement
 
 - logic for handling combat
     - aspect influence
-    - opponent skill use
-    - skills that don't just do damage
+    - skills that influence stats
     - make sure stat changes are temporary
-    - allow targeting self / selecting target? or handle self-targeting skills automatically
 
 - menus: select initial creature, view party
 - menus access the save master

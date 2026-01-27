@@ -71,9 +71,11 @@ public class SkillButton : MonoBehaviour
             return;
         }
 
+        SaveableCreature skillTarget = skill.TargetSelf ? user : target;
+
         // Apply skill effects
-        SaveableCreature updatedTarget = skill.UseSkill(user, target, logUpdateEvent);
-        if (user != target)
+        SaveableCreature updatedTarget = skill.UseSkill(user, skillTarget, logUpdateEvent);
+        if (!skill.TargetSelf)
         {
             combat.UpdateOpponent(updatedTarget);
         }

@@ -86,41 +86,47 @@ public class Skill : ScriptableObject
     /// <returns>Skill target, with updated health and stats.</returns>
     public SaveableCreature UseSkill(SaveableCreature user, SaveableCreature target, StringEvent logUpdateEvent)
     {
-        logUpdateEvent.Invoke($"{title} was used!");
-
-        if (!targetSelf)
+        if (user == target && !targetSelf)
         {
-            if (user == target)
-            {
-                Debug.Log("This should not be a self-targeting skill.");
-                return target;
-            }
-
-            if (power < 0)
-            {
-                Debug.Log("This skill heals. Are you sure you meant to use it on your opponent?");
-            }
-
-            float adjustedAttack = user.stats.attack - target.stats.defense;
-            float baseDamage = (float)(power * 0.5f * ((adjustedAttack * 0.01) + 1));
-            float randomDamage = UnityEngine.Random.Range(baseDamage * 0.8f, baseDamage * 1.2f);
-
-            float critThreshold = (user.stats.critical * 0.03f) + critical;
-            bool criticalHit = UnityEngine.Random.Range(0f, 1f) < critThreshold;
-
-            float damage = criticalHit ? (float)(randomDamage * ((user.stats.critical * 0.1) + 1)) : randomDamage;
-            int finalDamage = (int)Math.Round(damage, 0);
-
-            target.stats.currentHP -= finalDamage;
-            if (target.stats.currentHP < 0)
-            {
-                target.stats.currentHP = 0;
-            }
-            else if (target.stats.currentHP > target.stats.hp)
-            {
-                target.stats.currentHP = (int)target.stats.hp;
-            }
+            Debug.Log("This should not be a self-targeting skill.");
+            return target;
         }
+
+        if (power < 0 && user != target)
+        {
+            Debug.Log("This skill heals. Are you sure you meant to use it on your opponent?");
+        }
+
+        float adjustedAttack = user.stats.attack - target.stats.defense;
+        float baseDamage = (float)(power * 0.5f * ((adjustedAttack * 0.01) + 1));
+        float randomDamage = UnityEngine.Random.Range(baseDamage * 0.8f, baseDamage * 1.2f);
+
+        float critThreshold = (user.stats.critical * 0.03f) + critical;
+        bool criticalHit = UnityEngine.Random.Range(0f, 1f) < critThreshold;
+
+        float damage = criticalHit ? (float)(randomDamage * ((user.stats.critical * 0.1) + 1)) : randomDamage;
+        int finalDamage = (int)Math.Round(damage, 0);
+
+        target.stats.currentHP -= finalDamage;
+        if (target.stats.currentHP < 0)
+        {
+            target.stats.currentHP = 0;
+        }
+        else if (target.stats.currentHP > target.stats.hp)
+        {
+            target.stats.currentHP = (int)target.stats.hp;
+        }
+
+        string skillEffect = $"{title} was used! ";
+        if (finalDamage > 0)
+        {
+            skillEffect += $"{target.creatureName} took {finalDamage} damage.";
+        }
+        else if (finalDamage < 0)
+        {
+            skillEffect += $"{target.creatureName} received {finalDamage * -1} healing.";
+        }
+        logUpdateEvent.Invoke(skillEffect);
 
         return target;
     }

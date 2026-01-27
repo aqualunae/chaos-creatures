@@ -134,7 +134,7 @@ public class CreatureSpecies : ScriptableObject
             }
         }
 
-        Debug.Log("Invalid sprite parameters");
+        Debug.Log("Invalid parameters");
         return null;
     }
 
@@ -143,7 +143,6 @@ public class CreatureSpecies : ScriptableObject
     /// </summary>
     /// <param name="isBaseColor">True for base color, false for accent color</param>
     /// <param name="index">Color index</param>
-    /// <returns></returns>
     public Color GetColor(bool isBaseColor, int index)
     {
         if (isBaseColor)
@@ -153,6 +152,62 @@ public class CreatureSpecies : ScriptableObject
         else
         {
             return options.accentColors[index].color;
+        }
+    }
+
+    /// <summary>
+    /// Get the title of a feature or pattern possible for this species.
+    /// </summary>
+    /// <param name="location">Body part</param>
+    /// <param name="rarity">Rarity of the feature, if applicable</param>
+    /// <param name="patternIndex">Index of the pattern, if applicable. Recessive patterns are expected to be included indices, and not calculated by this method.</param>
+    public string GetFeatureTitle(GeneLocation location, FeatureRarity rarity = FeatureRarity.dominant, int patternIndex = -1)
+    {
+        if (patternIndex == -1)
+        {
+            switch (location)
+            {
+                case GeneLocation.primary:
+                    return primary[(int)rarity].title;
+                case GeneLocation.secondary:
+                    return secondary[(int)rarity].title;
+                case GeneLocation.tertiary:
+                    return tertiary[(int)rarity].title;
+            }
+        }
+        else
+        {
+            switch (location)
+            {
+                case GeneLocation.body:
+                    return options.bodyPatterns[patternIndex].title;
+                case GeneLocation.primary:
+                    return options.primaryFeaturePatterns[patternIndex].title;
+                case GeneLocation.secondary:
+                    return options.secondaryFeaturePatterns[patternIndex].title;
+                case GeneLocation.tertiary:
+                    return options.tertiaryFeaturePatterns[patternIndex].title;
+            }
+        }
+
+        Debug.Log("Invalid parameters");
+        return null;
+    }
+
+    /// <summary>
+    /// Get the title of a possible color for this species.
+    /// </summary>
+    /// <param name="isBaseColor">True for base color, false for accent color</param>
+    /// <param name="index">Color index</param>
+    public string GetColorTitle(bool isBaseColor, int index)
+    {
+        if (isBaseColor)
+        {
+            return options.baseColors[index].title;
+        }
+        else
+        {
+            return options.accentColors[index].title;
         }
     }
 
@@ -314,7 +369,6 @@ public class CreatureSpecies : ScriptableObject
         stats.critical *= UnityEngine.Random.Range((float)criticalGain.x / 100, (float)criticalGain.y / 100) + 1;
         stats.aspect = aspect;
         stats.currentHP = (int)stats.hp;
-        stats.exp = 0;
 
         return stats;
     }

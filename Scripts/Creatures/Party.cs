@@ -122,6 +122,20 @@ public class Party : SaveableBehaviour
     }
 
     /// <summary>
+    /// Restore all party creatures to max health.
+    /// </summary>
+    public void HealAll()
+    {
+        for (int i = 0; i < creatures.Count; i++)
+        {
+            if (creatures[i] != null)
+            {
+                creatures[i].stats.currentHP = (int)creatures[i].stats.hp;
+            }
+        }
+    }
+
+    /// <summary>
     /// Not used; where is the egg going?
     /// </summary>
     public bool PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
