@@ -14,6 +14,9 @@ public class SaveSystem : MonoBehaviour
         public List<SaveableBehaviour.Saveable> saveables;
     }
 
+    [SerializeField]
+    private StringEvent trigger;
+
     private SaveMaster saveMaster;
 
     /// <summary>
@@ -77,10 +80,12 @@ public class SaveSystem : MonoBehaviour
     {
         if (File.Exists(GetSavePath()))
         {
+            trigger.Invoke("Load Game");
             OnLoad();
         }
         else
         {
+            trigger.Invoke("New Game");
             HashSet<SaveableBehaviour> saveableBehaviors = SaveableBehaviour.Instances;
             foreach(SaveableBehaviour saveableBehavior in saveableBehaviors)
             {

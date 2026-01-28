@@ -35,21 +35,22 @@ public class Party : SaveableBehaviour
         creatures = new Dictionary<int, SaveableCreature>();
         for (int i = 0; i < partySize; i++)
         {
-            if (presetParty.Length > i)
-            {
-                creatures.Add(i, new SaveableCreature()
-                {
-                    species = presetParty[i].Species.Species,
-                    creatureName = presetParty[i].CreatureName,
-                    level = presetParty[i].Level,
-                    stats = presetParty[i].Stats,
-                    details = presetParty[i].Details
-                });
-            }
-            else
-            {
-                creatures.Add(i, null);
-            }
+            creatures.Add(i, null);
+            // if (presetParty.Length > i)
+            // {
+            //     creatures.Add(i, new SaveableCreature()
+            //     {
+            //         species = presetParty[i].Species.Species,
+            //         creatureName = presetParty[i].CreatureName,
+            //         level = presetParty[i].Level,
+            //         stats = presetParty[i].Stats,
+            //         details = presetParty[i].Details
+            //     });
+            // }
+            // else
+            // {
+            //     creatures.Add(i, null);
+            // }
         }
     }
 
