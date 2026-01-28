@@ -22,7 +22,7 @@ public class AdoptionWindow : MonoBehaviour
     [SerializeField]
     private Party playerParty;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event called when something happens to progress the game.")]
     private StringEvent progression;
 
     private SaveableCreature[] creatures;
@@ -39,6 +39,10 @@ public class AdoptionWindow : MonoBehaviour
         progression.RemoveListener(AssessProgression);
     }
 
+    /// <summary>
+    /// On new game, load the window. On load game, hide it.
+    /// </summary>
+    /// <param name="trigger">Represents an event in the game's progression.</param>
     private void AssessProgression(string trigger)
     {
         if (trigger == "New Game")
@@ -51,6 +55,9 @@ public class AdoptionWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generate and render random creatures for each slot.
+    /// </summary>
     private void Initialize()
     {
         // loop
@@ -71,6 +78,10 @@ public class AdoptionWindow : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Called when the player clicks on a creature's renderer.
+    /// </summary>
+    /// <param name="index">Index of the slot</param>
     public void SelectionPrompt(int index)
     {
         selection = index;
@@ -78,6 +89,9 @@ public class AdoptionWindow : MonoBehaviour
         confirm.interactable = true;
     }
 
+    /// <summary>
+    /// Toggles between combat details and visual details.
+    /// </summary>
     public void ToggleDetails()
     {
         toggle = !toggle;
@@ -87,8 +101,13 @@ public class AdoptionWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds the creature to the player's party and closes the window.
+    /// </summary>
     public void ConfirmSelection()
     {
+        // todo: let player name creature
+
         // add the selected creature to the player's party
         playerParty.AddToParty(creatures[selection]);
 

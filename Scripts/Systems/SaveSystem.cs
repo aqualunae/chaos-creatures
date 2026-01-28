@@ -14,7 +14,7 @@ public class SaveSystem : MonoBehaviour
         public List<SaveableBehaviour.Saveable> saveables;
     }
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event called when something happens to progress the game.")]
     private StringEvent trigger;
 
     private SaveMaster saveMaster;

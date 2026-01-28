@@ -23,6 +23,12 @@ public class AdoptionSlot : MonoBehaviour
     private int index;
     private AdoptionWindow window;
 
+    /// <summary>
+    /// Initialize all the components of this slot and add the selection listener.
+    /// </summary>
+    /// <param name="creature">Creature to be shown.</param>
+    /// <param name="index">Index of this slot within the Adoption Window</param>
+    /// <param name="window">Reference to the Adoption Window, for calling methods</param>
     public void Initialize(SaveableCreature creature, int index, AdoptionWindow window)
     {
         this.index = index;
@@ -35,6 +41,9 @@ public class AdoptionSlot : MonoBehaviour
         renderTarget.onClick.AddListener(Select);
     }
 
+    /// <summary>
+    /// Confirm selection of this slot.
+    /// </summary>
     private void Select()
     {
         window.SelectionPrompt(index);
@@ -45,6 +54,10 @@ public class AdoptionSlot : MonoBehaviour
         renderTarget.onClick.RemoveListener(Select);
     }
 
+    /// <summary>
+    /// Switch view between combat details and visual details.
+    /// </summary>
+    /// <param name="state">True for combat, false for visual.</param>
     public void ToggleDetails(bool state)
     {
         combatStats.gameObject.SetActive(state);

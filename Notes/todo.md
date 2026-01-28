@@ -60,6 +60,8 @@
 - fixed experience error confusing ^ with Math.Pow()
 - added panel to view creature details
 
+- creature random adoption
+
 ## Next Up
 
 - camera following player movement
@@ -69,13 +71,14 @@
     - skills that influence stats
     - make sure stat changes are temporary
 
-- menus: select initial creature, view party
+- menu to view party
 - menus access the save master
 
 - allow saveables to trigger saves on state change
 - method for saveables to remove themselves from save system
 - make movers saveable
 
+- implement items
 - code commenting in items folder
 
 ## Combat Flow
