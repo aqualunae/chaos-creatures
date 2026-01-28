@@ -71,8 +71,10 @@
 
 - menus: select initial creature, view party
 - menus access the save master
+
 - allow saveables to trigger saves on state change
 - method for saveables to remove themselves from save system
+- make movers saveable
 
 - code commenting in items folder
 
