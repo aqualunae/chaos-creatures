@@ -19,11 +19,25 @@ public class Mover : MonoBehaviour
 
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
     private Coroutine movementCoroutine;
-    private Vector3 direction3;
+    private Vector3 gridDirection;
     private float gridSize = 0.32f;
+    private Vector3 aimLocation;
+    private Vector3 aimDirection;
+
+    public Vector3 AimLocation
+    {
+        get => aimLocation;
+    }
+
+    public Vector3 AimDirection
+    {
+        get => aimDirection;
+    }
 
     private void Awake()
     {
+        aimLocation = transform.position;
+        aimDirection = Vector3.zero;
         gamePauzedEvent.AddListener(TogglePauze);
     }
 
@@ -51,7 +65,8 @@ public class Mover : MonoBehaviour
             return;
         }
 
-        direction3 = new Vector3(direction.x, direction.y) * gridSize;
+        aimDirection = new Vector3(direction.x, direction.y);
+        gridDirection = aimDirection * gridSize;
         if (movementCoroutine != null)
         {
             StopCoroutine(movementCoroutine);
@@ -63,12 +78,15 @@ public class Mover : MonoBehaviour
     private IEnumerator Movement()
     {
         Vector3 originalPosition = transform.position;
-        while (Vector2.Distance(transform.position, originalPosition + direction3) > gapCloseDistance)
+        while (Vector2.Distance(transform.position, originalPosition + gridDirection) > gapCloseDistance)
         {
-            transform.Translate(speed * Time.deltaTime * direction3);
+            transform.Translate(speed * Time.deltaTime * gridDirection);
             yield return new WaitForEndOfFrame();
         }
-        transform.position = originalPosition + direction3;
+        transform.position = originalPosition + gridDirection;
+
+        // the aim direction is the tile past the object in the same direction it was moving
+        aimLocation = transform.position + gridDirection;
 
         // tell any listeners that the player has moved
         movementEvent.Invoke(transform.position);

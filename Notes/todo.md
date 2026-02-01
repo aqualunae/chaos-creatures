@@ -66,10 +66,7 @@
 
 - camera following player movement
 
-- logic for handling combat
-    - aspect influence
-    - skills that influence stats
-    - make sure stat changes are temporary
+- creature renderer sort order for softshells not working as intended
 
 - menu to view party
 - menus access the save master
@@ -78,8 +75,17 @@
 - method for saveables to remove themselves from save system
 - make movers saveable
 
+- continue work on warp system
+
+- interactables?
+
 - implement items
 - code commenting in items folder
+
+- logic for handling combat
+    - aspect influence
+    - skills that influence stats
+    - make sure stat changes are temporary
 
 ## Combat Flow
 
