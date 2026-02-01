@@ -62,9 +62,16 @@
 
 - creature random adoption
 
-## Next Up
+### Week of January 28
 
-- camera following player movement
+- added interaction system
+- adjusted input for interaction via mouse or keyboard/controller
+- added dialogue window
+- converted mover to a saveable behaviour
+- centered camera to player
+- confined camera
+
+## Next Up
 
 - creature renderer sort order for softshells not working as intended
 
@@ -73,11 +80,8 @@
 
 - allow saveables to trigger saves on state change
 - method for saveables to remove themselves from save system
-- make movers saveable
 
 - continue work on warp system
-
-- interactables?
 
 - implement items
 - code commenting in items folder

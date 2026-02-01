@@ -127,7 +127,6 @@ public class Mover : SaveableBehaviour
 
     public override Saveable OnSave()
     {
-        Debug.Log(lastPosition);
         MoverSaveData saveData = new MoverSaveData()
         {
             position = lastPosition,
