@@ -18,42 +18,6 @@ public class Party : SaveableBehaviour
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
     private Dictionary<int, SaveableCreature> creatures;
 
-    // this needs to be Awake so that it's called before the save system calls OnLoad through Start
-    private void Awake()
-    {
-        // to keep track of it as a saveable
-        instances.Add(this);
-    }
-
-    /// <summary>
-    /// Called by Save System when it doesn't find existing save data.
-    /// </summary>
-    public override void OnNewGame()
-    {
-        Debug.Log("new file");
-        // create the party using the presets, if any
-        creatures = new Dictionary<int, SaveableCreature>();
-        for (int i = 0; i < partySize; i++)
-        {
-            creatures.Add(i, null);
-            // if (presetParty.Length > i)
-            // {
-            //     creatures.Add(i, new SaveableCreature()
-            //     {
-            //         species = presetParty[i].Species.Species,
-            //         creatureName = presetParty[i].CreatureName,
-            //         level = presetParty[i].Level,
-            //         stats = presetParty[i].Stats,
-            //         details = presetParty[i].Details
-            //     });
-            // }
-            // else
-            // {
-            //     creatures.Add(i, null);
-            // }
-        }
-    }
-
     /// <summary>
     /// Get a party member by index, for example in combat.
     /// </summary>
@@ -163,6 +127,26 @@ public class Party : SaveableBehaviour
     public class PartySaveData
     {
         public List<SaveableCreature> creatures;
+    }
+
+    // this needs to be Awake so that it's called before the save system calls OnLoad through Start
+    private void Awake()
+    {
+        // to keep track of it as a saveable
+        instances.Add(this);
+    }
+
+    /// <summary>
+    /// Called by Save System when it doesn't find existing save data.
+    /// </summary>
+    public override void OnNewGame()
+    {
+        // create the party using the presets, if any
+        creatures = new Dictionary<int, SaveableCreature>();
+        for (int i = 0; i < partySize; i++)
+        {
+            creatures.Add(i, null);
+        }
     }
 
     /// <summary>

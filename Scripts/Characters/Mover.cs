@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Mover : MonoBehaviour
+public class Mover : SaveableBehaviour
 {
     [SerializeField, Tooltip("Speed of the object when in motion.")]
     private float speed;
@@ -39,6 +40,9 @@ public class Mover : MonoBehaviour
         aimLocation = transform.position;
         aimDirection = Vector3.zero;
         gamePauzedEvent.AddListener(TogglePauze);
+
+        // to keep track of it as a saveable
+        instances.Add(this);
     }
 
     private void TogglePauze(bool pauzed)
@@ -53,6 +57,7 @@ public class Mover : MonoBehaviour
             StopCoroutine(movementCoroutine);
         }
         gamePauzedEvent.RemoveListener(TogglePauze);
+        lastPosition = transform.position;
     }
 
     /// <summary>
@@ -99,6 +104,62 @@ public class Mover : MonoBehaviour
     /// <param name="collision">Object that this object is colliding with.</param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        StopCoroutine(movementCoroutine);
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
     }
+
+    #region Saving
+
+    public class MoverSaveData
+    {
+        public Vector3 position;
+        public string sceneName;
+    }
+
+    private Vector3 lastPosition;
+
+    public override void OnNewGame()
+    {
+        // doesn't actually have data to initialize here
+    }
+
+    public override Saveable OnSave()
+    {
+        Debug.Log(lastPosition);
+        MoverSaveData saveData = new MoverSaveData()
+        {
+            position = lastPosition,
+            sceneName = SceneManager.GetActiveScene().name
+        };
+
+        string data = JsonUtility.ToJson(saveData);
+        string identifier = $"{typeof(Mover)}_{id}";
+
+        Saveable saveable = new Saveable()
+        {
+            id = identifier,
+            data = data
+        };
+
+        return saveable;
+    }
+
+    public override void OnLoad(Saveable saveable)
+    {
+        MoverSaveData saveData = JsonUtility.FromJson<MoverSaveData>(saveable.data);
+
+        // if the last saved location was not this scene, hide this
+        if (saveData.sceneName != SceneManager.GetActiveScene().name)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // otherwise, set the position of this to its last saved position
+        transform.position = saveData.position;
+    }
+
+    #endregion
 }
