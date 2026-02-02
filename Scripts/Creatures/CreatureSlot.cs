@@ -3,7 +3,7 @@ using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdoptionSlot : MonoBehaviour
+public class CreatureSlot : MonoBehaviour
 {
     [SerializeField]
     private CreatureRenderer creatureRenderer;
@@ -21,7 +21,8 @@ public class AdoptionSlot : MonoBehaviour
     private SpeciesListVariable speciesList;
 
     private int index;
-    private AdoptionWindow window;
+    private AdoptionWindow windowA;
+    private PartyWindow windowP;
 
     /// <summary>
     /// Initialize all the components of this slot and add the selection listener.
@@ -32,11 +33,29 @@ public class AdoptionSlot : MonoBehaviour
     public void Initialize(SaveableCreature creature, int index, AdoptionWindow window)
     {
         this.index = index;
-        this.window = window;
+        this.windowA = window;
 
         CreatureSpecies species = speciesList.GetSpecies(creature.species);
         creatureRenderer.Initialize(species, creature.details);
-        combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats.currentHP, creature.stats.hp);
+        combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
+        visualStats.Initialize(creature);
+        renderTarget.onClick.AddListener(Select);
+    }
+
+    /// <summary>
+    /// Initialize all the components of this slot and add the selection listener.
+    /// </summary>
+    /// <param name="creature">Creature to be shown.</param>
+    /// <param name="index">Index of this slot within the Adoption Window</param>
+    /// <param name="window">Reference to the Party Window, for calling methods</param>
+    public void Initialize(SaveableCreature creature, int index, PartyWindow window)
+    {
+        this.index = index;
+        this.windowP = window;
+
+        CreatureSpecies species = speciesList.GetSpecies(creature.species);
+        creatureRenderer.Initialize(species, creature.details);
+        combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
         visualStats.Initialize(creature);
         renderTarget.onClick.AddListener(Select);
     }
@@ -46,7 +65,14 @@ public class AdoptionSlot : MonoBehaviour
     /// </summary>
     private void Select()
     {
-        window.SelectionPrompt(index);
+        if (windowA)
+        {
+            windowA.Select(index);
+        }
+        else if (windowP)
+        {
+            windowP.Select(index);
+        }
     }
 
     private void OnDisable()

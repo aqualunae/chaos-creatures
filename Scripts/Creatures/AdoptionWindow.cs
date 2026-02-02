@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class AdoptionWindow : MonoBehaviour
 {
     [SerializeField]
-    private AdoptionSlot[] slots;
+    private CreatureSlot[] slots;
 
     [SerializeField]
     private RandomCreature[] options;
@@ -86,7 +86,7 @@ public class AdoptionWindow : MonoBehaviour
     /// Called when the player clicks on a creature's renderer.
     /// </summary>
     /// <param name="index">Index of the slot</param>
-    public void SelectionPrompt(int index)
+    public void Select(int index)
     {
         selection = index;
         log.text = $"Are you sure you wish to select the {creatures[selection].species}?";

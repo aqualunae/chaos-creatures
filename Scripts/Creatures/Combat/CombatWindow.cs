@@ -59,6 +59,9 @@ public class CombatWindow : MonoBehaviour
     private CreatureSpecies opponentSpecies;
     private CreatureSpecies playerSpecies;
     private Vector3 actionMenuLocation;
+    private Button[] actionButtons;
+    private Button endCombatButton;
+    
 
     public void Initialize(SaveableCreature opponent)
     {
@@ -67,7 +70,7 @@ public class CombatWindow : MonoBehaviour
         playerSpecies = speciesList.GetSpecies(player.species);
         playerRenderer.Initialize(playerSpecies, player.details);
         playerDetails.Initialize(player);
-        playerStats.Initialize(player.creatureName, player.species, player.level, player.stats.currentHP, player.stats.hp);
+        playerStats.Initialize(player.creatureName, player.species, player.level, player.stats);
         playerRenderer.FlipFacing();
 
         // Initialize the opponent
@@ -75,7 +78,7 @@ public class CombatWindow : MonoBehaviour
         opponentSpecies = speciesList.GetSpecies(opponent.species);
         opponentRenderer.Initialize(opponentSpecies, opponent.details);
         opponentDetails.Initialize(opponent);
-        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats.currentHP, opponent.stats.hp);
+        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats);
         opponentRenderer.gameObject.SetActive(true);
 
         log.text = $"You've encountered a hostile {opponent.species}!";
@@ -92,6 +95,17 @@ public class CombatWindow : MonoBehaviour
 
         // set the actions menu position that it should be returned to when the visual details view is closed
         actionMenuLocation = actionsMenu.transform.localPosition;
+
+        // get the buttons in the actions menu and make sure they're interactable
+        actionButtons = actionsMenu.GetComponentsInChildren<Button>();
+        endCombatButton = actionButtons[^1];
+        endCombatButton.GetComponentInChildren<TextMeshProUGUI>().text = "Flee";
+        for (int i = 0; i < actionButtons.Length; i++)
+        {
+            actionButtons[i].interactable = true;
+        }
+
+        // set up logging and pauze the overworld
         logUpdateEvent.AddListener(UpdateLog);
         pauzeEvent.Invoke(true);
     }
@@ -104,6 +118,7 @@ public class CombatWindow : MonoBehaviour
             button.gameObject.SetActive(false);
         }
         ToggleDetails(false);
+        logUpdateEvent.RemoveListener(UpdateLog);
         pauzeEvent.Invoke(false);
     }
 
@@ -116,7 +131,7 @@ public class CombatWindow : MonoBehaviour
         playerStats.UpdateHealth(player.stats.currentHP);
         if (player.stats.currentHP == 0)
         {
-            StartCoroutine(PlayerDefeat());
+            PlayerDefeat();
         }
     }
 
@@ -129,7 +144,7 @@ public class CombatWindow : MonoBehaviour
         opponentStats.UpdateHealth(opponent.stats.currentHP);
         if (opponent.stats.currentHP == 0)
         {
-            StartCoroutine(PlayerVictory());
+            PlayerVictory();
         }
     }
 
@@ -188,7 +203,7 @@ public class CombatWindow : MonoBehaviour
     /// <summary>
     /// Display a victory message and calculate experience.
     /// </summary>
-    private IEnumerator PlayerVictory()
+    private void PlayerVictory()
     {
         // log that the opponent has been defeated
         string victoryLog = $"You have defeated the {opponent.species}! ";
@@ -196,8 +211,9 @@ public class CombatWindow : MonoBehaviour
         // calculate experience
         int expEarned = (int)Math.Pow(opponent.level * 3, 3);
         player.stats.exp += expEarned;
+        playerStats.UpdateExperience(player.stats.exp);
         victoryLog += $"{expEarned} exp earned. ";
-        int levelThreshhold = (int)Math.Pow(player.level * 5, 3) - (int)Math.Pow((player.level - 1) * 5, 3);
+        int levelThreshhold = CreatureUtility.GetExperienceThreshold(player.level);
         if (player.stats.exp >= levelThreshhold)
         {
             int leftoverExp = player.stats.exp - levelThreshhold;
@@ -212,32 +228,58 @@ public class CombatWindow : MonoBehaviour
 
         // wait for the player to read the log
         UpdateLog(victoryLog);
-        yield return new WaitForSeconds(3);
+        EndCombat(true);
+    }
 
-        // close the combat window
-        gameObject.SetActive(false);
-        yield return null;
+    
+
+    /// <summary>
+    /// Disable all buttons and then turn the Flee button into an End button.
+    /// </summary>
+    /// <param name="victory"></param>
+    private void EndCombat(bool victory)
+    {
+        for (int i = 0; i < actionButtons.Length; i++)
+        {
+            actionButtons[i].interactable = false;
+        }
+        for (int i = 0; i < skillButtons.Count; i++)
+        {
+            skillButtons[i].GetComponent<Button>().interactable = false;
+        }
+
+        endCombatButton.interactable = true;
+        endCombatButton.GetComponentInChildren<TextMeshProUGUI>().text = "End";
+        if (!victory)
+        {
+            endCombatButton.onClick.AddListener(ConfirmDefeat);
+        }
     }
 
     /// <summary>
-    /// Display a defeat log and return the player to a safe position.
+    /// Display a defeat log.
     /// </summary>
-    private IEnumerator PlayerDefeat()
+    private void PlayerDefeat()
     {
         // log that your creature has been defeated
         string defeatLog = $"{player.creatureName} is no longer able to fight!";
         UpdateLog(defeatLog);
-        yield return new WaitForSeconds(3);
+        EndCombat(false);
+    }
 
-        // ask the player if theyd like to use their next creature, if applicable
-
-        // otherwise, warp the player back to the tent and heal their creatures
+    /// <summary>
+    /// Return the player to a safe position.
+    /// </summary>
+    private void ConfirmDefeat()
+    {
+        // warp the player back to the tent and heal their creatures
         playerParty.GetComponent<Warper>().WarpToTarget();
         playerParty.HealAll();
 
+        endCombatButton.onClick.RemoveListener(ConfirmDefeat);
+
         // close the combat window
         gameObject.SetActive(false);
-        yield return null;
     }
 
     /// <summary>

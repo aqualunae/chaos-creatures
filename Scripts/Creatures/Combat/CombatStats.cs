@@ -1,3 +1,5 @@
+using System.Collections;
+using Assets.Scripts.Creatures.Combat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,21 +24,48 @@ public class CombatStats : MonoBehaviour
     [SerializeField]
     private Slider healthSlider;
 
+    [SerializeField]
+    private TextMeshProUGUI experienceField;
+
+    [SerializeField]
+    private Slider experienceSlider;
+
+    [SerializeField, Range(1, 20)]
+    private float sliderSpeed = 10;
+
     private int maxHealth;
+    private int maxExperience;
+
+    private float previousHealth;
+    private float currentHealth;
+
+    private float previousExperience;
+    private float currentExperience;
 
     /// <summary>
     /// Pass in creature data so it can be rendered in the Combat Stats panel.
     /// </summary>
-    public void Initialize(string name, string species, int level, float currentHealth, float maxHealth)
+    public void Initialize(string name, string species, int level, Stats stats)
     {
         nameField.text = name;
         speciesField.text = species;
         levelField.text = $"Lvl {level}";
-        healthField.text = $"{(int)currentHealth}/{(int)maxHealth}";
+
+        maxHealth = (int)stats.hp;
+        previousHealth = stats.currentHP;
+        currentHealth = stats.currentHP;
+        healthField.text = $"{(int)stats.currentHP}/{(int)maxHealth} HP";
         healthSlider.minValue = 0;
         healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;
-        this.maxHealth = (int)maxHealth;
+        healthSlider.value = stats.currentHP;
+
+        maxExperience = CreatureUtility.GetExperienceThreshold(level);
+        previousExperience = stats.exp;
+        currentExperience = stats.exp;
+        experienceField.text = $"{stats.exp}/{maxExperience} EXP";
+        experienceSlider.minValue = 0;
+        experienceSlider.maxValue = maxExperience;
+        experienceSlider.value = stats.exp;
     }
 
     /// <summary>
@@ -44,7 +73,30 @@ public class CombatStats : MonoBehaviour
     /// </summary>
     public void UpdateHealth(int currentHealth)
     {
-        healthSlider.value = currentHealth;
+        this.currentHealth = currentHealth;
         healthField.text = $"{(int)currentHealth}/{maxHealth}";
+    }
+
+    public void UpdateExperience(int currentExperience)
+    {
+        this.currentExperience = currentExperience;
+        experienceField.text = $"{(int)currentExperience}/{maxExperience}";
+    }
+
+    private void Update()
+    {
+        if (currentHealth != previousHealth)
+        {
+            float transitionHealth = Mathf.MoveTowards(previousHealth, currentHealth, sliderSpeed * Time.deltaTime);
+            healthSlider.value = transitionHealth;
+            previousHealth = transitionHealth;
+        }
+
+        if (currentExperience != previousExperience)
+        {
+            float transitionExperience = Mathf.MoveTowards(previousExperience, currentExperience, sliderSpeed * Time.deltaTime);
+            experienceSlider.value = transitionExperience;
+            previousExperience = transitionExperience;
+        }
     }
 }

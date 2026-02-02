@@ -71,15 +71,25 @@
 - centered camera to player
 - confined camera
 
-## Next Up
-
-- creature renderer sort order for softshells not working as intended
-
-- menu to view party
-- menus access the save master
-
 - allow saveables to trigger saves on state change
 - method for saveables to remove themselves from save system
+- created view party menu
+- ability to switch between main pauze menu and party menu
+- health and experience sliders slide gradually
+- when combat ends, the player clicks end to close window
+- (as opposed to it closing automatically after 2 seconds)
+- moved "experience to next level" calculation to CreatureUtility
+
+## Next Up
+
+### Issues
+
+- creature renderer sort order for softshells not working as intended
+- game crashes on load of movers
+
+### Features
+
+- menus access the save master as needed
 
 - continue work on warp system
 

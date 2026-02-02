@@ -2,6 +2,7 @@ using UnityEngine;
 using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using System.Linq;
+using System;
 
 public static class CreatureUtility
 {
@@ -37,7 +38,7 @@ public static class CreatureUtility
     public static int WeightedRandom(int[] thresholds)
     {
         int randomMax = thresholds.Sum() + 1;
-        int randomNumber = Random.Range(1, randomMax);
+        int randomNumber = UnityEngine.Random.Range(1, randomMax);
         int sum = 0;
         for (int i = 0; i < thresholds.Length; i++)
         {
@@ -137,5 +138,10 @@ public static class CreatureUtility
             secondary = secondary,
             tertiary = tertiary
         };
+    }
+
+    public static int GetExperienceThreshold(int level)
+    {
+        return (int)Math.Pow(level * 5, 3) - (int)Math.Pow((level - 1) * 5, 3);
     }
 }

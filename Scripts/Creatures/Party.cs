@@ -18,6 +18,11 @@ public class Party : SaveableBehaviour
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
     private Dictionary<int, SaveableCreature> creatures;
 
+    public Dictionary<int, SaveableCreature> Creatures
+    {
+        get => creatures;
+    }
+
     /// <summary>
     /// Get a party member by index, for example in combat.
     /// </summary>
@@ -42,6 +47,7 @@ public class Party : SaveableBehaviour
             if (creatures[i] == null)
             {
                 creatures[i] = creature;
+                saveEvent.Invoke(SaveState.Save);
                 return true;
             }
         }
@@ -69,6 +75,7 @@ public class Party : SaveableBehaviour
         }
 
         creatures[index] = creature;
+        saveEvent.Invoke(SaveState.Save);
         return true;
     }
 
