@@ -22,8 +22,11 @@ public class AdoptionWindow : MonoBehaviour
     [SerializeField]
     private Party playerParty;
 
-    [SerializeField, Tooltip("Event called when something happens to progress the game.")]
-    private StringEvent progression;
+    [SerializeField, Tooltip("Event called when the game is saved or loaded.")]
+    private SaveEvent saveEvent;
+
+    [SerializeField]
+    private BoolEvent pauzeEvent;
 
     private SaveableCreature[] creatures;
     private bool toggle = true;
@@ -31,25 +34,25 @@ public class AdoptionWindow : MonoBehaviour
 
     private void Awake()
     {
-        progression.AddListener(AssessProgression);
+        saveEvent.AddListener(AssessSave);
     }
 
     private void OnDisable()
     {
-        progression.RemoveListener(AssessProgression);
+        saveEvent.RemoveListener(AssessSave);
     }
 
     /// <summary>
     /// On new game, load the window. On load game, hide it.
     /// </summary>
-    /// <param name="trigger">Represents an event in the game's progression.</param>
-    private void AssessProgression(string trigger)
+    /// <param name="state">Represents a change in the game's save state.</param>
+    private void AssessSave(SaveState state)
     {
-        if (trigger == "New Game")
+        if (state == SaveState.NewGame)
         {
             Initialize();
         }
-        else if (trigger == "Load Game")
+        else
         {
             gameObject.SetActive(false);
         }
@@ -75,6 +78,7 @@ public class AdoptionWindow : MonoBehaviour
             slots[i].Initialize(creature, i, this);
         }
 
+        pauzeEvent.Invoke(true);
         gameObject.SetActive(true);
     }
 
@@ -112,6 +116,7 @@ public class AdoptionWindow : MonoBehaviour
         playerParty.AddToParty(creatures[selection]);
 
         // close the window
+        pauzeEvent.Invoke(false);
         gameObject.SetActive(false);
     }
 }

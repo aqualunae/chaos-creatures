@@ -50,6 +50,9 @@ public class CombatWindow : MonoBehaviour
     [SerializeField]
     private StringEvent logUpdateEvent;
 
+    [SerializeField]
+    private BoolEvent pauzeEvent;
+
     private SaveableCreature player;
     private SaveableCreature opponent;
     private List<SkillButton> skillButtons;
@@ -90,6 +93,7 @@ public class CombatWindow : MonoBehaviour
         // set the actions menu position that it should be returned to when the visual details view is closed
         actionMenuLocation = actionsMenu.transform.localPosition;
         logUpdateEvent.AddListener(UpdateLog);
+        pauzeEvent.Invoke(true);
     }
 
     private void OnDisable()
@@ -100,6 +104,7 @@ public class CombatWindow : MonoBehaviour
             button.gameObject.SetActive(false);
         }
         ToggleDetails(false);
+        pauzeEvent.Invoke(false);
     }
 
     /// <summary>

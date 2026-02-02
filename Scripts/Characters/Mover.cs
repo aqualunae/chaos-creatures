@@ -155,7 +155,7 @@ public class Mover : SaveableBehaviour
             gameObject.SetActive(false);
             return;
         }
-
+        
         // otherwise, set the position of this to its last saved position
         transform.position = saveData.position;
     }

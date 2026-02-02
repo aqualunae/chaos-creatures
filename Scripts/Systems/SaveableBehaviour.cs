@@ -36,6 +36,9 @@ public abstract class SaveableBehaviour : MonoBehaviour
         get => id;
     }
 
+    [SerializeField]
+    protected SaveEvent saveEvent;
+
     /// <summary>
     /// How should the object initialize when it has no save data available?
     /// </summary>
@@ -51,6 +54,16 @@ public abstract class SaveableBehaviour : MonoBehaviour
     /// </summary>
     public abstract void OnLoad(Saveable saveable);
 
-    // TODO
-    // - How can SBs tell the Save System that their data has been updated?
+    /// <summary>
+    /// Can be called to update the save data.
+    /// </summary>
+    protected void TriggerSave()
+    {
+        saveEvent.Invoke(SaveState.Save);
+    }
+
+    protected void RemoveSelf()
+    {
+        instances.Remove(this);
+    }
 }

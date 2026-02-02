@@ -8,14 +8,14 @@ public class SaveSystem : MonoBehaviour
     [SerializeField, Tooltip("Name of the file to be saved. Do not include extension or path.")]
     private string filename;
 
+    [SerializeField, Tooltip("Event called when something happens to progress the game.")]
+    private SaveEvent trigger;
+
     [System.Serializable]
     private class SaveMaster
     {
         public List<SaveableBehaviour.Saveable> saveables;
     }
-
-    [SerializeField, Tooltip("Event called when something happens to progress the game.")]
-    private StringEvent trigger;
 
     private SaveMaster saveMaster;
 
@@ -73,6 +73,19 @@ public class SaveSystem : MonoBehaviour
         reader.Close();
     }
 
+    private void Awake()
+    {
+        trigger.AddListener(HandleTrigger);
+    }
+
+    private void HandleTrigger(SaveState state)
+    {
+        if (state == SaveState.Save)
+        {
+            OnSave();
+        }
+    }
+
     /// <summary>
     /// OnLoad needs to be placed in Start because it needs to be called after the Instances HashSet is filled, which happens on Awake.
     /// </summary>
@@ -80,12 +93,12 @@ public class SaveSystem : MonoBehaviour
     {
         if (File.Exists(GetSavePath()))
         {
-            trigger.Invoke("Load Game");
+            trigger.Invoke(SaveState.Load);
             OnLoad();
         }
         else
         {
-            trigger.Invoke("New Game");
+            trigger.Invoke(SaveState.NewGame);
             HashSet<SaveableBehaviour> saveableBehaviors = SaveableBehaviour.Instances;
             foreach(SaveableBehaviour saveableBehavior in saveableBehaviors)
             {
