@@ -173,21 +173,21 @@ public class CreatureRenderer : MonoBehaviour
         primaryBase.sortingOrder = species.GetSortOrder(GeneLocation.primary, true);
         primaryPattern.sprite = species.GetSprite(GeneLocation.primary, details.primary.rarity, details.primary.patternIndex);
         primaryPattern.color = species.GetColor(false, details.primary.accentColorIndex);
-        primaryBase.sortingOrder = species.GetSortOrder(GeneLocation.primary, false);
+        primaryPattern.sortingOrder = species.GetSortOrder(GeneLocation.primary, false);
 
         secondaryBase.sprite = species.GetSprite(GeneLocation.secondary, details.secondary.rarity);
         secondaryBase.color = species.GetColor(true, details.secondary.baseColorIndex);
         secondaryBase.sortingOrder = species.GetSortOrder(GeneLocation.secondary, true);
         secondaryPattern.sprite = species.GetSprite(GeneLocation.secondary, details.secondary.rarity, details.secondary.patternIndex);
         secondaryPattern.color = species.GetColor(false, details.secondary.accentColorIndex);
-        secondaryBase.sortingOrder = species.GetSortOrder(GeneLocation.secondary, false);
+        secondaryPattern.sortingOrder = species.GetSortOrder(GeneLocation.secondary, false);
 
         tertiaryBase.sprite = species.GetSprite(GeneLocation.tertiary, details.tertiary.rarity);
         tertiaryBase.color = species.GetColor(true, details.tertiary.baseColorIndex);
         tertiaryBase.sortingOrder = species.GetSortOrder(GeneLocation.tertiary, true);
         tertiaryPattern.sprite = species.GetSprite(GeneLocation.tertiary, details.tertiary.rarity, details.tertiary.patternIndex);
         tertiaryPattern.color = species.GetColor(false, details.tertiary.accentColorIndex);
-        tertiaryBase.sortingOrder = species.GetSortOrder(GeneLocation.tertiary, false);
+        tertiaryPattern.sortingOrder = species.GetSortOrder(GeneLocation.tertiary, false); 
     }
 
     /// <summary>

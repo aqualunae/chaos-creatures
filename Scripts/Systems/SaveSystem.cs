@@ -63,7 +63,10 @@ public class SaveSystem : MonoBehaviour
             if (saveMaster.saveables.Exists(saveable => saveable.id.Contains(saveableBehavior.ID)))
             {
                 SaveableBehaviour.Saveable saveData = saveMaster.saveables.Find(saveable => saveable.id.Contains(saveableBehavior.ID));
-                saveableBehavior.OnLoad(saveData);
+                if (saveableBehavior)
+                {
+                    saveableBehavior.OnLoad(saveData);
+                }
             }
             else
             {

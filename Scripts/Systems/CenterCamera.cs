@@ -3,10 +3,10 @@ using UnityEngine;
 public class CenterCamera : MonoBehaviour
 {
     [SerializeField]
-    private GameObject objectToCenter;
+    private GameObjectVariable playerRef;
 
     private void Update()
     {
-        transform.position = new Vector3(objectToCenter.transform.position.x, objectToCenter.transform.position.y, transform.position.z);
+        transform.position = new Vector3(playerRef.Value.transform.position.x, playerRef.Value.transform.position.y, transform.position.z);
     }
 }

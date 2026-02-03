@@ -14,7 +14,6 @@ public class SpeciesListVariable: Variable<CreatureSpecies[]>
     /// <returns>Scriptable object containing data about the species.</returns>
     public CreatureSpecies GetSpecies(string speciesTitle)
     {
-        Debug.Log(speciesTitle);
         return Value.First(species => species.Species == speciesTitle);
     }
 }

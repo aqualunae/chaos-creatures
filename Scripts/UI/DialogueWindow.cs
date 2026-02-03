@@ -19,7 +19,7 @@ public class DialogueWindow : MonoBehaviour
     public void Initialize(string[] lines, string source = null)
     {
         // turn off the plaque that renders the name field if there is no name
-        nameField.transform.parent.gameObject.SetActive(source != null);
+        nameField.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(source));
 
         // assign text to fields
         nameField.text = source;

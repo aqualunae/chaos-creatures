@@ -41,6 +41,7 @@ public class CombatStats : MonoBehaviour
 
     private float previousExperience;
     private float currentExperience;
+    private int level;
 
     /// <summary>
     /// Pass in creature data so it can be rendered in the Combat Stats panel.
@@ -66,6 +67,7 @@ public class CombatStats : MonoBehaviour
         experienceSlider.minValue = 0;
         experienceSlider.maxValue = maxExperience;
         experienceSlider.value = stats.exp;
+        this.level = level;
     }
 
     /// <summary>
@@ -94,7 +96,7 @@ public class CombatStats : MonoBehaviour
 
         if (currentExperience != previousExperience)
         {
-            float transitionExperience = Mathf.MoveTowards(previousExperience, currentExperience, sliderSpeed * Time.deltaTime);
+            float transitionExperience = Mathf.MoveTowards(previousExperience, currentExperience, 5 * sliderSpeed * level * Time.deltaTime);
             experienceSlider.value = transitionExperience;
             previousExperience = transitionExperience;
         }

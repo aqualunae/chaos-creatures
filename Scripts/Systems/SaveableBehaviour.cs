@@ -34,6 +34,7 @@ public abstract class SaveableBehaviour : MonoBehaviour
     public string ID
     {
         get => id;
+        set => id = value;
     }
 
     [SerializeField]

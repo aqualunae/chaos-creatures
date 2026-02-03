@@ -41,8 +41,8 @@ public class CombatWindow : MonoBehaviour
     [SerializeField]
     private GameObject skillsMenu;
 
-    [SerializeField, Tooltip("Reference to the player's party.")]
-    private Party playerParty;
+    [SerializeField, Tooltip("Reference to the player.")]
+    private GameObjectVariable playerRef;
 
     [SerializeField, Tooltip("List of possible species, used to instantiate creatures to render.")]
     private SpeciesListVariable speciesList;
@@ -66,6 +66,7 @@ public class CombatWindow : MonoBehaviour
     public void Initialize(SaveableCreature opponent)
     {
         // Initialize the first creature in the player's party.
+        Party playerParty = playerRef.Value.GetComponent<Party>();
         player = playerParty.GetByIndex(0);
         playerSpecies = speciesList.GetSpecies(player.species);
         playerRenderer.Initialize(playerSpecies, player.details);
@@ -273,8 +274,8 @@ public class CombatWindow : MonoBehaviour
     private void ConfirmDefeat()
     {
         // warp the player back to the tent and heal their creatures
-        playerParty.GetComponent<Warper>().WarpToTarget();
-        playerParty.HealAll();
+        playerRef.Value.GetComponent<WarpSelf>().WarpToTarget();
+        playerRef.Value.GetComponent<Party>().HealAll();
 
         endCombatButton.onClick.RemoveListener(ConfirmDefeat);
 

@@ -16,6 +16,9 @@ public class Mover : SaveableBehaviour
     [SerializeField]
     private BoolEvent gamePauzedEvent;
 
+    [SerializeField]
+    private WarpPointVariable entrancePoint;
+
     private bool gamePauzed = false;
 
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
@@ -43,6 +46,8 @@ public class Mover : SaveableBehaviour
 
         // to keep track of it as a saveable
         instances.Add(this);
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void TogglePauze(bool pauzed)
@@ -95,6 +100,9 @@ public class Mover : SaveableBehaviour
 
         // tell any listeners that the player has moved
         movementEvent.Invoke(transform.position);
+
+        // since the player has moved, they're no longer at the entrance point, so it's no longer relevant
+        entrancePoint.Value = null;
         yield return null;
     }
 
@@ -103,6 +111,14 @@ public class Mover : SaveableBehaviour
     /// </summary>
     /// <param name="collision">Object that this object is colliding with.</param>
     private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+    }
+
+    public void Stop()
     {
         if (movementCoroutine != null)
         {
@@ -149,15 +165,34 @@ public class Mover : SaveableBehaviour
     {
         MoverSaveData saveData = JsonUtility.FromJson<MoverSaveData>(saveable.data);
 
+        // unused code for non-player moving objects
         // if the last saved location was not this scene, hide this
-        if (saveData.sceneName != SceneManager.GetActiveScene().name)
+        // if (saveData.sceneName != SceneManager.GetActiveScene().name)
+        // {
+        //     gameObject.SetActive(false);
+        //     return;
+        // }
+
+        if (!transform)
         {
-            gameObject.SetActive(false);
+            Debug.Log("No transform.");
             return;
         }
-        
-        // otherwise, set the position of this to its last saved position
-        transform.position = saveData.position;
+
+        // if the entrancePoint is set, you're entering a scene from a warp point
+        // which means your saveData.position is the exit point of the previous map, not the entrance point of the current map
+        // so you need to set your position to the entrance point
+        if (entrancePoint.Value != null)
+        {
+            transform.position = entrancePoint.Value.Position;
+        }
+        else
+        {
+            // otherwise, set the position of this to its last saved position
+            transform.position = saveData.position;
+        }
+
+        Debug.Log(transform.position);
     }
 
     #endregion

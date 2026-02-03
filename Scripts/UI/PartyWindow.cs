@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Assets.Scripts.Creatures;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PartyWindow : MonoBehaviour
@@ -8,7 +9,7 @@ public class PartyWindow : MonoBehaviour
     private CreatureSlot[] slots;
 
     [SerializeField]
-    private Party playerParty;
+    private GameObjectVariable playerPartyRef;
 
     private bool toggle = true;
 
@@ -17,6 +18,7 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
+        Party playerParty = playerPartyRef.Value.GetComponent<Party>();
         Dictionary<int, SaveableCreature> creatures = playerParty.Creatures;
         for (int i = 0; i < slots.Length; i++)
         {

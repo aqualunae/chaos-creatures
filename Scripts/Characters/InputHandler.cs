@@ -8,9 +8,6 @@ public class InputHandler : MonoBehaviour
     private BoolEvent gamePauzedEvent;
 
     [SerializeField]
-    private Camera mainCamera;
-
-    [SerializeField]
     private LayerMask interactableMask;
 
     [SerializeField]
@@ -66,7 +63,7 @@ public class InputHandler : MonoBehaviour
 
         // if the cursor is near the player
         Vector2 cursorPosition = value.Get<Vector2>();
-        Vector3 targetPosition = mainCamera.ScreenToWorldPoint(new Vector3(cursorPosition.x, cursorPosition.y, mainCamera.transform.position.z * -1));
+        Vector3 targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(cursorPosition.x, cursorPosition.y, Camera.main.transform.position.z * -1));
         if (Vector3.Distance(targetPosition, transform.position) < interactDistance)
         {
             Debug.Log(targetPosition);
@@ -90,7 +87,6 @@ public class InputHandler : MonoBehaviour
     /// </summary>
     private void OnInteractKey(InputValue value)
     {
-        Debug.Log("F");
         //check if the game is pauzed
         if (gamePauzed)
         {

@@ -20,7 +20,7 @@ public class AdoptionWindow : MonoBehaviour
     private Button confirm;
 
     [SerializeField]
-    private Party playerParty;
+    private GameObjectVariable playerRef;
 
     [SerializeField, Tooltip("Event called when the game is saved or loaded.")]
     private SaveEvent saveEvent;
@@ -113,6 +113,7 @@ public class AdoptionWindow : MonoBehaviour
         // todo: let player name creature
 
         // add the selected creature to the player's party
+        Party playerParty = playerRef.Value.GetComponent<Party>();
         playerParty.AddToParty(creatures[selection]);
 
         // close the window

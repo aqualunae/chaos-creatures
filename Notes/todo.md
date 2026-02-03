@@ -80,18 +80,23 @@
 - (as opposed to it closing automatically after 2 seconds)
 - moved "experience to next level" calculation to CreatureUtility
 
+- fixed: creature renderer sort order for softshells not working as intended
+- implemented warping
+- refactored code so that player can be instantiated anywhere and maintain existing stats
+- entrance point variable can be set to convey player location when switching scenes
+- exit point outside of main collider to ensure player doesn't ricochet
+- fixed: game sometimes crashes on load of movers
+
 ## Next Up
 
 ### Issues
 
-- creature renderer sort order for softshells not working as intended
-- game crashes on load of movers
+- player jitters when they run into things
+- keep player snapped to grid
 
 ### Features
 
 - menus access the save master as needed
-
-- continue work on warp system
 
 - implement items
 - code commenting in items folder

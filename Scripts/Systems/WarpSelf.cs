@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Warper : MonoBehaviour
+public class WarpSelf : MonoBehaviour
 {
     [SerializeField]
     private WarpPoint target;
