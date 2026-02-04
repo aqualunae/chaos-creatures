@@ -12,10 +12,17 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private WarpPointVariable entrancePoint;
 
+    [SerializeField]
+    private GridVariable gridRef;
+
+    [SerializeField]
+    private Grid grid;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
     {
+        gridRef.Value = grid;
         if (playerRef.Value != null)
         {
             Destroy(playerRef.Value);

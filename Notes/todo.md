@@ -87,14 +87,17 @@
 - exit point outside of main collider to ensure player doesn't ricochet
 - fixed: game sometimes crashes on load of movers
 
+### Week of February 4
+
+- player snapped to grid
+- player returned to snapped position on collision
+- saveables check if they are already present
+
 ## Next Up
 
-### Issues
-
-- player jitters when they run into things
-- keep player snapped to grid
-
-### Features
+- include keybind hints on the UI
+- option to start a new game or continue
+- add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
 

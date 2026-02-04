@@ -136,13 +136,6 @@ public class Party : SaveableBehaviour
         public List<SaveableCreature> creatures;
     }
 
-    // this needs to be Awake so that it's called before the save system calls OnLoad through Start
-    private void Awake()
-    {
-        // to keep track of it as a saveable
-        instances.Add(this);
-    }
-
     /// <summary>
     /// Called by Save System when it doesn't find existing save data.
     /// </summary>

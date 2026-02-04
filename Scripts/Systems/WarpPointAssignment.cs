@@ -27,7 +27,6 @@ public class WarpPointAssignment : MonoBehaviour
     {
         if (target && collision.gameObject.TryGetComponent<Mover>(out Mover mover))
         {
-            mover.Stop();
             WarpToTarget(mover);
         }
     }
@@ -39,7 +38,6 @@ public class WarpPointAssignment : MonoBehaviour
             if (!target.SceneName.Equals(SceneManager.GetActiveScene().name))
             {
                 entrancePoint.Value = target;
-                Debug.Log("Loading");
                 SceneManager.LoadScene(target.SceneName, LoadSceneMode.Single);
             }
             else

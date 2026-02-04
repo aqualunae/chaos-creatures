@@ -18,14 +18,29 @@ public abstract class SaveableBehaviour : MonoBehaviour
     /// <summary>
     /// Hashset of SaveableBehaviours. All SBs must add themselves to this list on Awake().
     /// </summary>
-    protected static readonly HashSet<SaveableBehaviour> instances = new HashSet<SaveableBehaviour>();
+    protected static Dictionary<string, SaveableBehaviour> instances = new Dictionary<string, SaveableBehaviour>();
 
     /// <summary>
     /// Copy of the HashSet that cannot be changed. Save System iterates through it to retrieve and send out save data.
     /// </summary>
     public static HashSet<SaveableBehaviour> Instances
     {
-        get => new HashSet<SaveableBehaviour>(instances);
+        get => new HashSet<SaveableBehaviour>(instances.Values);
+    }
+
+    /// <summary>
+    /// Add self to the save data, or update reference if already there.
+    /// </summary>
+    protected void Awake()
+    {
+        if (instances.ContainsKey(ID))
+        {
+            instances[ID] = this;
+        }
+        else
+        {
+            instances.Add(ID, this);
+        }
     }
 
     [SerializeField, Tooltip("Used as a unique identifier for this object.")]
@@ -63,8 +78,11 @@ public abstract class SaveableBehaviour : MonoBehaviour
         saveEvent.Invoke(SaveState.Save);
     }
 
+    /// <summary>
+    /// Can be called to remove this from the save data.
+    /// </summary>
     protected void RemoveSelf()
     {
-        instances.Remove(this);
+        instances.Remove(ID);
     }
 }

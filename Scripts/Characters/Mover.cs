@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,12 +20,15 @@ public class Mover : SaveableBehaviour
     [SerializeField]
     private WarpPointVariable entrancePoint;
 
+    [SerializeField]
+    private GridVariable gridRef;
+
     private bool gamePauzed = false;
 
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
     private Coroutine movementCoroutine;
     private Vector3 gridDirection;
-    private float gridSize = 0.32f;
+    private Vector3 gridSize;
     private Vector3 aimLocation;
     private Vector3 aimDirection;
 
@@ -38,14 +42,14 @@ public class Mover : SaveableBehaviour
         get => aimDirection;
     }
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
+        gridSize = gridRef.Value.cellSize;
         aimLocation = transform.position;
         aimDirection = Vector3.zero;
         gamePauzedEvent.AddListener(TogglePauze);
-
-        // to keep track of it as a saveable
-        instances.Add(this);
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -62,7 +66,6 @@ public class Mover : SaveableBehaviour
             StopCoroutine(movementCoroutine);
         }
         gamePauzedEvent.RemoveListener(TogglePauze);
-        lastPosition = transform.position;
     }
 
     /// <summary>
@@ -76,7 +79,7 @@ public class Mover : SaveableBehaviour
         }
 
         aimDirection = new Vector3(direction.x, direction.y);
-        gridDirection = aimDirection * gridSize;
+        gridDirection = aimDirection * gridSize.x;
         if (movementCoroutine != null)
         {
             StopCoroutine(movementCoroutine);
@@ -88,18 +91,21 @@ public class Mover : SaveableBehaviour
     private IEnumerator Movement()
     {
         Vector3 originalPosition = transform.position;
-        while (Vector2.Distance(transform.position, originalPosition + gridDirection) > gapCloseDistance)
+        Vector3 snappedPosition = gridRef.Value.CellToWorld(gridRef.Value.WorldToCell(originalPosition + gridDirection)) + (gridSize * 0.5f);
+        while (Vector2.Distance(transform.position, snappedPosition) > gapCloseDistance)
         {
             transform.Translate(speed * Time.deltaTime * gridDirection);
             yield return new WaitForEndOfFrame();
         }
-        transform.position = originalPosition + gridDirection;
+        
+        transform.position = snappedPosition;
 
         // the aim direction is the tile past the object in the same direction it was moving
         aimLocation = transform.position + gridDirection;
 
         // tell any listeners that the player has moved
-        movementEvent.Invoke(transform.position);
+        lastPosition = transform.position;
+        movementEvent.Invoke(lastPosition);
 
         // since the player has moved, they're no longer at the entrance point, so it's no longer relevant
         entrancePoint.Value = null;
@@ -112,10 +118,7 @@ public class Mover : SaveableBehaviour
     /// <param name="collision">Object that this object is colliding with.</param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (movementCoroutine != null)
-        {
-            StopCoroutine(movementCoroutine);
-        }
+        Stop();
     }
 
     public void Stop()
@@ -124,6 +127,7 @@ public class Mover : SaveableBehaviour
         {
             StopCoroutine(movementCoroutine);
         }
+        transform.position = lastPosition;
     }
 
     #region Saving
@@ -173,9 +177,8 @@ public class Mover : SaveableBehaviour
         //     return;
         // }
 
-        if (!transform)
+        if (transform.IsDestroyed())
         {
-            Debug.Log("No transform.");
             return;
         }
 
@@ -192,7 +195,7 @@ public class Mover : SaveableBehaviour
             transform.position = saveData.position;
         }
 
-        Debug.Log(transform.position);
+        lastPosition = transform.position;
     }
 
     #endregion
