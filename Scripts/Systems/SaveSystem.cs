@@ -6,13 +6,13 @@ using UnityEngine;
 public class SaveSystem : MonoBehaviour
 {
     [SerializeField, Tooltip("Name of the file to be saved. Do not include extension or path.")]
-    private string filename;
+    private StringVariable filename;
 
     [SerializeField, Tooltip("Event called when something happens to progress the game.")]
     private SaveEvent trigger;
 
     [System.Serializable]
-    private class SaveMaster
+    public class SaveMaster
     {
         public List<SaveableBehaviour.Saveable> saveables;
     }
@@ -25,7 +25,7 @@ public class SaveSystem : MonoBehaviour
     /// <returns>Full filepath of the save data.</returns>
     private string GetSavePath()
     {
-        return $"{Path.Combine(Application.persistentDataPath, filename)}.json";
+        return $"{Path.Combine(Application.persistentDataPath, filename.Value)}.json";
     }
 
     /// <summary>

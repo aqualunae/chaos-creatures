@@ -96,6 +96,7 @@
 ## Next Up
 
 - include keybind hints on the UI
+- implement keyboard navigation
 - option to start a new game or continue
 - add audio effects: https://www.bfxr.net/
 
@@ -177,6 +178,7 @@
 
 - https://www.answermind.blog/unlock-unity-master-persistent-data-path-flawless-game-saves
 - https://stackoverflow.com/a/65495834
+- key cap by Arthur Shlain from <a href="https://thenounproject.com/browse/icons/term/key-cap/" target="_blank" title="key cap Icons">Noun Project</a> (CC BY 3.0)
 
 ## Pauzing
 

@@ -13,6 +13,9 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private float interactDistance = 0.32f;
 
+    [SerializeField]
+    private VoidEvent nextEvent;
+
     private bool gamePauzed = false;
 
     private void Awake()
@@ -108,5 +111,10 @@ public class InputHandler : MonoBehaviour
                 interactable.interactAction.Invoke();
             }
         }
+    }
+
+    private void OnNext(InputValue value)
+    {
+        nextEvent.Invoke();
     }
 }

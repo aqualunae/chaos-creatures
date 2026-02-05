@@ -13,6 +13,9 @@ public class DialogueWindow : MonoBehaviour
     [SerializeField]
     private Button nextButton;
 
+    [SerializeField]
+    private VoidEvent nextEvent;
+
     private string[] dialogueLines;
     private int currentLine;
 
@@ -29,6 +32,7 @@ public class DialogueWindow : MonoBehaviour
         dialogueLines = lines;
         currentLine = 0;
         nextButton.onClick.AddListener(Next);
+        nextEvent.AddListener(Next);
     }
 
     public void Next()
@@ -49,5 +53,6 @@ public class DialogueWindow : MonoBehaviour
     private void OnDisable()
     {
         nextButton.onClick.RemoveListener(Next);
+        nextEvent.RemoveListener(Next);
     }
 }

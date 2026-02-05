@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauzeGame : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class PauzeGame : MonoBehaviour
 
     [SerializeField]
     private GameObject pauzeMenu;
+
+    [SerializeField]
+    private GameObjectVariable playerRef;
 
     private void Awake()
     {
@@ -18,10 +22,12 @@ public class PauzeGame : MonoBehaviour
     {
         if (pauzed)
         {
+            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
             pauzeMenu.SetActive(true);
         }
         else
         {
+            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
             pauzeMenu.SetActive(false);
         }
     }
