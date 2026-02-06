@@ -77,13 +77,13 @@ public class InputHandler : MonoBehaviour
         Vector3 targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(cursorPosition.x, cursorPosition.y, Camera.main.transform.position.z * -1));
         if (Vector3.Distance(targetPosition, transform.position) < interactDistance)
         {
-            Debug.Log(targetPosition);
             // try to find an interactable at the target position
             GameObject selectedObject;
             RaycastHit2D hitData = Physics2D.Raycast(new Vector2(targetPosition.x, targetPosition.y), Vector2.zero, 0, interactableMask);
             if (hitData)
             {
                 selectedObject = hitData.transform.gameObject;
+                Debug.Log(selectedObject.name);
                 if (selectedObject.TryGetComponent<Interactable>(out Interactable interactable))
                 {
                     // if an interactable was found, invoke its interaction

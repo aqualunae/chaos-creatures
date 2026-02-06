@@ -18,6 +18,11 @@ public class GearItem : Item
 
     public override bool UseItem()
     {
-        return base.UseItem();
+        return false;
+    }
+
+    public bool EquipItem()
+    {
+        return false;
     }
 }

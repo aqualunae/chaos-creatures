@@ -105,16 +105,29 @@
     - added pauze to the ui control scheme to allow keyboard un-pauzing
 - ensured that player skills become unavailable on defeat
 - upgraded pauze event from bool to enum
+- created interaction indicator
+- added inventory
+- lootable items on the ground can be added to the inventory
+- inventory saves and loads correctly
 
 ## Next Up
+
+### Issues
+
+- dialogue skipping lines, probably because of next listener being added multiple times?
+- lootable items reappear on load
+
+### Features
+
+- inventory screen in pauze menu
+- item use logic
+- item usable during combat
+- code commenting in items folder
 
 - include keybind hints on the UI
 - add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
-
-- implement items
-- code commenting in items folder
 
 - logic for handling combat
     - aspect influence
