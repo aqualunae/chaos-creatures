@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     [SerializeField, Tooltip("Bool Event that is called to toggle the pauze state of the game.")]
-    private BoolEvent gamePauzedEvent;
+    private GameStateEvent pauzeEvent;
 
     [SerializeField]
     private LayerMask interactableMask;
@@ -16,16 +16,16 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private VoidEvent nextEvent;
 
-    private bool gamePauzed = false;
+    private GameState gamePauzed = GameState.Overworld;
 
     private void Awake()
     {
-        gamePauzedEvent.AddListener(TogglePauze);
+        pauzeEvent.AddListener(TogglePauze);
     }
 
     private void OnDisable()
     {
-        gamePauzedEvent.RemoveListener(TogglePauze);
+        pauzeEvent.RemoveListener(TogglePauze);
     }
 
     /// <summary>
@@ -43,14 +43,22 @@ public class InputHandler : MonoBehaviour
     // Call the pauze event when the pauze key is pressed.
     private void OnPauze(InputValue value)
     {
-        gamePauzedEvent.Invoke(!gamePauzed);
+        if (gamePauzed != GameState.Overworld)
+        {
+            gamePauzed = GameState.Overworld;
+        }
+        else
+        {
+            gamePauzed = GameState.PauzeMenu;
+        }
+        pauzeEvent.Invoke(gamePauzed);
     }
 
     // Update the pauze state when the pauze event is called.
     // Keeping OnPauze and TogglePauze separate allows the key to toggle correctly even when the pauze event is called by other scripts, such as clicking resume from the pauze menu.
-    private void TogglePauze(bool pauzed)
+    private void TogglePauze(GameState state)
     {
-        gamePauzed = pauzed;
+        gamePauzed = state;
     }
 
     /// <summary>
@@ -59,7 +67,7 @@ public class InputHandler : MonoBehaviour
     private void OnInteractMouse(InputValue value)
     {
         //check if the game is pauzed
-        if (gamePauzed)
+        if (gamePauzed != GameState.Overworld)
         {
             return;
         }
@@ -91,7 +99,7 @@ public class InputHandler : MonoBehaviour
     private void OnInteractKey(InputValue value)
     {
         //check if the game is pauzed
-        if (gamePauzed)
+        if (gamePauzed != GameState.Overworld)
         {
             return;
         }

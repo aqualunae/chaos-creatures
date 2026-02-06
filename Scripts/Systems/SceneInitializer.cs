@@ -19,19 +19,12 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private Grid grid;
 
-    [SerializeField]
-    private GameObjectVariable eventSystemRef;
-
-    [SerializeField]
-    private EventSystem eventSystem;
-
     private GameObject instantiatedPlayer;
 
     private void Awake()
     {
         // assign system variables
         gridRef.Value = grid;
-        eventSystemRef.Value = eventSystem.gameObject;
 
         // get rid of ghosts
         if (playerRef.Value != null)

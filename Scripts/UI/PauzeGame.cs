@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PauzeGame : MonoBehaviour
 {
     [SerializeField]
-    private BoolEvent gamePauzedEvent;
+    private GameStateEvent pauzeEvent;
 
     [SerializeField]
     private GameObject pauzeMenu;
@@ -14,32 +14,35 @@ public class PauzeGame : MonoBehaviour
 
     private void Awake()
     {
-        gamePauzedEvent.AddListener(TogglePauzeByListener);
+        pauzeEvent.AddListener(TogglePauzeByListener);
     }
 
     // Only allow the pauze state to be toggled by the listener. Otherwise it results in unpredictable behaviour.
-    private void TogglePauzeByListener(bool pauzed)
+    private void TogglePauzeByListener(GameState state)
     {
-        if (pauzed)
-        {
-            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-            pauzeMenu.SetActive(true);
-        }
-        else
+        if (state == GameState.Overworld)
         {
             playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
             pauzeMenu.SetActive(false);
         }
+        else 
+        {
+            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+            if (state == GameState.PauzeMenu)
+            {
+                pauzeMenu.SetActive(true);
+            }
+        }
     }
 
     // If the pauze state needs to be toggled, invoke the listener.
-    public void TogglePauze(bool pauzed)
+    public void TogglePauze(GameState state)
     {
-        gamePauzedEvent.Invoke(pauzed);
+        pauzeEvent.Invoke(state);
     }
 
     private void OnDisable()
     {
-        gamePauzedEvent.RemoveListener(TogglePauzeByListener);
+        pauzeEvent.RemoveListener(TogglePauzeByListener);
     }
 }

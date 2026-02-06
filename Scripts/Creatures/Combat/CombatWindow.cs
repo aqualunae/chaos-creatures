@@ -51,7 +51,7 @@ public class CombatWindow : MonoBehaviour
     private StringEvent logUpdateEvent;
 
     [SerializeField]
-    private BoolEvent pauzeEvent;
+    private GameStateEvent pauzeEvent;
 
     private SaveableCreature player;
     private SaveableCreature opponent;
@@ -108,7 +108,7 @@ public class CombatWindow : MonoBehaviour
 
         // set up logging and pauze the overworld
         logUpdateEvent.AddListener(UpdateLog);
-        pauzeEvent.Invoke(true);
+        pauzeEvent.Invoke(GameState.OtherMenu);
     }
 
     private void OnDisable()
@@ -120,7 +120,7 @@ public class CombatWindow : MonoBehaviour
         }
         ToggleDetails(false);
         logUpdateEvent.RemoveListener(UpdateLog);
-        pauzeEvent.Invoke(false);
+        pauzeEvent.Invoke(GameState.Overworld);
     }
 
     /// <summary>
@@ -160,6 +160,11 @@ public class CombatWindow : MonoBehaviour
             button.GetComponent<Button>().interactable = state;
         }
 
+        if (state)
+        {
+            actionsMenu.GetComponentsInChildren<Button>()[0].Select();
+        }
+
         if (!state && opponent.stats.currentHP > 0)
         {
             StartCoroutine(OpponentSkill());
@@ -196,7 +201,10 @@ public class CombatWindow : MonoBehaviour
             UpdateOpponent(opponentTarget);
         }
 
-        TogglePlayerTurn(true);
+        if (player.stats.currentHP > 0)
+        {
+            TogglePlayerTurn(true);
+        }
 
         yield return null;
     }
@@ -251,6 +259,7 @@ public class CombatWindow : MonoBehaviour
 
         endCombatButton.interactable = true;
         endCombatButton.GetComponentInChildren<TextMeshProUGUI>().text = "End";
+        endCombatButton.Select();
         if (!victory)
         {
             endCombatButton.onClick.AddListener(ConfirmDefeat);
@@ -262,6 +271,12 @@ public class CombatWindow : MonoBehaviour
     /// </summary>
     private void PlayerDefeat()
     {
+        // disable skills
+        foreach (SkillButton button in skillButtons)
+        {
+            button.GetComponent<Button>().interactable = false;
+        }
+
         // log that your creature has been defeated
         string defeatLog = $"{player.creatureName} is no longer able to fight!";
         UpdateLog(defeatLog);

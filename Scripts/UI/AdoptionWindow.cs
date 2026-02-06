@@ -26,7 +26,7 @@ public class AdoptionWindow : MonoBehaviour
     private SaveEvent saveEvent;
 
     [SerializeField]
-    private BoolEvent pauzeEvent;
+    private GameStateEvent pauzeEvent;
 
     private SaveableCreature[] creatures;
     private bool toggle = true;
@@ -78,7 +78,7 @@ public class AdoptionWindow : MonoBehaviour
             slots[i].Initialize(creature, i, this);
         }
 
-        pauzeEvent.Invoke(true);
+        pauzeEvent.Invoke(GameState.OtherMenu);
         gameObject.SetActive(true);
     }
 
@@ -91,6 +91,7 @@ public class AdoptionWindow : MonoBehaviour
         selection = index;
         log.text = $"Are you sure you wish to select the {creatures[selection].species}?";
         confirm.interactable = true;
+        confirm.Select();
     }
 
     /// <summary>
@@ -117,7 +118,7 @@ public class AdoptionWindow : MonoBehaviour
         playerParty.AddToParty(creatures[selection]);
 
         // close the window
-        pauzeEvent.Invoke(false);
+        pauzeEvent.Invoke(GameState.Overworld);
         gameObject.SetActive(false);
     }
 }

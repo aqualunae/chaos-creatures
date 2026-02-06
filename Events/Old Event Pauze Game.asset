@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 743549b148bd50c408717c22cde773a2, type: 3}
-  m_Name: Event Pauze Game
+  m_Name: Old Event Pauze Game
   m_EditorClassIdentifier: Assembly-CSharp::BoolEvent

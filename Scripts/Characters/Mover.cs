@@ -15,7 +15,7 @@ public class Mover : SaveableBehaviour
     private float gapCloseDistance = 0.1f;
 
     [SerializeField]
-    private BoolEvent gamePauzedEvent;
+    private GameStateEvent gamePauzedEvent;
 
     [SerializeField]
     private WarpPointVariable entrancePoint;
@@ -54,9 +54,9 @@ public class Mover : SaveableBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    private void TogglePauze(bool pauzed)
+    private void TogglePauze(GameState state)
     {
-        this.gamePauzed = pauzed;
+        gamePauzed = state != GameState.Overworld;
     }
 
     private void OnDisable()

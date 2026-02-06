@@ -93,11 +93,22 @@
 - player returned to snapped position on collision
 - saveables check if they are already present
 
+- created display keybind component
+- updated start menu to allow new game or load game
+- updated transition from start menu to loaded game to have more accurate positioning
+
+- improved keyboard navigation
+    - set Enter and Space to do the same thing both on UI and Player (Overworld) maps
+    - added scripting to select appropriate buttons
+    - removed unnecessary references to event system
+    - made sure that the control scheme switches from player to ui and back appropriately
+    - added pauze to the ui control scheme to allow keyboard un-pauzing
+- ensured that player skills become unavailable on defeat
+- upgraded pauze event from bool to enum
+
 ## Next Up
 
 - include keybind hints on the UI
-- implement keyboard navigation
-- option to start a new game or continue
 - add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
