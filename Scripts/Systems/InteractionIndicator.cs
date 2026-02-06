@@ -1,16 +1,40 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractionIndicator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField]
+    private GameObject popup;
+
+    [SerializeField]
+    private float radius = 1;
+
+    [SerializeField]
+    private string playerTag;
+
+    private CircleCollider2D interactableField;
+
+    private void Start()
     {
+        if (!interactableField)
+        {
+            interactableField = this.AddComponent<CircleCollider2D>();
+        }
         
+        interactableField.isTrigger = true;
+        interactableField.radius = this.radius;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.CompareTag(playerTag))
+        {
+            popup.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        popup.SetActive(false);
     }
 }
