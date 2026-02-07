@@ -83,7 +83,7 @@ public class InputHandler : MonoBehaviour
             if (hitData)
             {
                 selectedObject = hitData.transform.gameObject;
-                Debug.Log(selectedObject.name);
+                // Debug.Log(selectedObject.name);
                 if (selectedObject.TryGetComponent<Interactable>(out Interactable interactable))
                 {
                     // if an interactable was found, invoke its interaction
@@ -121,6 +121,8 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    // might not be used?
+    // was originally for handling dialogue but the button navigation seems to be handling it just as well
     private void OnNext(InputValue value)
     {
         nextEvent.Invoke();

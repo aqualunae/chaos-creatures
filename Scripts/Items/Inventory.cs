@@ -12,36 +12,48 @@ public class Inventory : SaveableBehaviour
         public int index;
     }
 
-    [SerializeField]
+    [SerializeField, Tooltip("Maximum number of item stacks.")]
     private int size;
-
-    [SerializeField]
-    private ItemListVariable masterList;
 
     private Dictionary<int, InventoryItem> items;
 
+    /// <summary>
+    /// Maximum number of item stacks.
+    /// </summary>
+    public int Size
+    {
+        get => size;
+    }
+
+    public Dictionary<int, InventoryItem> Items
+    {
+        get => items;
+    }
+
+    /// <summary>
+    /// Add an item to the inventory, if possible.
+    /// </summary>
+    /// <param name="item">Item data</param>
+    /// <param name="amount">Quantity of item</param>
+    /// <returns>True if successful.</returns>
     public bool AddItem(Item item, int amount)
     {
-        // https://stackoverflow.com/a/5425052
-
-        Debug.Log(items[0]);
-        bool stackExists = items.Where(slot => slot.Value != null).Select(slot => slot.Value.title == item.Title).FirstOrDefault();
+        // check if the item is already in the inventory
+        bool stackExists = items.Count(slot => slot.Value?.title == item.Title) > 0;
         if (stackExists)
         {
-            Debug.Log("stack exists");
+            // if it is, add it to the stack
             InventoryItem existingStack = items.First(slot => slot.Value.title == item.Title).Value;
             existingStack.amount += amount;
             return true;
         }
 
-        bool slotAvailable = items.Select(slot => slot.Value == null).FirstOrDefault();
-        Debug.Log(slotAvailable);
-        Debug.Log(items[0] == null);
+        // otherwise, check if there's an available slot
+        bool slotAvailable = items.Count(slot => slot.Value == null) > 0;
         if (slotAvailable)
         {
+            // add the item to the available slot
             int availableIndex = items.First(slot => slot.Value == null).Key;
-            Debug.Log(availableIndex);
-
             InventoryItem newStack = new InventoryItem()
             {
                 title = item.Title,
@@ -56,6 +68,11 @@ public class Inventory : SaveableBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Remove one of an item, for example if it's used.
+    /// </summary>
+    /// <param name="index">Slot index of the inventory stack.</param>
+    /// <returns>True if successful.</returns>
     public bool RemoveOne(int index)
     {
         if (items[index] != null)
@@ -74,6 +91,11 @@ public class Inventory : SaveableBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Remove all of an item, for example when selling or discarding.
+    /// </summary>
+    /// <param name="index">Slot index of the inventory stack</param>
+    /// <returns>True if successful.</returns>
     public bool RemoveStack(int index)
     {
         if (items[index] != null)
@@ -108,7 +130,8 @@ public class Inventory : SaveableBehaviour
             items = this.items.Values.ToList()
         };
 
-        // saveData.items.RemoveAll(item => item.amount == 0);
+        // don't save empty slots
+        saveData.items.RemoveAll(item => item == null);
 
         string data = JsonUtility.ToJson(saveData);
         string identifier = $"{typeof(Inventory)}_{id}";
@@ -125,12 +148,15 @@ public class Inventory : SaveableBehaviour
     public override void OnLoad(Saveable saveable)
     {
         InventorySaveData saveData = JsonUtility.FromJson<InventorySaveData>(saveable.data);
+
+        // create the slots
         items = new Dictionary<int, InventoryItem>();
         for (int i = 0; i < size; i++)
         {
             items.Add(i, null);
         }
 
+        // fill slots with saved data
         for (int i = 0; i < saveData.items.Count; i++)
         {
             if (saveData.items[i].amount > 0)

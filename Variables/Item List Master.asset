@@ -13,5 +13,14 @@ MonoBehaviour:
   m_Name: Item List Master
   m_EditorClassIdentifier: Assembly-CSharp::ItemListVariable
   runtimeValue:
-  - {fileID: 11400000, guid: 7f8f58b6a18b5ec408136900578a3d3e, type: 2}
   - {fileID: 11400000, guid: 0b8dec3105ee61742aa66dea87f5a51c, type: 2}
+  - {fileID: 11400000, guid: 7f8f58b6a18b5ec408136900578a3d3e, type: 2}
+  - {fileID: 11400000, guid: 847f40b9e7119ef4781d0acda4fbee4f, type: 2}
+  - {fileID: 11400000, guid: 6f38f20b4f3715a41954ec1175b367d7, type: 2}
+  - {fileID: 11400000, guid: c6160e33f4fffdd469e59e6ead936c17, type: 2}
+  - {fileID: 11400000, guid: c2bbb37899d59fa4ea1a023d363cfe30, type: 2}
+  - {fileID: 11400000, guid: e2de33b9dce6e214bb0b2ef0f3d65c37, type: 2}
+  - {fileID: 11400000, guid: 9e3649d6040b6a04a90fb4bcde439b5b, type: 2}
+  - {fileID: 11400000, guid: 000197df3201bf04fac7904017f809dc, type: 2}
+  - {fileID: 11400000, guid: a03f956eae34b1342a0cb7e16dc550fc, type: 2}
+  - {fileID: 11400000, guid: 6eda63bfaf71edc42aeeca79d6b659ee, type: 2}

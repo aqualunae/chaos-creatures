@@ -110,6 +110,12 @@
 - lootable items on the ground can be added to the inventory
 - inventory saves and loads correctly
 
+- randomized loot tables
+- created more items
+- improved inventory checking on pickup
+- inventory window and slot
+- selected item panel on inventory window
+
 ## Next Up
 
 ### Issues
@@ -117,12 +123,22 @@
 - dialogue skipping lines, probably because of next listener being added multiple times?
 - lootable items reappear on load
 
+- clicks not registering:
+    - on start menu after quitting from the pauze menu
+    - on the dialogue window
+
+- some logic depends on there only being one player; how to open the possibility of multiplayer?
+
 ### Features
 
-- inventory screen in pauze menu
+- move items between slots in the same inventory
+- move items to storage
+- discard items
 - item use logic
 - item usable during combat
 - code commenting in items folder
+
+- responsive ui scaling
 
 - include keybind hints on the UI
 - add audio effects: https://www.bfxr.net/

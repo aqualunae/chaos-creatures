@@ -36,7 +36,7 @@ public class DialogueWindow : MonoBehaviour
         // assign variables that will let us progress the dialogue
         dialogueLines = lines;
         currentLine = 0;
-        nextButton.onClick.AddListener(Next);
+        // nextButton.onClick.AddListener(Next);
         nextEvent.AddListener(Next);
         initialized = true;
     }
@@ -59,7 +59,7 @@ public class DialogueWindow : MonoBehaviour
 
     private void OnDisable()
     {
-        nextButton.onClick.RemoveListener(Next);
+        // nextButton.onClick.RemoveListener(Next);
         nextEvent.RemoveListener(Next);
     }
 }

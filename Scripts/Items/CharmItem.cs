@@ -1,8 +1,8 @@
 using UnityEngine;
 using Assets.Scripts.Creatures;
 
-[CreateAssetMenu(fileName = "Item Gear ", menuName = "Items/Gear")]
-public class GearItem : Item
+[CreateAssetMenu(fileName = "Item Charm ", menuName = "Items/Charm")]
+public class CharmItem : Item
 {
     [SerializeField]
     private StatAffected statAffected;
