@@ -1,16 +1,15 @@
+using Assets.Scripts.Creatures;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item ", menuName = "Items/Generic")]
 public class Item : ScriptableObject
 {
-    // public enum ItemCategory
-    // {
-    //     charm,
-    //     bracelet,
-    //     combat,
-    //     material,
-    //     key
-    // }
+    public class UseItemResult
+    {
+        public bool success;
+        public string log;
+        public SaveableCreature target;
+    }
 
     public enum StatAffected
     {
@@ -53,8 +52,13 @@ public class Item : ScriptableObject
         get => color;
     }
 
-    public virtual bool UseItem()
+    public virtual UseItemResult UseItem(SaveableCreature target)
     {
-        return false;
+        return new UseItemResult()
+        {   
+            success = false,
+            log = "Unable to use item.",
+            target = target
+        };
     }
 }

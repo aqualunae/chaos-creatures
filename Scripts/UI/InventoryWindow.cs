@@ -7,30 +7,30 @@ using static Inventory;
 public class InventoryWindow : MonoBehaviour
 {
     [SerializeField]
-    private GameObjectVariable inventoryOwner;
+    protected GameObjectVariable inventoryOwner;
 
     [SerializeField]
-    private Image selectedItemSprite;
+    protected Image selectedItemSprite;
 
     [SerializeField]
-    private TextMeshProUGUI selectedItemTitle;
+    protected TextMeshProUGUI selectedItemTitle;
 
     [SerializeField]
-    private TextMeshProUGUI selectedItemDescription;
+    protected TextMeshProUGUI selectedItemDescription;
 
     [SerializeField]
-    private GameObject slotContainer;
+    protected GameObject slotContainer;
 
     [SerializeField]
-    private GameObject inventorySlotPrefab;
+    protected GameObject inventorySlotPrefab;
 
     [SerializeField]
-    private ItemListVariable masterList;
+    protected ItemListVariable masterList;
 
-    private Inventory inventory;
-    private List<InventorySlot> slots;
+    protected Inventory inventory;
+    protected List<InventorySlot> slots;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         inventory = inventoryOwner.Value.GetComponent<Inventory>();
         if (slots == null)
@@ -41,15 +41,26 @@ public class InventoryWindow : MonoBehaviour
     }
 
     /// <summary>
+    /// If slots already exist, discard them.
+    /// </summary>
+    protected void PurgeSlots()
+    {
+        if (slots != null && slots.Count > 0)
+        {
+            for (int i = slots.Count - 1; i >= 0; i--)
+            {
+                slots[i].gameObject.SetActive(false);
+                slots.RemoveAt(i);
+            }
+        }
+    }
+
+    /// <summary>
     /// Create or refresh inventory slots
     /// </summary>
-    private void Initialize()
+    protected virtual void Initialize()
     {
-        // if slots already exist, discard them
-        for (int i = 0; i < slots.Count; i++)
-        {
-            slots[i].gameObject.SetActive(false);
-        }
+        PurgeSlots();
 
         // draw new slots
         for (int i = 0; i < inventory.Size; i++)
@@ -59,14 +70,27 @@ public class InventoryWindow : MonoBehaviour
             slot.Initialize(i, this, inventory.Items[i]);
             slots.Add(slot);
         }
+
+        if (slots != null && slots.Count > 0)
+        {
+            slots[0].Select();
+            Select(0);
+        }
     }
 
     /// <summary>
     /// Show the details of the selected item in the selected item panel
     /// </summary>
     /// <param name="index">Slot index of the selected inventory slot.</param>
-    public void Select(int index)
+    public virtual void Select(int index)
     {
+        if (inventory.Items.Count <= index)
+        {
+            Debug.Log("Invalid index");
+            VoidSelection();
+            return;
+        }
+
         InventoryItem selectedItem = inventory.Items[index];
         if (selectedItem != null)
         {
@@ -78,9 +102,20 @@ public class InventoryWindow : MonoBehaviour
         }
         else
         {
-            selectedItemSprite.color = Color.clear;
-            selectedItemTitle.text = "";
-            selectedItemDescription.text = "Select an item to view its details.";
+            VoidSelection();
         }
+    }
+
+    protected void VoidSelection()
+    {
+        selectedItemSprite.color = Color.clear;
+        selectedItemTitle.text = "";
+        selectedItemDescription.text = "Select an item to view its details.";
+    }
+
+    public virtual void ReduceStackByOne(int index)
+    {
+        inventory.RemoveOne(index);
+        Initialize();
     }
 }

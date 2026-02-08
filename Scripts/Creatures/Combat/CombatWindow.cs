@@ -62,6 +62,15 @@ public class CombatWindow : MonoBehaviour
     private Button[] actionButtons;
     private Button endCombatButton;
     
+    public SaveableCreature GetPlayer()
+    {
+        return player;
+    }
+
+    public SaveableCreature GetOpponent()
+    {
+        return opponent;
+    }
 
     public void Initialize(SaveableCreature opponent)
     {
@@ -109,6 +118,11 @@ public class CombatWindow : MonoBehaviour
         // set up logging and pauze the overworld
         logUpdateEvent.AddListener(UpdateLog);
         pauzeEvent.Invoke(GameState.OtherMenu);
+
+        // set the skills menu active first and select the first skill
+        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+        switcher.AutoSwitch(0);
+        SelectFirstSkill();
     }
 
     private void OnDisable()
@@ -155,6 +169,9 @@ public class CombatWindow : MonoBehaviour
     /// <param name="state">True for player's turn, false for opponent's turn.</param>
     public void TogglePlayerTurn(bool state)
     {
+        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+        switcher.AutoSwitch(0);
+
         foreach (SkillButton button in skillButtons)
         {
             button.GetComponent<Button>().interactable = state;
@@ -162,7 +179,7 @@ public class CombatWindow : MonoBehaviour
 
         if (state)
         {
-            actionsMenu.GetComponentsInChildren<Button>()[0].Select();
+            SelectFirstSkill();
         }
 
         if (!state && opponent.stats.currentHP > 0)
@@ -317,8 +334,33 @@ public class CombatWindow : MonoBehaviour
         playerDetails.gameObject.SetActive(state);
         opponentDetails.gameObject.SetActive(state);
     }
-    
-    // BONUS
-    // - Show creature appearance details when you select your own or your opponent's creature.
-    // - Inventory interactions
+
+    /// <summary>
+    /// Selects first skill button, if available. Otherwise, selects an action button.
+    /// </summary>
+    public void SelectFirstSkill()
+    {
+        // if skill buttons have been rendered, select the first one
+        if (skillButtons != null && skillButtons.Count > 0)
+        {
+            skillButtons[0].GetComponent<Button>().Select();
+        }
+        else
+        {
+            // otherwise, select an available action button
+            Button[] actionButtons = actionsMenu.GetComponentsInChildren<Button>();
+            if (actionButtons[0].interactable)
+            {
+                actionButtons[0].Select();
+            }
+            else if (actionButtons[1].interactable)
+            {
+                actionButtons[1].Select();
+            }
+            else
+            {
+                actionButtons[^1].Select();
+            }
+        }
+    }
 }

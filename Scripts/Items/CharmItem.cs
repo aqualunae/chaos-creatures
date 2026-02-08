@@ -16,13 +16,13 @@ public class CharmItem : Item
     [SerializeField]
     private GeneEffect[] geneEffects;
 
-    public override bool UseItem()
+    public override UseItemResult UseItem(SaveableCreature target)
     {
-        return false;
+        return base.UseItem(target);
     }
 
-    public bool EquipItem()
+    public UseItemResult EquipItem(SaveableCreature target)
     {
-        return false;
+        return base.UseItem(target);
     }
 }

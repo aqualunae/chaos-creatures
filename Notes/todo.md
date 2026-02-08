@@ -116,17 +116,25 @@
 - inventory window and slot
 - selected item panel on inventory window
 
+- items menu in the combat screen
+- tab switcher and enable listener components
+- improved combat keyboard navigation
+    - particularly when switching tabs
+    - fixed an issue with attempting to select inactive inventory slots
+- fixed: dialogue skipping lines
+- some combat items can be used
+- created UseItemResult class
+
 ## Next Up
 
 ### Issues
 
-- dialogue skipping lines, probably because of next listener being added multiple times?
-- lootable items reappear on load
-
+- dialogue cannot be progressed after exiting combat
 - clicks not registering:
     - on start menu after quitting from the pauze menu
     - on the dialogue window
 
+- components involved in combat are tightly coupled; is this acceptable?
 - some logic depends on there only being one player; how to open the possibility of multiplayer?
 
 ### Features
@@ -135,7 +143,7 @@
 - move items to storage
 - discard items
 - item use logic
-- item usable during combat
+- lootable items on timer
 - code commenting in items folder
 
 - responsive ui scaling

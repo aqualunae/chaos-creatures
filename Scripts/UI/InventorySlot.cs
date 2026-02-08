@@ -1,3 +1,4 @@
+using Assets.Scripts.Creatures;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,6 @@ public class InventorySlot : MonoBehaviour
     private Item itemData = null;
     private InventoryWindow parent;
     private int slotIndex;
-    // private bool selected = false;
 
     public void Initialize(int index, InventoryWindow window, InventoryItem item = null)
     {
@@ -44,21 +44,43 @@ public class InventorySlot : MonoBehaviour
         slotField.text = (slotIndex + 1).ToString();
     }
 
-    // public void SetSelected(bool state)
-    // {
-    //     selected = state;
-    //     if (selected)
-    //     {
-    //         sprite.transform.localScale = new Vector3(1.5f, 1.5f, 1);
-    //     }
-    //     else
-    //     {
-    //         sprite.transform.localScale = Vector3.one;
-    //     }
-    // }
-
     public void Select()
     {
         parent.Select(slotIndex);
+    }
+
+    public void UseItem()
+    {
+        if (parent is CombatInventoryWindow)
+        {
+            CombatInventoryWindow window = parent as CombatInventoryWindow;
+            CombatWindow combatWindow = window.GetCombatWindow();
+            SaveableCreature target = combatWindow.GetOpponent();
+            bool targetSelf = false;
+            if (itemData is CombatItem)
+            {
+                CombatItem combatItem = itemData as CombatItem;
+                if (combatItem.TargetSelf)
+                {
+                    target = combatWindow.GetPlayer();
+                    targetSelf = true;
+                }
+            }
+            Item.UseItemResult result = itemData.UseItem(target);
+            combatWindow.UpdateLog(result.log);
+            if (result.success)
+            {
+                if (targetSelf)
+                {
+                    combatWindow.UpdatePlayer(result.target);
+                }
+                else
+                {
+                    combatWindow.UpdateOpponent(result.target);
+                }
+                combatWindow.TogglePlayerTurn(false);
+                parent.ReduceStackByOne(slotIndex);
+            }
+        }
     }
 }

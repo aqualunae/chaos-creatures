@@ -1,3 +1,4 @@
+using Assets.Scripts.Creatures;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item Bracelet ", menuName = "Items/Bracelet")]
@@ -22,8 +23,8 @@ public class Bracelet : Item
     [SerializeField]
     private Color accentColor;
 
-    public override bool UseItem()
+    public override UseItemResult UseItem(SaveableCreature target)
     {
-        return base.UseItem();
+        return base.UseItem(target);
     }
 }
