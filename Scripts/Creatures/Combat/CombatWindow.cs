@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
 public class CombatWindow : MonoBehaviour
 {
@@ -70,6 +71,16 @@ public class CombatWindow : MonoBehaviour
     public SaveableCreature GetOpponent()
     {
         return opponent;
+    }
+
+    public bool BefriendCreature(SaveableCreature target)
+    {
+        bool success = playerRef.Value.GetComponent<Party>().AddToParty(target);
+        if (success)
+        {
+            EndCombat(true);
+        }
+        return success;
     }
 
     public void Initialize(SaveableCreature opponent)

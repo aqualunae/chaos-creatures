@@ -18,6 +18,7 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
+        Debug.Log("enabling");
         Party playerParty = playerPartyRef.Value.GetComponent<Party>();
         Dictionary<int, SaveableCreature> creatures = playerParty.Creatures;
         for (int i = 0; i < slots.Length; i++)

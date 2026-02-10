@@ -25,6 +25,14 @@ public class Bracelet : Item
 
     public override UseItemResult UseItem(SaveableCreature target)
     {
-        return base.UseItem(target);
+        float rand = UnityEngine.Random.Range(0, 1f);
+        bool success = rand <= captureRate;
+        string log = success ? $"You have befriended the wild { target.species }!" : $"The wild { target.species } spurns your friendship.";
+        return new UseItemResult()
+        {
+            success = success,
+            log = log,
+            target = target
+        };
     }
 }
