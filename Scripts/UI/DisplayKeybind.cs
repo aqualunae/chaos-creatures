@@ -16,9 +16,9 @@ public class DisplayKeybind : MonoBehaviour
     private void OnEnable()
     {
         PlayerInput input = playerRef.Value.GetComponent<PlayerInput>();
-        if (input.currentActionMap.name == "Player")
+        if (input.actions.FindActionMap("Player").enabled)
         {
-            bindingField.text = input.currentActionMap.FindAction(actionTitle).GetBindingDisplayString();
+            bindingField.text = input.actions.FindActionMap("Player").FindAction(actionTitle).GetBindingDisplayString();
         }
         else
         {

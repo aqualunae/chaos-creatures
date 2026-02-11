@@ -39,7 +39,6 @@ public class CreatureSlot : MonoBehaviour
         creatureRenderer.Initialize(species, creature.details);
         combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
         visualStats.Initialize(creature);
-        renderTarget.onClick.AddListener(Select);
     }
 
     /// <summary>
@@ -57,13 +56,12 @@ public class CreatureSlot : MonoBehaviour
         creatureRenderer.Initialize(species, creature.details);
         combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
         visualStats.Initialize(creature);
-        renderTarget.onClick.AddListener(Select);
     }
 
     /// <summary>
     /// Confirm selection of this slot.
     /// </summary>
-    private void Select()
+    public void Select()
     {
         if (windowA)
         {
@@ -73,11 +71,6 @@ public class CreatureSlot : MonoBehaviour
         {
             windowP.Select(index);
         }
-    }
-
-    private void OnDisable()
-    {
-        renderTarget.onClick.RemoveListener(Select);
     }
 
     /// <summary>

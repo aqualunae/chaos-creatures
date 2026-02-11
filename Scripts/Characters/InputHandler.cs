@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Mover))]
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField, Tooltip("Bool Event that is called to toggle the pauze state of the game.")]
+    [SerializeField, Tooltip("Event that is called to toggle the pauze state of the game.")]
     private GameStateEvent pauzeEvent;
 
     [SerializeField]
@@ -13,8 +13,8 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private float interactDistance = 0.32f;
 
-    [SerializeField]
-    private VoidEvent nextEvent;
+    // [SerializeField]
+    // private VoidEvent nextEvent;
 
     private GameState gamePauzed = GameState.Overworld;
 
@@ -119,12 +119,5 @@ public class InputHandler : MonoBehaviour
                 interactable.interactAction.Invoke();
             }
         }
-    }
-
-    // might not be used?
-    // was originally for handling dialogue but the button navigation seems to be handling it just as well
-    private void OnNext(InputValue value)
-    {
-        nextEvent.Invoke();
     }
 }

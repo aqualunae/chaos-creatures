@@ -35,7 +35,7 @@ public class StartMenu : MonoBehaviour
         // dispose of ghosts
         if (playerRef.Value != null)
         {
-            playerRef.Value.gameObject.SetActive(false);
+            playerRef.Value.SetActive(false);
         }
 
         // set the load game button to disabled if there is no save data

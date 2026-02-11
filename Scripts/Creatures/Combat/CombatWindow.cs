@@ -143,7 +143,7 @@ public class CombatWindow : MonoBehaviour
         {
             button.gameObject.SetActive(false);
         }
-        ToggleDetails(false);
+        // ToggleDetails(false);
         logUpdateEvent.RemoveListener(UpdateLog);
         pauzeEvent.Invoke(GameState.Overworld);
     }
@@ -180,9 +180,6 @@ public class CombatWindow : MonoBehaviour
     /// <param name="state">True for player's turn, false for opponent's turn.</param>
     public void TogglePlayerTurn(bool state)
     {
-        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
-        switcher.AutoSwitch(0);
-
         foreach (SkillButton button in skillButtons)
         {
             button.GetComponent<Button>().interactable = state;
@@ -195,6 +192,8 @@ public class CombatWindow : MonoBehaviour
 
         if (!state && opponent.stats.currentHP > 0)
         {
+            TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+            switcher.AutoSwitch(0);
             StartCoroutine(OpponentSkill());
         }
     }
@@ -276,6 +275,9 @@ public class CombatWindow : MonoBehaviour
     /// <param name="victory"></param>
     private void EndCombat(bool victory)
     {
+        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+        switcher.AutoSwitch(0);
+
         for (int i = 0; i < actionButtons.Length; i++)
         {
             actionButtons[i].interactable = false;
@@ -327,6 +329,7 @@ public class CombatWindow : MonoBehaviour
     }
 
     /// <summary>
+    /// Obsolete: switching tabs is now handled by TabSwitcher
     /// Toggle display of the creatures' visual details.
     /// </summary>
     /// <param name="state">True to display details, false to go back to displaying skills.</param>

@@ -107,6 +107,29 @@ public class Party : SaveableBehaviour
         }
     }
 
+    private int selectedIndex = -1;
+
+    public void Select(int index)
+    {
+        if (selectedIndex == -1)
+        {
+            selectedIndex = index;
+        }
+        else
+        {
+            Swap(selectedIndex, index);
+            selectedIndex = -1;
+        }
+    }
+
+    private void Swap(int first, int second)
+    {
+        SaveableCreature firstCreature = creatures[first];
+        SaveableCreature secondCreature = creatures[second];
+        creatures[second] = firstCreature;
+        creatures[first] = secondCreature;
+    }
+
     /// <summary>
     /// Not used; where is the egg going?
     /// </summary>

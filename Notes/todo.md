@@ -125,19 +125,27 @@
 - some combat items can be used
 - created UseItemResult class
 
+- bracelet logic
+
+- switching creatures party positions
+- fixed: creature details don't display after second combat instance
+    - related to using a new method to switch tabs
+- fixed: dialogue cannot be progressed after exiting combat
+- fixed: clicks not registering on start menu after quitting from the pauze menu
+    - related to having the ui action map incorrectly disabled while on the overworld
+
 ## Next Up
 
 ### Issues
-
-- dialogue cannot be progressed after exiting combat
-- clicks not registering:
-    - on start menu after quitting from the pauze menu
-    - on the dialogue window
 
 - components involved in combat are tightly coupled; is this acceptable?
 - some logic depends on there only being one player; how to open the possibility of multiplayer?
 
 ### Features
+
+- handle friendship when party is full
+- creature storage
+- switch creatures during combat
 
 - move items between slots in the same inventory
 - move items to storage

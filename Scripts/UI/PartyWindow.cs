@@ -11,6 +11,7 @@ public class PartyWindow : MonoBehaviour
     [SerializeField]
     private GameObjectVariable playerPartyRef;
 
+    private Party party;
     private bool toggle = true;
 
     /// <summary>
@@ -19,12 +20,20 @@ public class PartyWindow : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("enabling");
-        Party playerParty = playerPartyRef.Value.GetComponent<Party>();
-        Dictionary<int, SaveableCreature> creatures = playerParty.Creatures;
+        party = playerPartyRef.Value.GetComponent<Party>();
+        Refresh();
+
+        gameObject.SetActive(true);
+    }
+
+    private void Refresh()
+    {
+        Dictionary<int, SaveableCreature> creatures = party.Creatures;
         for (int i = 0; i < slots.Length; i++)
         {
             if (creatures[i] != null)
             {
+                slots[i].gameObject.SetActive(true);
                 slots[i].Initialize(creatures[i], i, this);
             }
             else
@@ -32,13 +41,12 @@ public class PartyWindow : MonoBehaviour
                 slots[i].gameObject.SetActive(false);
             }
         }
-
-        gameObject.SetActive(true);
     }
 
     public void Select(int index)
     {
-        // open sub-menu?
+        party.Select(index);
+        Refresh();
     }
 
     /// <summary>
