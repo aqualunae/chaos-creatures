@@ -19,6 +19,9 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private Grid grid;
 
+    [SerializeField]
+    private GameStateEvent pauzeEvent;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
@@ -47,5 +50,7 @@ public class SceneInitializer : MonoBehaviour
         {
             instantiatedPlayer.transform.position = entrancePoint.Value.Position;
         }
+
+        pauzeEvent.Invoke(GameState.Overworld);
     }
 }

@@ -10,9 +10,6 @@ using static Inventory;
 public class CombatInventoryWindow : InventoryWindow
 {
     [SerializeField]
-    private Button selectIfEmpty;
-
-    [SerializeField]
     private CombatWindow combatWindow;
 
     private Dictionary<int, InventoryItem> slotContents;
@@ -60,13 +57,21 @@ public class CombatInventoryWindow : InventoryWindow
             slotContents.Add(i, combatItems[i]);
             GameObject slotObject = Instantiate(inventorySlotPrefab, slotContainer.transform);
             InventorySlot slot = slotObject.GetComponent<InventorySlot>();
-            slot.Initialize(i, this, combatItems[i]);
+            if (combatItems[i] != null) { inventoryIsEmpty = false; }
+            slot.Initialize(i, combatItems[i]);
             slots.Add(slot);
         }
 
-        Select(0);
-        if (slots != null && slots.Count > 0)
+        if (slotContents.Count == 0)
         {
+            selectedItemSprite.color = Color.clear;
+            selectedItemTitle.text = "";
+            selectedItemDescription.text = "You don't have any items that are usable during combat.";
+            selectIfEmpty.Select();
+        }
+        else
+        {
+            Select(0);
             slots[0].GetComponent<Button>().Select();
         }
     }
@@ -100,9 +105,36 @@ public class CombatInventoryWindow : InventoryWindow
         }
     }
 
+    /// <summary>
+    /// Use an item.
+    /// </summary>
+    /// <param name="index">Slot index of the item to use.</param>
+    public override void UseItem(int index)
+    {
+        if (inventory.Items.Count <= index)
+        {
+            Debug.Log("Invalid index");
+            return;
+        }
+
+        // if the item is valid
+        InventoryItem selectedItem = inventory.Items[index];
+        if (selectedItem != null)
+        {
+            // figure out what it is
+            Item itemData = masterList.GetItem(selectedItem.title);
+            
+            // try to use it
+            if (GetCombatWindow().UseItem(itemData))
+            {
+                // if using it is valid, reduce the stack
+                ReduceStackByOne(index);
+            }
+        }
+    }
+    
     public override void ReduceStackByOne(int index)
     {
-        inventory.RemoveOne(slotContents[index].index);
-        Initialize();
+        inventory.ReduceStackByOne(slotContents[index].index);
     }
 }

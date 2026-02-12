@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Mover), typeof(PlayerInput))]
 public class InputHandler : MonoBehaviour
 {
     [SerializeField, Tooltip("Event that is called to toggle the pauze state of the game.")]
@@ -20,6 +20,7 @@ public class InputHandler : MonoBehaviour
 
     private void Awake()
     {
+        GetComponent<PlayerInput>().actions.FindActionMap("UI").Disable();
         pauzeEvent.AddListener(TogglePauze);
     }
 

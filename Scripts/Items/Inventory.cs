@@ -73,7 +73,7 @@ public class Inventory : SaveableBehaviour
     /// </summary>
     /// <param name="index">Slot index of the inventory stack.</param>
     /// <returns>True if successful.</returns>
-    public bool RemoveOne(int index)
+    public bool ReduceStackByOne(int index)
     {
         if (items[index] != null)
         {

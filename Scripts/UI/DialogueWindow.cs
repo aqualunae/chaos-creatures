@@ -14,7 +14,7 @@ public class DialogueWindow : MonoBehaviour
     private Button nextButton;
 
     [SerializeField]
-    private VoidEvent nextEvent;
+    private GameStateEvent pauzeEvent;
 
     private string[] dialogueLines;
     private int currentLine;
@@ -31,6 +31,9 @@ public class DialogueWindow : MonoBehaviour
         // assign variables that will let us progress the dialogue
         dialogueLines = lines;
         currentLine = 0;
+
+        // pauze the game
+        pauzeEvent.Invoke(GameState.OtherMenu);
     }
 
     public void Next()
@@ -46,5 +49,11 @@ public class DialogueWindow : MonoBehaviour
             // if you're at the end, close the window
             gameObject.SetActive(false);
         }
+    }
+
+    private void OnDisable()
+    {
+        // unpauze
+        pauzeEvent.Invoke(GameState.Overworld);
     }
 }

@@ -76,10 +76,6 @@ public class CombatWindow : MonoBehaviour
     public bool BefriendCreature(SaveableCreature target)
     {
         bool success = playerRef.Value.GetComponent<Party>().AddToParty(target);
-        if (success)
-        {
-            EndCombat(true);
-        }
         return success;
     }
 
@@ -376,5 +372,69 @@ public class CombatWindow : MonoBehaviour
                 actionButtons[^1].Select();
             }
         }
+    }
+
+    public bool UseItem(Item itemData)
+    {
+        bool itemWasUsed = false;
+
+        // determine which creature should be targeted by the item
+        SaveableCreature target = GetOpponent();
+        bool targetSelf = false;
+        if (itemData is CombatItem)
+        {
+            CombatItem combatItem = itemData as CombatItem;
+            if (combatItem.TargetSelf)
+            {
+                target = GetPlayer();
+                targetSelf = true;
+            }
+        }
+
+        // attempt to use the item
+        Item.UseItemResult result = itemData.UseItem(target);
+        string log = result.log;
+
+        // if using a bracelet was successful, handle friendship
+        if (itemData is Bracelet && result.success)
+        {
+            if (BefriendCreature(target))
+            {
+                log += " It was added to your party.";
+                itemWasUsed = true;
+                EndCombat(true);
+            }
+            else
+            {
+                log += " But there's no room in your party!";
+                TogglePlayerTurn(false);
+            }
+        }
+        // if using a bracelet was unsuccessful, the player's turn is over
+        else if (itemData is Bracelet && !result.success)
+        {
+            itemWasUsed = true;
+            TogglePlayerTurn(false);
+        }
+        // if a combat item was used successfully, update the target and end the player's turn
+        else if (result.success)
+        {
+            if (targetSelf)
+            {
+                UpdatePlayer(result.target);
+            }
+            else
+            {
+                UpdateOpponent(result.target);
+            }
+            TogglePlayerTurn(false);
+            itemWasUsed = true;
+        }
+        // if an attempt was made to use a combat item and it was unsuccessful
+        // that's probably a code error, so don't reduce the item stack or end the player's turn
+
+        // log the result and return whether the inventory stack should be reduced
+        UpdateLog(log);
+        return itemWasUsed;
     }
 }

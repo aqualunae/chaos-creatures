@@ -22,12 +22,12 @@ public class PauzeGame : MonoBehaviour
     {
         if (state == GameState.Overworld)
         {
-            playerRef.Value.GetComponent<PlayerInput>().actions.FindActionMap("Player").Enable();
+            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
             pauzeMenu.SetActive(false);
         }
         else 
         {
-            playerRef.Value.GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();
+            playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
             if (state == GameState.PauzeMenu)
             {
                 pauzeMenu.SetActive(true);

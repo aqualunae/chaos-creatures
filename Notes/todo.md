@@ -134,12 +134,23 @@
 - fixed: clicks not registering on start menu after quitting from the pauze menu
     - related to having the ui action map incorrectly disabled while on the overworld
 
+### Week of February 11
+
+- moved combat item use logic up the chain to Combat Window and Combat Inventory Window, instead of having it in Inventory Slot
+- created Item Listener component, which accepts an index from Inventory Slot and passes it to Inventory Window or Combat Inventory Window
+- on capturing creature, select the end button
+- display an appropriate message when inventory is empty
+- pauze menu always opens to the highest level menu
+- interactions fields display action to take
+- move interact to space
+- use only one action map at a time
+- pauze on dialogue
+
 ## Next Up
 
 ### Issues
 
-- components involved in combat are tightly coupled; is this acceptable?
-- some logic depends on there only being one player; how to open the possibility of multiplayer?
+- loading in the hyper arcade and then moving to campgrounds causes a crash
 
 ### Features
 
@@ -151,12 +162,11 @@
 - move items to storage
 - discard items
 - item use logic
-- lootable items on timer
+- lootable items on timer; saveable delta time
 - code commenting in items folder
 
 - responsive ui scaling
 
-- include keybind hints on the UI
 - add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
@@ -244,3 +254,10 @@
     - opens the pauze menu
     - disables all movers
 
+## Use Item Flow
+
+- Inventory Window has a Selection Listener component
+- Inventory Window draws Inventory Slots
+- when an Inventory Slot is selected or activated, it tells the Selection Listener its index
+- Selection Listener relays the index back to the Inventory Window
+- Inventory Window executes item display or use logic
