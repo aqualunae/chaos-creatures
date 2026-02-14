@@ -75,7 +75,7 @@ public class AdoptionWindow : MonoBehaviour
             optionsList.RemoveAt(index);
 
             creatures[i] = creature;
-            slots[i].Initialize(creature, i, this);
+            slots[i].Initialize(creature, i);
         }
 
         pauzeEvent.Invoke(GameState.OtherMenu);

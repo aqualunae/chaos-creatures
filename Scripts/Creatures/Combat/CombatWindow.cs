@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class CombatWindow : MonoBehaviour
 {
@@ -73,32 +74,38 @@ public class CombatWindow : MonoBehaviour
         return opponent;
     }
 
-    public bool BefriendCreature(SaveableCreature target)
+    /// <summary>
+    /// Attempt to befriend the current opponent.
+    /// </summary>
+    /// <returns>True if successful</returns>
+    public bool BefriendCreature()
     {
-        bool success = playerRef.Value.GetComponent<Party>().AddToParty(target);
+        bool success = playerRef.Value.GetComponent<Party>().AddToParty(opponent);
         return success;
     }
 
-    public void Initialize(SaveableCreature opponent)
+    private void RefreshPlayer()
     {
-        // Initialize the first creature in the player's party.
+        // select the first party creature that is able to fight.
         Party playerParty = playerRef.Value.GetComponent<Party>();
-        player = playerParty.GetByIndex(0);
+        for (int i = 0; i < playerParty.Creatures.Count; i++)
+        {
+            player = playerParty.GetByIndex(i);
+            if (player.stats.currentHP > 0)
+            {
+                break;
+            }
+        }
+        
+        // initialize all combat components
         playerSpecies = speciesList.GetSpecies(player.species);
         playerRenderer.Initialize(playerSpecies, player.details);
         playerDetails.Initialize(player);
         playerStats.Initialize(player.creatureName, player.species, player.level, player.stats);
         playerRenderer.FlipFacing();
 
-        // Initialize the opponent
-        this.opponent = opponent;
-        opponentSpecies = speciesList.GetSpecies(opponent.species);
-        opponentRenderer.Initialize(opponentSpecies, opponent.details);
-        opponentDetails.Initialize(opponent);
-        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats);
-        opponentRenderer.gameObject.SetActive(true);
-
-        log.text = $"You've encountered a hostile {opponent.species}!";
+        // remove skill buttons from a previous creature or combat instance
+        DisableSkillButtons();
 
         // Show what skills the player has available.
         skillButtons = new List<SkillButton>();
@@ -109,6 +116,23 @@ public class CombatWindow : MonoBehaviour
             button.Initialize(playerSkills[i], player, opponent, this);
             skillButtons.Add(button);
         }
+
+        SelectFirstSkill();
+    }
+
+    public void Initialize(SaveableCreature opponent)
+    {
+        // Initialize the opponent
+        this.opponent = opponent;
+        opponentSpecies = speciesList.GetSpecies(opponent.species);
+        opponentRenderer.Initialize(opponentSpecies, opponent.details);
+        opponentDetails.Initialize(opponent);
+        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats);
+        opponentRenderer.gameObject.SetActive(true);
+
+        log.text = $"You've encountered a hostile {opponent.species}!";
+
+        RefreshPlayer();
 
         // set the actions menu position that it should be returned to when the visual details view is closed
         actionMenuLocation = actionsMenu.transform.localPosition;
@@ -125,21 +149,21 @@ public class CombatWindow : MonoBehaviour
         // set up logging and pauze the overworld
         logUpdateEvent.AddListener(UpdateLog);
         pauzeEvent.Invoke(GameState.OtherMenu);
+    }
 
-        // set the skills menu active first and select the first skill
-        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
-        switcher.AutoSwitch(0);
-        SelectFirstSkill();
+    private void DisableSkillButtons()
+    {
+        if (skillButtons != null)
+        {
+            foreach (SkillButton button in skillButtons)
+            {
+                button.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnDisable()
     {
-        // since buttons are drawn every time this window is initialized, they need to be removed when the window is closed
-        foreach (SkillButton button in skillButtons)
-        {
-            button.gameObject.SetActive(false);
-        }
-        // ToggleDetails(false);
         logUpdateEvent.RemoveListener(UpdateLog);
         pauzeEvent.Invoke(GameState.Overworld);
     }
@@ -188,8 +212,7 @@ public class CombatWindow : MonoBehaviour
 
         if (!state && opponent.stats.currentHP > 0)
         {
-            TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
-            switcher.AutoSwitch(0);
+            
             StartCoroutine(OpponentSkill());
         }
     }
@@ -271,8 +294,7 @@ public class CombatWindow : MonoBehaviour
     /// <param name="victory"></param>
     private void EndCombat(bool victory)
     {
-        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
-        switcher.AutoSwitch(0);
+        SelectFirstSkill();
 
         for (int i = 0; i < actionButtons.Length; i++)
         {
@@ -304,9 +326,23 @@ public class CombatWindow : MonoBehaviour
         }
 
         // log that your creature has been defeated
-        string defeatLog = $"{player.creatureName} is no longer able to fight!";
+        string defeatLog = $"{ player.creatureName } is no longer able to fight!";
+        
+
+        Party playerParty = playerRef.Value.GetComponent<Party>();
+        SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature.stats.currentHP > 0).ToArray();
+        if (healthyCreatures.Length > 0)
+        {
+            TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+            switcher.AutoSwitch(2);
+        }
+        else
+        {
+            defeatLog += " You don't have any more creatures that are able to fight.";
+            EndCombat(false);
+        }
+
         UpdateLog(defeatLog);
-        EndCombat(false);
     }
 
     /// <summary>
@@ -350,6 +386,10 @@ public class CombatWindow : MonoBehaviour
     /// </summary>
     public void SelectFirstSkill()
     {
+        // open the skills menu
+        TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
+        switcher.AutoSwitch(0);
+        
         // if skill buttons have been rendered, select the first one
         if (skillButtons != null && skillButtons.Count > 0)
         {
@@ -398,7 +438,7 @@ public class CombatWindow : MonoBehaviour
         // if using a bracelet was successful, handle friendship
         if (itemData is Bracelet && result.success)
         {
-            if (BefriendCreature(target))
+            if (BefriendCreature())
             {
                 log += " It was added to your party.";
                 itemWasUsed = true;
@@ -436,5 +476,12 @@ public class CombatWindow : MonoBehaviour
         // log the result and return whether the inventory stack should be reduced
         UpdateLog(log);
         return itemWasUsed;
+    }
+
+    public void SwitchCreature()
+    {
+        RefreshPlayer();
+        UpdateLog($"You sent out {player.creatureName}.");
+        TogglePlayerTurn(false);
     }
 }

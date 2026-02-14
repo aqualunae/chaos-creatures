@@ -146,6 +146,15 @@
 - use only one action map at a time
 - pauze on dialogue
 
+- switch creatures during combat
+- prevent switching to a creature that has 0 HP
+- prevent sending out a creature with 0 HP
+- refactor creature slot to be less entangled with its parent
+- rename item listener to selection listener
+- automatically open creature switching window on defeat
+- do not open creature switching window if whole party has 0 hp
+- switching creatures during combat ends player's turn
+
 ## Next Up
 
 ### Issues
@@ -156,7 +165,6 @@
 
 - handle friendship when party is full
 - creature storage
-- switch creatures during combat
 
 - move items between slots in the same inventory
 - move items to storage
@@ -164,6 +172,7 @@
 - item use logic
 - lootable items on timer; saveable delta time
 - code commenting in items folder
+- creature equipment
 
 - responsive ui scaling
 
@@ -171,10 +180,13 @@
 
 - menus access the save master as needed
 
+- calculate and display creature rarity
+
 - logic for handling combat
     - aspect influence
     - skills that influence stats
     - make sure stat changes are temporary
+    - first skill use to be determined by speed
 
 ## Combat Flow
 

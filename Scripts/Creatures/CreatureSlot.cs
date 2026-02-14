@@ -21,41 +21,21 @@ public class CreatureSlot : MonoBehaviour
     private SpeciesListVariable speciesList;
 
     private int index;
-    private AdoptionWindow windowA;
-    private PartyWindow windowP;
 
     /// <summary>
-    /// Initialize all the components of this slot and add the selection listener.
+    /// Initialize all the components of this slot.
     /// </summary>
     /// <param name="creature">Creature to be shown.</param>
-    /// <param name="index">Index of this slot within the Adoption Window</param>
-    /// <param name="window">Reference to the Adoption Window, for calling methods</param>
-    public void Initialize(SaveableCreature creature, int index, AdoptionWindow window)
+    /// <param name="index">Index of this slot within the window.</param>
+    public void Initialize(SaveableCreature creature, int index, bool canSelect = true)
     {
         this.index = index;
-        this.windowA = window;
 
         CreatureSpecies species = speciesList.GetSpecies(creature.species);
         creatureRenderer.Initialize(species, creature.details);
         combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
         visualStats.Initialize(creature);
-    }
-
-    /// <summary>
-    /// Initialize all the components of this slot and add the selection listener.
-    /// </summary>
-    /// <param name="creature">Creature to be shown.</param>
-    /// <param name="index">Index of this slot within the Adoption Window</param>
-    /// <param name="window">Reference to the Party Window, for calling methods</param>
-    public void Initialize(SaveableCreature creature, int index, PartyWindow window)
-    {
-        this.index = index;
-        this.windowP = window;
-
-        CreatureSpecies species = speciesList.GetSpecies(creature.species);
-        creatureRenderer.Initialize(species, creature.details);
-        combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
-        visualStats.Initialize(creature);
+        renderTarget.interactable = canSelect;
     }
 
     /// <summary>
@@ -63,14 +43,7 @@ public class CreatureSlot : MonoBehaviour
     /// </summary>
     public void Select()
     {
-        if (windowA)
-        {
-            windowA.Select(index);
-        }
-        else if (windowP)
-        {
-            windowP.Select(index);
-        }
+        GetComponentInParent<SelectionListener>().OnSelect(index);
     }
 
     /// <summary>

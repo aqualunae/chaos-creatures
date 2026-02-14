@@ -6,18 +6,18 @@ using UnityEngine;
 public class PartyWindow : MonoBehaviour
 {
     [SerializeField]
-    private CreatureSlot[] slots;
+    protected CreatureSlot[] slots;
 
     [SerializeField]
-    private GameObjectVariable playerPartyRef;
+    protected GameObjectVariable playerPartyRef;
 
-    private Party party;
-    private bool toggle = true;
+    protected Party party;
+    protected bool toggle = true;
 
     /// <summary>
     /// Initializes the party window with creatures from the player's party.
     /// </summary>
-    private void OnEnable()
+    protected void OnEnable()
     {
         Debug.Log("enabling");
         party = playerPartyRef.Value.GetComponent<Party>();
@@ -26,7 +26,7 @@ public class PartyWindow : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void Refresh()
+    protected virtual void Refresh()
     {
         Dictionary<int, SaveableCreature> creatures = party.Creatures;
         for (int i = 0; i < slots.Length; i++)
@@ -34,7 +34,7 @@ public class PartyWindow : MonoBehaviour
             if (creatures[i] != null)
             {
                 slots[i].gameObject.SetActive(true);
-                slots[i].Initialize(creatures[i], i, this);
+                slots[i].Initialize(creatures[i], i);
             }
             else
             {
@@ -43,7 +43,7 @@ public class PartyWindow : MonoBehaviour
         }
     }
 
-    public void Select(int index)
+    public virtual void Select(int index)
     {
         party.Select(index);
         Refresh();

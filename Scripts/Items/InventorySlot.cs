@@ -19,7 +19,7 @@ public class InventorySlot : MonoBehaviour
     private ItemListVariable masterList;
 
     private int slotIndex;
-    private ItemListener itemListener;
+    private SelectionListener itemListener;
 
     /// <summary>
     /// Draw the inventory slot
@@ -45,7 +45,7 @@ public class InventorySlot : MonoBehaviour
 
         // set variables that will allow us to send messages back to the parent window later
         slotIndex = index;
-        itemListener = GetComponentInParent<ItemListener>();
+        itemListener = GetComponentInParent<SelectionListener>();
 
         // players want their inventory to not be zero-indexed, probably
         slotField.text = (slotIndex + 1).ToString();

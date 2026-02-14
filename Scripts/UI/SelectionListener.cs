@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ItemListener : MonoBehaviour
+public class SelectionListener : MonoBehaviour
 {
     [SerializeField]
     private UnityEvent<int> selectionEvent;
