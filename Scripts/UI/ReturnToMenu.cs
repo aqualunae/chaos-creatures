@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class ReturnToMenu : MonoBehaviour
 {
     [SerializeField]
-    public GameObjectVariable playerRef;
+    private GameObjectVariable playerRef;
 
     public void QuitGame()
     {

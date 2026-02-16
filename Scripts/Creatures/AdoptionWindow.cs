@@ -78,7 +78,7 @@ public class AdoptionWindow : MonoBehaviour
             slots[i].Initialize(creature, i);
         }
 
-        pauzeEvent.Invoke(GameState.OtherMenu);
+        pauzeEvent.Invoke(GameState.AdoptionWindow);
         gameObject.SetActive(true);
     }
 

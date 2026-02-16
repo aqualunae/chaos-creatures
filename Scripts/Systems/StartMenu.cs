@@ -1,9 +1,12 @@
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(InputSystemUIInputModule))]
 public class StartMenu : MonoBehaviour
 {
     [SerializeField]
@@ -37,6 +40,9 @@ public class StartMenu : MonoBehaviour
         {
             playerRef.Value.SetActive(false);
         }
+
+        GetComponent<InputSystemUIInputModule>().actionsAsset.actionMaps[0].Disable();
+        GetComponent<InputSystemUIInputModule>().actionsAsset.actionMaps[1].Enable();
 
         // set the load game button to disabled if there is no save data
         loadGame.interactable = File.Exists(GetSavePath());

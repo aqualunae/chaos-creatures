@@ -7,17 +7,33 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Camera))]
 public class CreatureCamera : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Where should the rendered texture be displayed?")]
     private Image target;
+
+    [SerializeField, Tooltip("Size in pixels of the texture to be rendered.")]
+    private Vector3Int imageDimensions = new(64, 64, 1);
 
     private void Awake()
     {
+        // get the camera that this component is attached to
         Camera camera = GetComponent<Camera>();
-        RenderTexture texture = new RenderTexture(64, 64, 1);
-        texture.filterMode = FilterMode.Point;
+
+        // create a texture using the specified dimensions
+        RenderTexture texture = new(imageDimensions.x, imageDimensions.y, imageDimensions.z)
+        {
+            filterMode = FilterMode.Point
+        };
+
+        // tell the camera to send its output to the created texture
         camera.targetTexture = texture;
-        Material material = new Material(Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default"));
-        material.mainTexture = texture;
+
+        // create a new material using the texture
+        Material material = new(Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default"))
+        {
+            mainTexture = texture
+        };
+
+        // assign the created material to the target output
         target.material = material;
     }
 }

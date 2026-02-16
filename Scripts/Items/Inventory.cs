@@ -68,6 +68,30 @@ public class Inventory : SaveableBehaviour
         return false;
     }
 
+    private int selectedIndex = -1;
+
+    public void Move(int index)
+    {
+        if (selectedIndex == -1)
+        {
+            selectedIndex = index;
+        }
+        else
+        {
+            Swap(selectedIndex, index);
+            selectedIndex = -1;
+        }
+    }
+
+    private void Swap(int first, int second)
+    {
+        InventoryItem firstItem = items[first];
+        InventoryItem secondItem = items[second];
+
+        items[first] = secondItem;
+        items[second] = firstItem;
+    }
+
     /// <summary>
     /// Remove one of an item, for example if it's used.
     /// </summary>

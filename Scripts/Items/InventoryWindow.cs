@@ -79,7 +79,7 @@ public class InventoryWindow : MonoBehaviour
 
         if (!inventoryIsEmpty)
         {
-            slots[0].Select();
+            slots[0].GetComponent<Button>().Select();
             Select(0);
         }
         else
@@ -102,6 +102,8 @@ public class InventoryWindow : MonoBehaviour
             return;
         }
 
+        selectedIndex = index;
+
         InventoryItem selectedItem = inventory.Items[index];
         if (selectedItem != null)
         {
@@ -117,19 +119,20 @@ public class InventoryWindow : MonoBehaviour
         }
     }
 
-    public virtual void UseItem(int index)
-    {
-        if (inventory.Items.Count <= index)
-        {
-            Debug.Log("Invalid index");
-            VoidSelection();
-            return;
-        }
+    private int selectedIndex;
 
-        InventoryItem selectedItem = inventory.Items[index];
+    public void MoveItem()
+    {
+        inventory.Move(selectedIndex);
+    }
+
+    public void UseItem()
+    {
+        InventoryItem selectedItem = inventory.Items[selectedIndex];
         if (selectedItem != null)
         {
             Item selectedItemData = masterList.GetItem(selectedItem.title);
+            Debug.Log(selectedItem.title);
             // ask player to select a creature on which to use the item
             // UseItemResult result = selectedItemData.UseItem();
         }

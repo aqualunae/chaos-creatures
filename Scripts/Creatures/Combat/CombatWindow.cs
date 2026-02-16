@@ -16,10 +16,10 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("Position where the opponent's creature should be rendered.")]
     private CreatureRenderer opponentRenderer;
 
-    [SerializeField, Tooltip("Window that will display the stats of the player's creature.")]
+    [SerializeField, Tooltip("Window that will display the combat stats of the player's creature.")]
     private CombatStats playerStats;
 
-    [SerializeField, Tooltip("Window that will display the stats of the opponent's creature.")]
+    [SerializeField, Tooltip("Window that will display the combat stats of the opponent's creature.")]
     private CombatStats opponentStats;
 
     [SerializeField, Tooltip("Text field for displaying in-combat messages.")]
@@ -31,16 +31,16 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("Prefab skill button to instantiate.")]
     private SkillButton skillButton;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Window that will display the visual details of the player's creature.")]
     private CreatureDetailsWindow playerDetails;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Window that will display the visual details of the opponent's creature.")]
     private CreatureDetailsWindow opponentDetails;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Window that holds the player's root actions, such as Skills, Items, and Party.")]
     private GameObject actionsMenu;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Window where the skill buttons are rendered.")]
     private GameObject skillsMenu;
 
     [SerializeField, Tooltip("Reference to the player.")]
@@ -49,10 +49,10 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("List of possible species, used to instantiate creatures to render.")]
     private SpeciesListVariable speciesList;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event called when something happens in combat and needs to be displayed to the player.")]
     private StringEvent logUpdateEvent;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event used to change the state of the game.")]
     private GameStateEvent pauzeEvent;
 
     private SaveableCreature player;
@@ -64,11 +64,17 @@ public class CombatWindow : MonoBehaviour
     private Button[] actionButtons;
     private Button endCombatButton;
     
+    /// <summary>
+    /// Get the creature that is currently in combat for the player.
+    /// </summary>
     public SaveableCreature GetPlayer()
     {
         return player;
     }
 
+    /// <summary>
+    /// Get the creature that the player is in combat against.
+    /// </summary>
     public SaveableCreature GetOpponent()
     {
         return opponent;
@@ -84,6 +90,9 @@ public class CombatWindow : MonoBehaviour
         return success;
     }
 
+    /// <summary>
+    /// Gets the player's current creature for combat. Renders the creature's visuals, stats, and skills.
+    /// </summary>
     private void RefreshPlayer()
     {
         // select the first party creature that is able to fight.
@@ -120,6 +129,10 @@ public class CombatWindow : MonoBehaviour
         SelectFirstSkill();
     }
 
+    /// <summary>
+    /// Prepares the combat window.
+    /// </summary>
+    /// <param name="opponent">Creature that the player is in combat against.</param>
     public void Initialize(SaveableCreature opponent)
     {
         // Initialize the opponent
@@ -148,9 +161,14 @@ public class CombatWindow : MonoBehaviour
 
         // set up logging and pauze the overworld
         logUpdateEvent.AddListener(UpdateLog);
-        pauzeEvent.Invoke(GameState.OtherMenu);
+        pauzeEvent.Invoke(GameState.CombatWindow);
+
+        // todo: speed contest to determine if the player or opponent has the first turn
     }
 
+    /// <summary>
+    /// Disable all skill buttons, for example when combat has ended.
+    /// </summary>
     private void DisableSkillButtons()
     {
         if (skillButtons != null)
@@ -162,6 +180,9 @@ public class CombatWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Clean up listeners and unpauze the game when combat ends.
+    /// </summary>
     private void OnDisable()
     {
         logUpdateEvent.RemoveListener(UpdateLog);
@@ -200,19 +221,21 @@ public class CombatWindow : MonoBehaviour
     /// <param name="state">True for player's turn, false for opponent's turn.</param>
     public void TogglePlayerTurn(bool state)
     {
+        // skills should only be interactable during the player's turn
         foreach (SkillButton button in skillButtons)
         {
             button.GetComponent<Button>().interactable = state;
         }
 
+        // if it is the player's turn, select the first skill they have available
         if (state)
         {
             SelectFirstSkill();
         }
 
+        // if it's the opponent's turn and the opponent is able to fight, start their turn
         if (!state && opponent.stats.currentHP > 0)
         {
-            
             StartCoroutine(OpponentSkill());
         }
     }
@@ -231,22 +254,28 @@ public class CombatWindow : MonoBehaviour
     /// </summary>
     private IEnumerator OpponentSkill()
     {
+        // pause so that the player can process
         yield return new WaitForSeconds(1);
 
+        // get appropriate skills and choose one at random
         Skill[] skills = opponentSpecies.GetSkills(opponent.level);
         int index = UnityEngine.Random.Range(0, skills.Length);
 
+        // the UpdatePlayer and UpdateOpponent methods will end combat if a creature's health is reduced to 0
         if (!skills[index].TargetSelf)
         {
+            // if the skill is not self-targeting, use the skill on the player and update the player with the result
             SaveableCreature opponentTarget = skills[index].UseSkill(opponent, player, logUpdateEvent);
             UpdatePlayer(opponentTarget);
         }
         else
         {
+            // if the skill is self-targeting, use it on the opponent and update them
             SaveableCreature opponentTarget = skills[index].UseSkill(opponent, opponent, logUpdateEvent);
             UpdateOpponent(opponentTarget);
         }
 
+        // if the player has not been defeated, it's their turn again
         if (player.stats.currentHP > 0)
         {
             TogglePlayerTurn(true);
@@ -294,17 +323,22 @@ public class CombatWindow : MonoBehaviour
     /// <param name="victory"></param>
     private void EndCombat(bool victory)
     {
+        // switches the menu to skills, which prevents us from having to disable party and item buttons
         SelectFirstSkill();
 
+        // disable action buttons
         for (int i = 0; i < actionButtons.Length; i++)
         {
             actionButtons[i].interactable = false;
         }
+
+        // disable skill buttons
         for (int i = 0; i < skillButtons.Count; i++)
         {
             skillButtons[i].GetComponent<Button>().interactable = false;
         }
 
+        // update and select the button that ends combat
         endCombatButton.interactable = true;
         endCombatButton.GetComponentInChildren<TextMeshProUGUI>().text = "End";
         endCombatButton.Select();
@@ -325,23 +359,26 @@ public class CombatWindow : MonoBehaviour
             button.GetComponent<Button>().interactable = false;
         }
 
-        // log that your creature has been defeated
+        // prepare to log that your creature has been defeated
         string defeatLog = $"{ player.creatureName } is no longer able to fight!";
         
-
+        // get the number of creatures the player has that are able to enter combat
         Party playerParty = playerRef.Value.GetComponent<Party>();
         SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature.stats.currentHP > 0).ToArray();
         if (healthyCreatures.Length > 0)
         {
+            // if there are healthy creatures remaining, open the party tab
             TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
             switcher.AutoSwitch(2);
         }
         else
         {
+            // if there are no healthy creatures, the player is defeated
             defeatLog += " You don't have any more creatures that are able to fight.";
             EndCombat(false);
         }
 
+        // tell the player what has happened
         UpdateLog(defeatLog);
     }
 
@@ -414,6 +451,11 @@ public class CombatWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Use an item during combat.
+    /// </summary>
+    /// <param name="itemData">Item to be used</param>
+    /// <returns>True if the item was successfully used and needs to be reduced in inventory</returns>
     public bool UseItem(Item itemData)
     {
         bool itemWasUsed = false;
@@ -478,10 +520,19 @@ public class CombatWindow : MonoBehaviour
         return itemWasUsed;
     }
 
+    /// <summary>
+    /// Call this method when the order of the player's party changes
+    /// </summary>
     public void SwitchCreature()
     {
+        // update the player's active creature
         RefreshPlayer();
+
+        // tell the player what's going on
         UpdateLog($"You sent out {player.creatureName}.");
+
+        // switching creatures consumes a turn; it is now the opponent's turn
+        // when the player is switching creatures as a result of being defeated, a speed contest should occur
         TogglePlayerTurn(false);
     }
 }

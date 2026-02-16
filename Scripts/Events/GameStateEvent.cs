@@ -4,7 +4,9 @@ public enum GameState
 {
     Overworld,
     PauzeMenu,
-    OtherMenu
+    CombatWindow,
+    AdoptionWindow,
+    DialogueWindow
 }
 
 [System.Serializable, CreateAssetMenu(fileName = "Event ", menuName = "Events/Game State")]

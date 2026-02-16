@@ -9,10 +9,10 @@ using System;
 [RequireComponent(typeof(Tilemap))]
 public class RandomEncounters : MonoBehaviour, IEventSystemHandler
 {
-    [SerializeField]
+    [SerializeField, Tooltip("List of random creatures that can spawn.")]
     private RandomCreature[] possibleCreatures;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Combat window to open.")]
     private CombatWindow combatWindow;
 
     [SerializeField, Tooltip("One in how many chance that combat will start?")]
@@ -21,10 +21,13 @@ public class RandomEncounters : MonoBehaviour, IEventSystemHandler
     [SerializeField, Tooltip("How many steps between assessing combat chance?")]
     private int frequency = 3;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event that is fired when the player moves.")]
     private Vector3Event movementEvent;
 
+    // number of times the player has moved over the selected tilemap since the last instance of combat
     private int movementElapsed;
+
+    // the tilemap to which this script is attached
     private Tilemap tilemap;
 
     private void Awake()
@@ -36,6 +39,7 @@ public class RandomEncounters : MonoBehaviour, IEventSystemHandler
 
     private void OnDisable()
     {
+        // clean up listener
         movementEvent.RemoveListener(OnMove);
     }
 
@@ -59,11 +63,15 @@ public class RandomEncounters : MonoBehaviour, IEventSystemHandler
     /// </summary>
     private void StartCombat()
     {
+        // decide if combat is starting
         int chance = UnityEngine.Random.Range(0, combatChance);
         if (chance == 0)
         {
+            // randomly select and generate a creature
             int index = UnityEngine.Random.Range(0, possibleCreatures.Length);
             SaveableCreature creature = possibleCreatures[index].GetRandomCreature();
+
+            // activate the combat window and initialize it with the opponent
             combatWindow.gameObject.SetActive(true);
             combatWindow.Initialize(creature);
 

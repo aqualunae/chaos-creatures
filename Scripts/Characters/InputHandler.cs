@@ -44,11 +44,19 @@ public class InputHandler : MonoBehaviour
     // Call the pauze event when the pauze key is pressed.
     private void OnPauze(InputValue value)
     {
-        if (gamePauzed != GameState.Overworld)
+        // do not change the game state when the adoption window or combat window is open
+        if (gamePauzed == GameState.AdoptionWindow || gamePauzed == GameState.CombatWindow)
+        {
+            return;
+        }
+
+        // toggle between pauze menu and overworld if one of them is active
+        // allow exiting from the dialogue window
+        if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow)
         {
             gamePauzed = GameState.Overworld;
         }
-        else
+        else if (gamePauzed == GameState.Overworld)
         {
             gamePauzed = GameState.PauzeMenu;
         }

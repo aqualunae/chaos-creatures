@@ -97,17 +97,22 @@ public class Skill : ScriptableObject
             Debug.Log("This skill heals. Are you sure you meant to use it on your opponent?");
         }
 
+        // initial damage calculations
         float adjustedAttack = user.stats.attack - target.stats.defense;
         float baseDamage = (float)(power * 0.5f * ((adjustedAttack * 0.01) + 1));
         float randomDamage = UnityEngine.Random.Range(baseDamage * 0.8f, baseDamage * 1.2f);
 
+        // critical hit calculations
         float critThreshold = (user.stats.critical * 0.03f) + critical;
         bool criticalHit = UnityEngine.Random.Range(0f, 1f) < critThreshold;
-
         float damage = criticalHit ? (float)(randomDamage * ((user.stats.critical * 0.1) + 1)) : randomDamage;
         int finalDamage = (int)Math.Round(damage, 0);
 
+        // update target's health
+        // finalDamage will be negative if the skill heals
         target.stats.currentHP -= finalDamage;
+
+        // do not allow the target's health to go below 0 or above their maximum
         if (target.stats.currentHP < 0)
         {
             target.stats.currentHP = 0;
@@ -117,6 +122,9 @@ public class Skill : ScriptableObject
             target.stats.currentHP = (int)target.stats.hp;
         }
 
+        // todo: skill effects other than damage and healing
+
+        // create the log to display to the player
         string skillEffect = $"{title} was used! ";
         if (finalDamage > 0)
         {
@@ -128,6 +136,7 @@ public class Skill : ScriptableObject
         }
         logUpdateEvent.Invoke(skillEffect);
 
+        // return the updated creature
         return target;
     }
 }

@@ -155,6 +155,15 @@
 - do not open creature switching window if whole party has 0 hp
 - switching creatures during combat ends player's turn
 
+- updated commenting in combat folder
+- creature camera has configurable output size
+- updated game state to allow more options
+    - prevents hitting pauze to leave adoption or combat early
+    - allows hitting pauze to leave dialogue early
+- made sure the start menu has the ui action map enabled
+- fixed: opening the inventory window does not select any buttons, which breaks keyboard-only navigation
+- starting to navigate inventory interactions in the pauze menu
+
 ## Next Up
 
 ### Issues

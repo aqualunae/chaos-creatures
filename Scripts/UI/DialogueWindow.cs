@@ -33,7 +33,8 @@ public class DialogueWindow : MonoBehaviour
         currentLine = 0;
 
         // pauze the game
-        pauzeEvent.Invoke(GameState.OtherMenu);
+        pauzeEvent.Invoke(GameState.DialogueWindow);
+        pauzeEvent.AddListener(Escape);
     }
 
     public void Next()
@@ -54,6 +55,16 @@ public class DialogueWindow : MonoBehaviour
     private void OnDisable()
     {
         // unpauze
+        pauzeEvent.RemoveListener(Escape);
         pauzeEvent.Invoke(GameState.Overworld);
+    }
+
+    public void Escape(GameState state)
+    {
+        // if the pauze key is pressed during dialogue, close the dialogue window
+        if (state == GameState.Overworld)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
