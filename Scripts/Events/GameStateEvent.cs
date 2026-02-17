@@ -6,7 +6,8 @@ public enum GameState
     PauzeMenu,
     CombatWindow,
     AdoptionWindow,
-    DialogueWindow
+    DialogueWindow,
+    StorageWindow
 }
 
 [System.Serializable, CreateAssetMenu(fileName = "Event ", menuName = "Events/Game State")]

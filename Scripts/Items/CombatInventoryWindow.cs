@@ -109,7 +109,7 @@ public class CombatInventoryWindow : InventoryWindow
     /// Use an item.
     /// </summary>
     /// <param name="index">Slot index of the item to use.</param>
-    public void UseItem(int index)
+    public override void UseItem(int index)
     {
         if (inventory.Items.Count <= index)
         {

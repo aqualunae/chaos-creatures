@@ -47,8 +47,8 @@ public class InventorySlot : MonoBehaviour
         slotIndex = index;
         itemListener = GetComponentInParent<SelectionListener>();
 
-        // players want their inventory to not be zero-indexed, probably
-        slotField.text = (slotIndex + 1).ToString();
+        // slot numbering behaves unpredictably with multiple inventories, so let's disable it for now
+        slotField.text = "";
     }
 
     /// <summary>

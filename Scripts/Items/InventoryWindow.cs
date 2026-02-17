@@ -31,10 +31,16 @@ public class InventoryWindow : MonoBehaviour
     [SerializeField]
     protected Button selectIfEmpty;
 
+    [SerializeField]
+    private TextMeshProUGUI moveModeLabel;
+
     protected Inventory inventory;
     protected List<InventorySlot> slots;
     protected bool inventoryIsEmpty = true;
 
+    // when enabled, move items instead of using them on click
+    private bool moveMode = false;
+    
     protected virtual void OnEnable()
     {
         inventory = inventoryOwner.Value.GetComponent<Inventory>();
@@ -48,7 +54,7 @@ public class InventoryWindow : MonoBehaviour
     /// <summary>
     /// If slots already exist, discard them.
     /// </summary>
-    protected void PurgeSlots()
+    protected virtual void PurgeSlots()
     {
         if (slots != null && slots.Count > 0)
         {
@@ -80,7 +86,6 @@ public class InventoryWindow : MonoBehaviour
         if (!inventoryIsEmpty)
         {
             slots[0].GetComponent<Button>().Select();
-            Select(0);
         }
         else
         {
@@ -102,8 +107,6 @@ public class InventoryWindow : MonoBehaviour
             return;
         }
 
-        selectedIndex = index;
-
         InventoryItem selectedItem = inventory.Items[index];
         if (selectedItem != null)
         {
@@ -119,21 +122,45 @@ public class InventoryWindow : MonoBehaviour
         }
     }
 
-    private int selectedIndex;
-
-    public void MoveItem()
+    /// <summary>
+    /// When true, move items instead of using them.
+    /// </summary>
+    public void ToggleMoveMode()
     {
-        inventory.Move(selectedIndex);
+        moveMode = !moveMode;
+        moveModeLabel.text = moveMode ? "Move mode: ON" : "Move mode: OFF";
     }
 
-    public void UseItem()
+    /// <summary>
+    /// Select an item to move.
+    /// </summary>
+    /// <param name="index">Slot index of item</param>
+    protected virtual void MoveItem(int index)
     {
-        InventoryItem selectedItem = inventory.Items[selectedIndex];
+        inventory.Move(index);
+        Initialize();
+        slots[index].GetComponent<Button>().Select();
+    }
+
+    /// <summary>
+    /// Select an item to use, or to move if move mode is enabled.
+    /// </summary>
+    /// <param name="index">Slot index of item</param>
+    public virtual void UseItem(int index)
+    {
+        if (moveMode)
+        {
+            MoveItem(index);
+            return;    
+        }
+
+        InventoryItem selectedItem = inventory.Items[index];
         if (selectedItem != null)
         {
             Item selectedItemData = masterList.GetItem(selectedItem.title);
             Debug.Log(selectedItem.title);
             // ask player to select a creature on which to use the item
+            // check if the item is usable, equipment, or not
             // UseItemResult result = selectedItemData.UseItem();
         }
     }

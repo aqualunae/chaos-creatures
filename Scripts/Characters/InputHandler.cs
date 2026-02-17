@@ -51,8 +51,8 @@ public class InputHandler : MonoBehaviour
         }
 
         // toggle between pauze menu and overworld if one of them is active
-        // allow exiting from the dialogue window
-        if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow)
+        // allow exiting from the dialogue window and storage window
+        if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow || gamePauzed == GameState.StorageWindow)
         {
             gamePauzed = GameState.Overworld;
         }

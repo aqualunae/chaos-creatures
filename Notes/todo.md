@@ -164,32 +164,45 @@
 - fixed: opening the inventory window does not select any buttons, which breaks keyboard-only navigation
 - starting to navigate inventory interactions in the pauze menu
 
+- created move mode toggle in inventory
+- ability to move items between inventory slots
+- fixed: moving an item does not select it
+- added item storage window
+- added item storage crate
+- item storage has its own game state
+
 ## Next Up
 
 ### Issues
 
 - loading in the hyper arcade and then moving to campgrounds causes a crash
+- storage item slot indices display incorrectly
 
 ### Features
 
 - handle friendship when party is full
 - creature storage
 
-- move items between slots in the same inventory
-- move items to storage
-- discard items
 - item use logic
+    - separate healing items from combat items
+- creature equipment
+- implement item drag
+- removing item from inventory:
+    - delete it
+    - "slot" for discarding items
+    - confirmation popup
+
 - lootable items on timer; saveable delta time
 - code commenting in items folder
-- creature equipment
+
+- hold move key to move continuously
 
 - responsive ui scaling
+- calculate and display creature rarity
 
 - add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
-
-- calculate and display creature rarity
 
 - logic for handling combat
     - aspect influence
