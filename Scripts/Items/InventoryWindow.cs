@@ -49,6 +49,7 @@ public class InventoryWindow : MonoBehaviour
             slots = new List<InventorySlot>();
         }
         Initialize();
+        moveMode = false;
     }
 
     /// <summary>

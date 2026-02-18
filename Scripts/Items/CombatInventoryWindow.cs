@@ -111,14 +111,14 @@ public class CombatInventoryWindow : InventoryWindow
     /// <param name="index">Slot index of the item to use.</param>
     public override void UseItem(int index)
     {
-        if (inventory.Items.Count <= index)
+        if (slotContents.Count <= index)
         {
             Debug.Log("Invalid index");
             return;
         }
 
         // if the item is valid
-        InventoryItem selectedItem = inventory.Items[index];
+        InventoryItem selectedItem = slotContents[index];
         if (selectedItem != null)
         {
             // figure out what it is

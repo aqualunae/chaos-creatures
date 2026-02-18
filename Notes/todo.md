@@ -142,7 +142,7 @@
 - display an appropriate message when inventory is empty
 - pauze menu always opens to the highest level menu
 - interactions fields display action to take
-- move interact to space
+- changed interact to space
 - use only one action map at a time
 - pauze on dialogue
 
@@ -171,12 +171,24 @@
 - added item storage crate
 - item storage has its own game state
 
+- addded time system
+- put lootable items on timer
+- made lootable items saveable
+- fixed: game crashes when party with less than maximum creatures is defeated (checking stats of null)
+- fixed: storage window moves the first item selected (selection from previous opening persisted)
+- fixed: game crashes when attempting to pick up an item while the first inventory slot is empty (checking stack size of null)
+- fixed: items not usable in combat (checking wrong index)
+- when swapping two of the same item (in the same inventory or across storage), merge the stacks
+- fixed: swapping an item with itself deletes the item (need to check same)
+
 ## Next Up
 
 ### Issues
 
 - loading in the hyper arcade and then moving to campgrounds causes a crash
 - storage item slot indices display incorrectly
+- opening the storage window by keyboard navigation clicks the first item instead of just selecting it
+    - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
 
 ### Features
 
@@ -191,8 +203,8 @@
     - delete it
     - "slot" for discarding items
     - confirmation popup
+- highlight item when it is being used or moved
 
-- lootable items on timer; saveable delta time
 - code commenting in items folder
 
 - hold move key to move continuously

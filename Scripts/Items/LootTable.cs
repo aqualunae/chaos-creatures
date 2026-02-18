@@ -10,6 +10,9 @@ public class Lootable
 
     [Tooltip("Higher numbers mean the item is more common."), Range(1, 25)]
     public int weight;
+
+    [Tooltip("You don't have to set this.")]
+    public int index;
 }
 
 [CreateAssetMenu(fileName = "Loot Table ", menuName = "Items/Loot Table")]
@@ -42,11 +45,18 @@ public class LootTable : ScriptableObject
             // when the counter exceeds the random number, return the corresponding lootable
             if (counter > rand)
             {
+                lootItems[i].index = i;
                 return lootItems[i];
             }
         }
 
         // failing that, return the most common item
+        lootItems[0].index = 0;
         return lootItems[0];
+    }
+
+    public Lootable GetLootable(int index)
+    {
+        return lootItems[index];
     }
 }

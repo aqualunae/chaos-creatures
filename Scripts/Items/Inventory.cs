@@ -43,7 +43,7 @@ public class Inventory : SaveableBehaviour
         if (stackExists)
         {
             // if it is, add it to the stack
-            InventoryItem existingStack = items.First(slot => slot.Value.title == item.Title).Value;
+            InventoryItem existingStack = items.First(slot => slot.Value?.title == item.Title).Value;
             existingStack.amount += amount;
             return true;
         }
@@ -78,7 +78,11 @@ public class Inventory : SaveableBehaviour
         }
         else
         {
-            Swap(selectedIndex, index);
+            // only swap if two different slots were selected
+            if (selectedIndex != index)
+            {
+                Swap(selectedIndex, index);
+            }
             selectedIndex = -1;
         }
     }
@@ -88,8 +92,18 @@ public class Inventory : SaveableBehaviour
         InventoryItem firstItem = items[first];
         InventoryItem secondItem = items[second];
 
-        items[first] = secondItem;
-        items[second] = firstItem;
+        // if swapping two stacks of the same item, merge them
+        if (firstItem != null && firstItem.title == secondItem?.title)
+        {
+            items[second].amount += firstItem.amount;
+            items[first] = null;
+        }
+        else
+        {
+            // otherwise, swap the items
+            items[first] = secondItem;
+            items[second] = firstItem;
+        }
     }
 
     /// <summary>

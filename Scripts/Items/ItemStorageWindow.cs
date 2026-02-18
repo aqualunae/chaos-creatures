@@ -15,6 +15,7 @@ public class ItemStorageWindow : InventoryWindow
     private GameStateEvent pauzeEvent;
 
     protected Inventory storage;
+    private int selectedIndex = -1;
 
     protected override void OnEnable()
     {
@@ -62,13 +63,11 @@ public class ItemStorageWindow : InventoryWindow
             // if the slot index is higher than the combined total inventory
             if ((inventory.Items.Count + storage.Items.Count) <= index)
             {
-                Debug.Log("Invalid index");
                 VoidSelection();
                 return;
             }
 
             // select a storage item
-            Debug.Log(index - inventory.Items.Count);
             selectedItem = storage.Items[index - inventory.Items.Count];
         }
         else
@@ -92,14 +91,22 @@ public class ItemStorageWindow : InventoryWindow
         }
     }
 
-    private int selectedIndex = -1;
-
     /// <summary>
     /// Select an item to move.
     /// </summary>
     /// <param name="index">Slot index of item</param>
     protected override void MoveItem(int index)
     {
+        Debug.Log(index);
+        // only swap if two different slots were selected
+        if (index == selectedIndex)
+        {
+            selectedIndex = -1;
+            Initialize();
+            slots[index].GetComponent<Button>().Select();
+            return;
+        }
+
         // if a slot was previously selected
         if (selectedIndex != -1)
         {
@@ -123,17 +130,37 @@ public class ItemStorageWindow : InventoryWindow
                 InventoryItem playerItem = inventory.Items[selectedIndex];
                 InventoryItem storageItem = storage.Items[index - inventory.Items.Count];
 
-                inventory.Items[selectedIndex] = storageItem;
-                storage.Items[index - inventory.Items.Count] = playerItem;
+                if (playerItem != null && playerItem.title == storageItem?.title)
+                {
+                    // if the stacks are the same, merge them
+                    storage.Items[index - inventory.Items.Count].amount += playerItem.amount;
+                    inventory.Items[selectedIndex] = null;
+                }
+                else
+                {
+                    // otherwise, swap them
+                    inventory.Items[selectedIndex] = storageItem;
+                    storage.Items[index - inventory.Items.Count] = playerItem;
+                }
             }
             // if the first slot is in storage and the second slot is in the player's inventory
             else if (selectedIndex >= inventory.Items.Count && index < inventory.Items.Count)
             {
                 InventoryItem playerItem = inventory.Items[index];
                 InventoryItem storageItem = storage.Items[selectedIndex - inventory.Items.Count];
-
-                inventory.Items[index] = storageItem;
-                storage.Items[selectedIndex - inventory.Items.Count] = playerItem;
+                
+                if (playerItem != null && playerItem.title == storageItem?.title)
+                {
+                    // if the stacks are the same, merge them
+                    inventory.Items[index].amount += storageItem.amount;
+                    storage.Items[selectedIndex - inventory.Items.Count] = null;
+                }
+                else
+                {
+                    // otherwise, swap them
+                    inventory.Items[index] = storageItem;
+                    storage.Items[selectedIndex - inventory.Items.Count] = playerItem;
+                }
             }
 
             // reset selectedIndex

@@ -364,7 +364,7 @@ public class CombatWindow : MonoBehaviour
         
         // get the number of creatures the player has that are able to enter combat
         Party playerParty = playerRef.Value.GetComponent<Party>();
-        SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature.stats.currentHP > 0).ToArray();
+        SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature?.stats.currentHP > 0).ToArray();
         if (healthyCreatures.Length > 0)
         {
             // if there are healthy creatures remaining, open the party tab
