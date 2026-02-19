@@ -19,7 +19,6 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     protected void OnEnable()
     {
-        Debug.Log("enabling");
         party = playerPartyRef.Value.GetComponent<Party>();
         Refresh();
 

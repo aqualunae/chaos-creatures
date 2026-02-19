@@ -17,7 +17,8 @@ public class WarpPointAssignment : MonoBehaviour
     [SerializeField, Tooltip("Set the exit point outside of the collider so that the warps don't ricochet.")]
     private GameObject exitPoint;
 
-    private void Awake()
+    // start not awake so that the scene is loaded before this is called
+    private void Start()
     {
         warpPoint.Position = exitPoint.transform.position;
         warpPoint.SceneName = gameObject.scene.name;

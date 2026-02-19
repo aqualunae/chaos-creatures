@@ -181,14 +181,23 @@
 - when swapping two of the same item (in the same inventory or across storage), merge the stacks
 - fixed: swapping an item with itself deletes the item (need to check same)
 
+### Week of February 18
+
+- found and added skill animations
+- added sprite swapper that dynamically updates a single skill animation to any skill animation
+- moved skill use logic from skill button to combat window
+- added continuous movement by holding down move keys
+
 ## Next Up
 
 ### Issues
 
 - loading in the hyper arcade and then moving to campgrounds causes a crash
+    - try separating assignment from warping during play
 - storage item slot indices display incorrectly
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
+- pressing multiple move buttons at once can sometimes result in unexpected behaviour
 
 ### Features
 
@@ -206,8 +215,6 @@
 - highlight item when it is being used or moved
 
 - code commenting in items folder
-
-- hold move key to move continuously
 
 - responsive ui scaling
 - calculate and display creature rarity

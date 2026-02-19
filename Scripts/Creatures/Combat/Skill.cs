@@ -37,6 +37,9 @@ public class Skill : ScriptableObject
     [SerializeField, Range(1, 50), Tooltip("Minimum level the skill user has to be in order to access this skill.")]
     private int minimumLevel;
 
+    [SerializeField]
+    private SkillSprites skillSprites;
+
     public string Title
     {
         get => title;
@@ -75,6 +78,11 @@ public class Skill : ScriptableObject
     public int MinimumLevel
     {
         get => minimumLevel;
+    }
+
+    public Sprite[] Sprites
+    {
+        get => skillSprites.Sprites;
     }
 
     /// <summary>

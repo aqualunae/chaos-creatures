@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 [RequireComponent(typeof(Mover), typeof(PlayerInput))]
 public class InputHandler : MonoBehaviour
@@ -32,35 +33,45 @@ public class InputHandler : MonoBehaviour
     /// <summary>
     /// Called by the Input System to move the player.
     /// </summary>
-    private void OnMove(InputValue value)
+    public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 direction = value.Get<Vector2>();
-        if (direction != Vector2.zero)
+        Vector2 direction = context.ReadValue<Vector2>();
+        if (context.interaction is HoldInteraction)
         {
-            GetComponent<Mover>().Move(direction);
+            if (context.canceled)
+            {
+                GetComponent<Mover>().SlowStop();
+            }
+            else if (direction != Vector2.zero)
+            {
+                GetComponent<Mover>().MoveContinuous(direction);
+            }
         }
     }
 
     // Call the pauze event when the pauze key is pressed.
-    private void OnPauze(InputValue value)
+    public void OnPauze(InputAction.CallbackContext context)
     {
-        // do not change the game state when the adoption window or combat window is open
-        if (gamePauzed == GameState.AdoptionWindow || gamePauzed == GameState.CombatWindow)
+        if (context.started)
         {
-            return;
-        }
+            // do not change the game state when the adoption window or combat window is open
+            if (gamePauzed == GameState.AdoptionWindow || gamePauzed == GameState.CombatWindow)
+            {
+                return;
+            }
 
-        // toggle between pauze menu and overworld if one of them is active
-        // allow exiting from the dialogue window and storage window
-        if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow || gamePauzed == GameState.StorageWindow)
-        {
-            gamePauzed = GameState.Overworld;
+            // toggle between pauze menu and overworld if one of them is active
+            // allow exiting from the dialogue window and storage window
+            if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow || gamePauzed == GameState.StorageWindow)
+            {
+                gamePauzed = GameState.Overworld;
+            }
+            else if (gamePauzed == GameState.Overworld)
+            {
+                gamePauzed = GameState.PauzeMenu;
+            }
+            pauzeEvent.Invoke(gamePauzed);
         }
-        else if (gamePauzed == GameState.Overworld)
-        {
-            gamePauzed = GameState.PauzeMenu;
-        }
-        pauzeEvent.Invoke(gamePauzed);
     }
 
     // Update the pauze state when the pauze event is called.
@@ -73,7 +84,7 @@ public class InputHandler : MonoBehaviour
     /// <summary>
     /// Called by the Input System when the player clicks.
     /// </summary>
-    private void OnInteractMouse(InputValue value)
+    public void OnInteractMouse(InputAction.CallbackContext context)
     {
         //check if the game is pauzed
         if (gamePauzed != GameState.Overworld)
@@ -82,7 +93,7 @@ public class InputHandler : MonoBehaviour
         }
 
         // if the cursor is near the player
-        Vector2 cursorPosition = value.Get<Vector2>();
+        Vector2 cursorPosition = context.ReadValue<Vector2>();
         Vector3 targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(cursorPosition.x, cursorPosition.y, Camera.main.transform.position.z * -1));
         if (Vector3.Distance(targetPosition, transform.position) < interactDistance)
         {
@@ -105,10 +116,10 @@ public class InputHandler : MonoBehaviour
     /// <summary>
     /// Called by the Input System when the player presses their Interact key or button.
     /// </summary>
-    private void OnInteractKey(InputValue value)
+    public void OnInteractKey(InputAction.CallbackContext context)
     {
         //check if the game is pauzed
-        if (gamePauzed != GameState.Overworld)
+        if (gamePauzed != GameState.Overworld || !context.performed)
         {
             return;
         }

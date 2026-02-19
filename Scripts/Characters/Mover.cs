@@ -26,7 +26,9 @@ public class Mover : SaveableBehaviour
     private bool gamePauzed = false;
 
     // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
-    private Coroutine movementCoroutine;
+    private Coroutine movementCR;
+    private Coroutine multiMovementCR;
+    private bool moveKeyHeld = false;
     private Vector3 gridDirection;
     private Vector3 gridSize;
     private Vector3 aimLocation;
@@ -61,15 +63,15 @@ public class Mover : SaveableBehaviour
 
     private void OnDisable()
     {
-        if (movementCoroutine != null)
+        if (movementCR != null)
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(movementCR);
         }
         gamePauzedEvent.RemoveListener(TogglePauze);
     }
 
     /// <summary>
-    /// Move this object in a specific direction.
+    /// Move this object once in a specific direction.
     /// </summary>
     public void Move(Vector2 direction)
     {
@@ -80,15 +82,15 @@ public class Mover : SaveableBehaviour
 
         aimDirection = new Vector3(direction.x, direction.y);
         gridDirection = aimDirection * gridSize.x;
-        if (movementCoroutine != null)
+        if (movementCR != null)
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(movementCR);
         }
-        movementCoroutine = StartCoroutine(Movement());
+        movementCR = StartCoroutine(SingleMovement());
     }
 
     // Moves the object towards direction until it's close enough to round up and jump the gap.
-    private IEnumerator Movement()
+    private IEnumerator SingleMovement()
     {
         Vector3 originalPosition = transform.position;
         Vector3 snappedPosition = gridRef.Value.CellToWorld(gridRef.Value.WorldToCell(originalPosition + gridDirection)) + (gridSize * 0.5f);
@@ -112,6 +114,35 @@ public class Mover : SaveableBehaviour
         yield return null;
     }
 
+    public void MoveContinuous(Vector2 direction)
+    {
+        if (direction == Vector2.zero || gamePauzed)
+        {
+            return;
+        }
+
+        aimDirection = new Vector3(direction.x, direction.y);
+        gridDirection = aimDirection * gridSize.x;
+        if (movementCR != null)
+        {
+            StopCoroutine(movementCR);
+        }
+        moveKeyHeld = true;
+        multiMovementCR = StartCoroutine(MultiMovement());
+    }
+
+    private IEnumerator MultiMovement()
+    {
+        int safetyCounter = 50;
+        do
+        {
+            yield return movementCR = StartCoroutine(SingleMovement());
+            safetyCounter--;
+        }
+        while (moveKeyHeld && safetyCounter > 0);
+        yield return null;
+    }
+
     /// <summary>
     /// When the object collides with a static object, do not let it continue in that direction.
     /// </summary>
@@ -121,11 +152,21 @@ public class Mover : SaveableBehaviour
         Stop();
     }
 
+    public void SlowStop()
+    {
+        moveKeyHeld = false;
+    }
+
     public void Stop()
     {
-        if (movementCoroutine != null)
+        moveKeyHeld = false;
+        if (multiMovementCR != null)
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(multiMovementCR);
+        }
+        if (movementCR != null)
+        {
+            StopCoroutine(movementCR);
         }
         transform.position = lastPosition;
     }

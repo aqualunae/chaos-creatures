@@ -55,6 +55,12 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("Event used to change the state of the game.")]
     private GameStateEvent pauzeEvent;
 
+    [SerializeField]
+    private SpriteSwapper playerSkillSwapper;
+
+    [SerializeField]
+    private SpriteSwapper opponentSkillSwapper;
+
     private SaveableCreature player;
     private SaveableCreature opponent;
     private List<SkillButton> skillButtons;
@@ -122,7 +128,7 @@ public class CombatWindow : MonoBehaviour
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
-            button.Initialize(playerSkills[i], player, opponent, this);
+            button.Initialize(playerSkills[i]);
             skillButtons.Add(button);
         }
 
@@ -265,12 +271,16 @@ public class CombatWindow : MonoBehaviour
         if (!skills[index].TargetSelf)
         {
             // if the skill is not self-targeting, use the skill on the player and update the player with the result
+            playerSkillSwapper.sprites = skills[index].Sprites;
+            playerSkillSwapper.GetComponent<Animator>().Play("Skill");
             SaveableCreature opponentTarget = skills[index].UseSkill(opponent, player, logUpdateEvent);
             UpdatePlayer(opponentTarget);
         }
         else
         {
             // if the skill is self-targeting, use it on the opponent and update them
+            opponentSkillSwapper.sprites = skills[index].Sprites;
+            opponentSkillSwapper.GetComponent<Animator>().Play("Skill");
             SaveableCreature opponentTarget = skills[index].UseSkill(opponent, opponent, logUpdateEvent);
             UpdateOpponent(opponentTarget);
         }
@@ -282,6 +292,33 @@ public class CombatWindow : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    /// <summary>
+    /// The player selects a skill and uses it. Called by Skill Button primarily.
+    /// </summary>
+    /// <param name="skill">Skill to use</param>
+    public void PlayerSkill(Skill skill)
+    {
+        SaveableCreature skillTarget = skill.TargetSelf ? player : opponent;
+
+        // Apply skill effects
+        SaveableCreature updatedTarget = skill.UseSkill(player, skillTarget, logUpdateEvent);
+        if (!skill.TargetSelf)
+        {
+            opponentSkillSwapper.sprites = skill.Sprites;
+            opponentSkillSwapper.GetComponent<Animator>().Play("Skill");
+            UpdateOpponent(updatedTarget);
+        }
+        else
+        {
+            playerSkillSwapper.sprites = skill.Sprites;
+            playerSkillSwapper.GetComponent<Animator>().Play("Skill");
+            UpdatePlayer(updatedTarget);
+        }
+
+        // The player's turn is over now that they've used a skill.
+        TogglePlayerTurn(false);
     }
 
     /// <summary>
