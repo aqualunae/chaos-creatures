@@ -40,6 +40,9 @@ public class Skill : ScriptableObject
     [SerializeField]
     private SkillSprites skillSprites;
 
+    [SerializeField]
+    private AudioClip sound;
+
     public string Title
     {
         get => title;
@@ -83,6 +86,11 @@ public class Skill : ScriptableObject
     public Sprite[] Sprites
     {
         get => skillSprites.Sprites;
+    }
+
+    public AudioClip Sound
+    {
+        get => sound;
     }
 
     /// <summary>

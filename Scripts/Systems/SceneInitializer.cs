@@ -20,6 +20,12 @@ public class SceneInitializer : MonoBehaviour
     private Grid grid;
 
     [SerializeField]
+    private GameObjectVariable audioRef;
+
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
     private GameStateEvent pauzeEvent;
 
     private GameObject instantiatedPlayer;
@@ -28,6 +34,7 @@ public class SceneInitializer : MonoBehaviour
     {
         // assign system variables
         gridRef.Value = grid;
+        audioRef.Value = audioSource.gameObject;
 
         // get rid of ghosts
         if (playerRef.Value != null)

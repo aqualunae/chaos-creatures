@@ -61,6 +61,9 @@ public class CombatWindow : MonoBehaviour
     [SerializeField]
     private SpriteSwapper opponentSkillSwapper;
 
+    [SerializeField]
+    private GameObjectVariable audioRef;
+
     private SaveableCreature player;
     private SaveableCreature opponent;
     private List<SkillButton> skillButtons;
@@ -69,6 +72,7 @@ public class CombatWindow : MonoBehaviour
     private Vector3 actionMenuLocation;
     private Button[] actionButtons;
     private Button endCombatButton;
+    private AudioSource audioSource;
     
     /// <summary>
     /// Get the creature that is currently in combat for the player.
@@ -169,6 +173,10 @@ public class CombatWindow : MonoBehaviour
         logUpdateEvent.AddListener(UpdateLog);
         pauzeEvent.Invoke(GameState.CombatWindow);
 
+        // set up the audio source and play the opponent's call
+        audioSource = audioRef.Value.GetComponent<AudioSource>();
+        audioSource.PlayOneShot(opponentSpecies.Call);
+
         // todo: speed contest to determine if the player or opponent has the first turn
     }
 
@@ -267,6 +275,11 @@ public class CombatWindow : MonoBehaviour
         Skill[] skills = opponentSpecies.GetSkills(opponent.level);
         int index = UnityEngine.Random.Range(0, skills.Length);
 
+        if (skills[index].Sound != null)
+        {
+            audioSource.PlayOneShot(skills[index].Sound);
+        }
+
         // the UpdatePlayer and UpdateOpponent methods will end combat if a creature's health is reduced to 0
         if (!skills[index].TargetSelf)
         {
@@ -304,6 +317,11 @@ public class CombatWindow : MonoBehaviour
 
         // Apply skill effects
         SaveableCreature updatedTarget = skill.UseSkill(player, skillTarget, logUpdateEvent);
+        if (skill.Sound != null)
+        {
+            audioSource.PlayOneShot(skill.Sound);
+        }
+
         if (!skill.TargetSelf)
         {
             opponentSkillSwapper.sprites = skill.Sprites;

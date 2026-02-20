@@ -12,9 +12,18 @@ public class PauzeGame : MonoBehaviour
     [SerializeField]
     private GameObjectVariable playerRef;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip combatMusic;
+
+    private AudioClip overworldMusic;
+
     private void Awake()
     {
         pauzeEvent.AddListener(TogglePauzeByListener);
+        overworldMusic = audioSource.clip;
     }
 
     // Only allow the pauze state to be toggled by the listener. Otherwise it results in unpredictable behaviour.
@@ -33,6 +42,17 @@ public class PauzeGame : MonoBehaviour
                 pauzeMenu.SetActive(true);
             }
         }
+
+        if (state == GameState.CombatWindow)
+        {
+            audioSource.clip = combatMusic;
+        }
+        else
+        {
+            audioSource.clip = overworldMusic;
+        }
+
+        audioSource.Play();
     }
 
     // If the pauze state needs to be toggled, invoke the listener.

@@ -12,9 +12,17 @@ public class CreatureSpecies : ScriptableObject
     [SerializeField]
     protected string species;
 
+    [SerializeField]
+    protected AudioClip call;
+
     public string Species
     {
         get => species;
+    }
+
+    public AudioClip Call
+    {
+        get => call;
     }
 
     [Header("Features"), Tooltip("The possible shapes of the species.")]
