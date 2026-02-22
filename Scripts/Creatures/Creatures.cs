@@ -1,6 +1,7 @@
 using Assets.Scripts.Creatures.Combat;
 using UnityEditor;
 using UnityEngine;
+using static Bracelet;
 
 namespace Assets.Scripts.Creatures
 {
@@ -164,6 +165,15 @@ namespace Assets.Scripts.Creatures
         public string option;
     }
 
+    [System.Serializable]
+    public class Equipment
+    {
+        public BraceletStyle braceletStyle;
+        public ColorTitle baseColorTitle;
+        public ColorTitle accentColorTitle;
+        public string[] charms = new string[3];
+    }
+
     /// <summary>
     /// Used to save specific creatures
     /// </summary>
@@ -175,5 +185,6 @@ namespace Assets.Scripts.Creatures
         public int level;
         public Stats stats;
         public CreatureDetails details;
+        public Equipment equipment;
     }
 }

@@ -17,6 +17,9 @@ public class LootableItem : SaveableBehaviour
     [SerializeField, Tooltip("After the loot is picked up, how many seconds until it should spawn a new loot item?")]
     private int interval;
 
+    [SerializeField]
+    private ColorListVariable colorList;
+
     private Lootable loot;
     private bool available = true;
     private int lastInterval = 0;
@@ -38,7 +41,7 @@ public class LootableItem : SaveableBehaviour
         lootRenderer.gameObject.SetActive(true);
         loot = table.GetLootable();
         lootRenderer.sprite = loot.item.Sprite;
-        lootRenderer.color = loot.item.Color;
+        lootRenderer.color = colorList.GetColor(loot.item.Color);
         available = true;
     }
 
@@ -131,7 +134,7 @@ public class LootableItem : SaveableBehaviour
 
         // render item
         lootRenderer.sprite = loot.item.Sprite;
-        lootRenderer.color = loot.item.Color;
+        lootRenderer.color = colorList.GetColor(loot.item.Color);
         lootRenderer.gameObject.SetActive(available);
     }
 

@@ -36,7 +36,8 @@ public class RandomCreature : ScriptableObject
             creatureName = speciesName,
             level = level,
             stats = stats,
-            details = details
+            details = details,
+            equipment = null
         };
     }
 }

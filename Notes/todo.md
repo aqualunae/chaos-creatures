@@ -199,6 +199,8 @@
 - added menus to the systems prefab
 - fully implemented CreatureSpecies.GetGeneticOdds(GeneEffect[] effects)
 - added more commenting to the items folder
+- added creature overview window, equipment panel, equipment slot, and bracelet renderer
+- standardized item colors
 
 ## Next Up
 
@@ -214,9 +216,13 @@
 
 - handle friendship when party is full
 - creature storage
+    - attached to tent
+
+- creature calls on adoption screen
+- maybe also on selection in party?
 
 - item use logic
-    - separate healing items from combat items
+    - separate healing items from combat items?
 - creature equipment
 - implement item drag
 - removing item from inventory:

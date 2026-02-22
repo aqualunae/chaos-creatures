@@ -63,6 +63,14 @@ public class AdoptionWindow : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
+        Equipment defaultBracelet = new Equipment()
+        {
+            braceletStyle = Bracelet.BraceletStyle.Beaded,
+            baseColorTitle = ColorTitle.red,
+            accentColorTitle = ColorTitle.red,
+            charms = new string[3]
+        };
+
         // loop
         List<RandomCreature> optionsList = new List<RandomCreature>();
         optionsList.AddRange(options);
@@ -73,6 +81,8 @@ public class AdoptionWindow : MonoBehaviour
             int index = UnityEngine.Random.Range(0, optionsList.Count);
             SaveableCreature creature = optionsList[index].GetRandomCreature();
             optionsList.RemoveAt(index);
+
+            creature.equipment = defaultBracelet;
 
             creatures[i] = creature;
             slots[i].Initialize(creature, i);

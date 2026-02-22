@@ -18,6 +18,9 @@ public class InventorySlot : MonoBehaviour
     [SerializeField, Tooltip("List of items that can be used to obtain usable data from saveable data.")]
     private ItemListVariable masterList;
 
+    [SerializeField]
+    private ColorListVariable colorList;
+
     private int slotIndex;
     private SelectionListener itemListener;
 
@@ -33,7 +36,7 @@ public class InventorySlot : MonoBehaviour
         {
             Item itemData = masterList.GetItem(item.title);
             sprite.sprite = itemData.Sprite;
-            sprite.color = itemData.Color;
+            sprite.color = colorList.GetColor(itemData.Color);
             amountField.text = item.amount.ToString();
         }
         else

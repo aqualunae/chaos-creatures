@@ -98,7 +98,7 @@ public class CombatInventoryWindow : InventoryWindow
         {
             Item selectedItemData = masterList.GetItem(selectedItem.title);
             selectedItemSprite.sprite = selectedItemData.Sprite;
-            selectedItemSprite.color = selectedItemData.Color;
+            selectedItemSprite.color = colorList.GetColor(selectedItemData.Color);
             selectedItemTitle.text = $"{selectedItemData.Title} ({selectedItem.amount})";
             selectedItemDescription.text = selectedItemData.Description;
         }

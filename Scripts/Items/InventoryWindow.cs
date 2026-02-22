@@ -38,6 +38,9 @@ public class InventoryWindow : MonoBehaviour
     [SerializeField, Tooltip("If there are no valid inventory slots, what button should be selected for keyboard navigation?")]
     protected Button selectIfEmpty;
 
+    [SerializeField]
+    protected ColorListVariable colorList;
+
     protected Inventory inventory;
     protected List<InventorySlot> slots;
     protected bool inventoryIsEmpty = true;
@@ -121,7 +124,7 @@ public class InventoryWindow : MonoBehaviour
         {
             Item selectedItemData = masterList.GetItem(selectedItem.title);
             selectedItemSprite.sprite = selectedItemData.Sprite;
-            selectedItemSprite.color = selectedItemData.Color;
+            selectedItemSprite.color = colorList.GetColor(selectedItemData.Color);
             selectedItemTitle.text = $"{selectedItemData.Title} ({selectedItem.amount})";
             selectedItemDescription.text = selectedItemData.Description;
         }

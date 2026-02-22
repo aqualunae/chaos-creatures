@@ -9,7 +9,10 @@ public class PartyWindow : MonoBehaviour
     protected CreatureSlot[] slots;
 
     [SerializeField]
-    protected GameObjectVariable playerPartyRef;
+    protected GameObjectVariable playerRef;
+
+    [SerializeField]
+    protected CreatureOverviewWindow overviewWindow;
 
     protected Party party;
     protected bool toggle = true;
@@ -19,7 +22,7 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     protected void OnEnable()
     {
-        party = playerPartyRef.Value.GetComponent<Party>();
+        party = playerRef.Value.GetComponent<Party>();
         Refresh();
 
         gameObject.SetActive(true);
@@ -46,13 +49,19 @@ public class PartyWindow : MonoBehaviour
     }
 
     /// <summary>
-    /// Select a creature. Currently prepares it for swapping slots.
+    /// Select a creature.
     /// </summary>
     /// <param name="index">Creature slot selected</param>
     public virtual void Select(int index)
     {
-        party.Select(index);
-        Refresh();
+        // prepares it for swapping slots
+        // party.Select(index);
+        // Refresh();
+
+        SaveableCreature creature = party.GetByIndex(index);
+        overviewWindow.Initialize(creature);
+        overviewWindow.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     /// <summary>
