@@ -7,8 +7,7 @@ using static Item;
 
 public class InventoryWindow : MonoBehaviour
 {
-    [SerializeField]
-    protected GameObjectVariable inventoryOwner;
+    [Header("Selected Item Info")]
 
     [SerializeField]
     protected Image selectedItemSprite;
@@ -19,20 +18,25 @@ public class InventoryWindow : MonoBehaviour
     [SerializeField]
     protected TextMeshProUGUI selectedItemDescription;
 
-    [SerializeField]
+    [Header("References")]
+
+    [SerializeField, Tooltip("Object that has an inventory. Generally the player.")]
+    protected GameObjectVariable inventoryOwner;
+
+    [SerializeField, Tooltip("Where should slots be placed?")]
     protected GameObject slotContainer;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Inventory slot prefab to instantiate.")]
     protected GameObject inventorySlotPrefab;
 
-    [SerializeField]
+    [SerializeField, Tooltip("List of items that can be used to obtain usable data from saveable data.")]
     protected ItemListVariable masterList;
 
-    [SerializeField]
-    protected Button selectIfEmpty;
-
-    [SerializeField]
+    [SerializeField, Tooltip("Text field that tells the player whether move mode is enabled.")]
     private TextMeshProUGUI moveModeLabel;
+
+    [SerializeField, Tooltip("If there are no valid inventory slots, what button should be selected for keyboard navigation?")]
+    protected Button selectIfEmpty;
 
     protected Inventory inventory;
     protected List<InventorySlot> slots;
@@ -41,6 +45,10 @@ public class InventoryWindow : MonoBehaviour
     // when enabled, move items instead of using them on click
     private bool moveMode = false;
     
+    /// <summary>
+    /// Get the inventory and initialize slots.
+    /// Set move mode back to false.
+    /// </summary>
     protected virtual void OnEnable()
     {
         inventory = inventoryOwner.Value.GetComponent<Inventory>();

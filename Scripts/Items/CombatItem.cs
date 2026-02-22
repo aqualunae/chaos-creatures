@@ -5,19 +5,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item Combat ", menuName = "Items/Combat")]
 public class CombatItem : Item
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Could it target multiple creatures? Not implemented.")]
     private bool aoe;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Does this item target your creature instead of your opponent?")]
     private bool targetSelf;
 
-    [SerializeField, Range(-50, 50)]
+    [SerializeField, Range(-50, 50), Tooltip("Damage is positive, healing is negative.")]
     private int power;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Stat to buff or debuff. Not implemented.")]
     private StatAffected statAffected;
 
-    [SerializeField, Range(0.1f, 2)]
+    [SerializeField, Range(0.1f, 2), Tooltip("Intensity of stat effect. Not implemented.")]
     private float multiplier;
 
     public bool TargetSelf
@@ -30,12 +30,14 @@ public class CombatItem : Item
         string log = "";
         bool success = false;
 
+        // if the item does damage or heals, calculate the amount
         if (power != 0)
         {
             float baseDamage = (float)(power * 0.5f);
             float randomDamage = UnityEngine.Random.Range(baseDamage * 0.8f, baseDamage * 1.2f);
             int finalDamage = (int)Math.Round(randomDamage, 0);
 
+            // make sure the target's hp doesn't exceed boundaries
             target.stats.currentHP -= finalDamage;
             if (target.stats.currentHP < 0)
             {
@@ -46,6 +48,7 @@ public class CombatItem : Item
                 target.stats.currentHP = (int)target.stats.hp;
             }
 
+            // update the log string
             log += $"{title} was used. ";
             if (finalDamage < 0)
             {
@@ -55,14 +58,18 @@ public class CombatItem : Item
             {
                 log += $"{target.creatureName} took {finalDamage} damage. ";
             }
+
+            // register success
             success = true;
         }
 
+        // if the item doesn't do anything, it can't be used
         if (!success)
         {
             log = $"{title} could not be used.";
         }
 
+        // return results
         return new UseItemResult()
         {
             success = success,

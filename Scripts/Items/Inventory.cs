@@ -70,23 +70,36 @@ public class Inventory : SaveableBehaviour
 
     private int selectedIndex = -1;
 
+    /// <summary>
+    /// When called twice, swaps the slots of the two items.
+    /// </summary>
+    /// <param name="index">One of the item slot indices to swap</param>
     public void Move(int index)
     {
+        // if it's the first item selected, set selectedIndex
         if (selectedIndex == -1)
         {
             selectedIndex = index;
         }
         else
         {
+            // if it's the second selected index, swap the items
             // only swap if two different slots were selected
             if (selectedIndex != index)
             {
                 Swap(selectedIndex, index);
             }
+
+            // once the swap is complete, set selectedIndex back to default
             selectedIndex = -1;
         }
     }
 
+    /// <summary>
+    /// Swap the slots of two items within this inventory.
+    /// </summary>
+    /// <param name="first">First slot index</param>
+    /// <param name="second">Second slot index</param>
     private void Swap(int first, int second)
     {
         InventoryItem firstItem = items[first];

@@ -9,7 +9,7 @@ using static Inventory;
 
 public class CombatInventoryWindow : InventoryWindow
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Used to call CombatWindow.UseItem")]
     private CombatWindow combatWindow;
 
     private Dictionary<int, InventoryItem> slotContents;
@@ -19,6 +19,9 @@ public class CombatInventoryWindow : InventoryWindow
         return combatWindow;
     }
 
+    /// <summary>
+    /// Check the inventory and render slots.
+    /// </summary>
     protected override void OnEnable()
     {
         inventory = inventoryOwner.Value.GetComponent<Inventory>();

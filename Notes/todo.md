@@ -188,16 +188,27 @@
 - moved skill use logic from skill button to combat window
 - added continuous movement by holding down move keys
 
+- created sound effects with bfxr.net
+- added sound effects to skills and creatures
+- updated the combat window to call sounds
+- added music to scenes and combat
+
+- updated start menu buttons to look activated when selected
+- separated warp point assignment from warp point activation
+- updated warp point assignment to only run if the scene name isn't null or empty
+- added menus to the systems prefab
+- fully implemented CreatureSpecies.GetGeneticOdds(GeneEffect[] effects)
+- added more commenting to the items folder
+
 ## Next Up
 
 ### Issues
 
-- loading in the hyper arcade and then moving to campgrounds causes a crash
-    - try separating assignment from warping during play
+- possibly fixed: loading in the hyper arcade and then moving to campgrounds causes a crash sometimes
 - storage item slot indices display incorrectly
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-- pressing multiple move buttons at once can sometimes result in unexpected behaviour
+- pressing multiple movement buttons at once can sometimes result in unexpected behaviour
 
 ### Features
 
@@ -214,12 +225,8 @@
     - confirmation popup
 - highlight item when it is being used or moved
 
-- code commenting in items folder
-
 - responsive ui scaling
 - calculate and display creature rarity
-
-- add audio effects: https://www.bfxr.net/
 
 - menus access the save master as needed
 

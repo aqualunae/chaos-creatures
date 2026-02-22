@@ -2,17 +2,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class WarpPointAssignment : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Scriptable Object that will be used to access this location.")]
     private WarpPoint warpPoint;
-
-    [SerializeField]
-    private WarpPoint target;
-
-    [SerializeField]
-    private WarpPointVariable entrancePoint;
 
     [SerializeField, Tooltip("Set the exit point outside of the collider so that the warps don't ricochet.")]
     private GameObject exitPoint;
@@ -20,31 +14,13 @@ public class WarpPointAssignment : MonoBehaviour
     // start not awake so that the scene is loaded before this is called
     private void Start()
     {
+        // if for whatever reason the scene is not loaded, don't touch the warp point
+        if (string.IsNullOrEmpty(gameObject.scene.name))
+        {
+            return;
+        }
+
         warpPoint.Position = exitPoint.transform.position;
         warpPoint.SceneName = gameObject.scene.name;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (target && collision.gameObject.TryGetComponent<Mover>(out Mover mover))
-        {
-            WarpToTarget(mover);
-        }
-    }
-
-    private void WarpToTarget(Mover mover)
-    {
-        if (mover.TryGetComponent<PlayerInput>(out PlayerInput player))
-        {
-            if (!target.SceneName.Equals(SceneManager.GetActiveScene().name))
-            {
-                entrancePoint.Value = target;
-                SceneManager.LoadScene(target.SceneName, LoadSceneMode.Single);
-            }
-            else
-            {
-                mover.transform.position = target.Position;
-            }
-        }
     }
 }

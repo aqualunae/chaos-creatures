@@ -109,6 +109,10 @@ public class Party : SaveableBehaviour
 
     private int selectedIndex = -1;
 
+    /// <summary>
+    /// Select a creature to prepare for swapping slots.
+    /// </summary>
+    /// <param name="index">Selected creature slot index</param>
     public void Select(int index)
     {
         if (selectedIndex == -1)
@@ -122,6 +126,11 @@ public class Party : SaveableBehaviour
         }
     }
 
+    /// <summary>
+    /// Swap the slot positions of two creatures in the same party.
+    /// </summary>
+    /// <param name="first">First slot index</param>
+    /// <param name="second">Second slot index</param>
     private void Swap(int first, int second)
     {
         SaveableCreature firstCreature = creatures[first];

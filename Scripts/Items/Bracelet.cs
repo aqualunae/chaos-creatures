@@ -11,10 +11,10 @@ public class Bracelet : Item
         floss
     }
 
-    [SerializeField, Range(0.6f, 1)]
+    [SerializeField, Range(0.6f, 1), Tooltip("Chance that the creature will be befriended.")]
     private float captureRate;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Materials used to create the bracelet.")]
     private BraceletStyle style;
 
     [SerializeField]
@@ -23,6 +23,11 @@ public class Bracelet : Item
     [SerializeField]
     private Color accentColor;
 
+    /// <summary>
+    /// Attempt to befriend a creature using this bracelet.
+    /// </summary>
+    /// <param name="target">Creature you'd like to befriend.</param>
+    /// <returns>Results of the item use.</returns>
     public override UseItemResult UseItem(SaveableCreature target)
     {
         float rand = UnityEngine.Random.Range(0, 1f);

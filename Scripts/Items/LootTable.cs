@@ -55,6 +55,10 @@ public class LootTable : ScriptableObject
         return lootItems[0];
     }
 
+    /// <summary>
+    /// Get a specific item from the loot table
+    /// </summary>
+    /// <param name="index">Index of the item</param>
     public Lootable GetLootable(int index)
     {
         return lootItems[index];

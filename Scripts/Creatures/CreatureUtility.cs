@@ -140,6 +140,11 @@ public static class CreatureUtility
         };
     }
 
+    /// <summary>
+    /// Based on a creature's current level, get the amount of experience required for it to level up.
+    /// </summary>
+    /// <param name="level">Current level</param>
+    /// <returns>Required experience</returns>
     public static int GetExperienceThreshold(int level)
     {
         return (int)Math.Pow(level * 5, 3) - (int)Math.Pow((level - 1) * 5, 3);

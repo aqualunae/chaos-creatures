@@ -25,6 +25,9 @@ public class PartyWindow : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Initializes all active creature slots. Called on enable and after changes.
+    /// </summary>
     protected virtual void Refresh()
     {
         Dictionary<int, SaveableCreature> creatures = party.Creatures;
@@ -42,6 +45,10 @@ public class PartyWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Select a creature. Currently prepares it for swapping slots.
+    /// </summary>
+    /// <param name="index">Creature slot selected</param>
     public virtual void Select(int index)
     {
         party.Select(index);

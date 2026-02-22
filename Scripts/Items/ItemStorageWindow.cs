@@ -5,18 +5,21 @@ using static Inventory;
 
 public class ItemStorageWindow : InventoryWindow
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Reference to the inventory that is being opened for storage.")]
     private GameObjectVariable storageRef;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Where should inventory slots of the storage unit be placed?")]
     private GameObject storageSlotContainer;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event that lets us pauze the game.")]
     private GameStateEvent pauzeEvent;
 
     protected Inventory storage;
     private int selectedIndex = -1;
 
+    /// <summary>
+    /// Pauze the game, find the storage inventory, and enable the player's inventory.
+    /// </summary>
     protected override void OnEnable()
     {
         pauzeEvent.Invoke(GameState.StorageWindow);
@@ -24,13 +27,16 @@ public class ItemStorageWindow : InventoryWindow
         base.OnEnable();
     }
 
+    /// <summary>
+    /// Unpauze the game when closing this window.
+    /// </summary>
     private void OnDisable()
     {
         pauzeEvent.Invoke(GameState.Overworld);
     }
 
     /// <summary>
-    /// Create or refresh inventory slots
+    /// Create or refresh inventory slots.
     /// </summary>
     protected override void Initialize()
     {
@@ -165,14 +171,16 @@ public class ItemStorageWindow : InventoryWindow
 
             // reset selectedIndex
             selectedIndex = -1;
+
+            // after swapping items, refresh the inventory and select the item that was most recently selected
+            Initialize();
+            slots[index].GetComponent<Button>().Select();
         }
         else
         {
+            // if no slot was previously selected, select this slot.
             selectedIndex = index;
         }
-        
-        Initialize();
-        slots[index].GetComponent<Button>().Select();
     }
 
     /// <summary>

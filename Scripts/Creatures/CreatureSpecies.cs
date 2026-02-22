@@ -339,7 +339,102 @@ public class CreatureSpecies : ScriptableObject
             }
             else if (effect.location == GeneLocation.primary)
             {
-                // surely this could be refactored
+                if (effect.geneAspect == GeneAspect.pattern)
+                {
+                    for (int i = 0; i < options.primaryFeaturePatterns.Length; i++)
+                    {
+                        if (options.primaryFeaturePatterns[i].title == effect.option)
+                        {
+                            odds.primaryPatternRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.primaryFeaturePatterns, false), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.mainColor)
+                {
+                    for (int i = 0; i < options.baseColors.Length; i++)
+                    {
+                        if (options.baseColors[i].title == effect.option)
+                        {
+                            odds.primaryBaseColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.baseColors), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.accentColor)
+                {
+                    for (int i = 0; i < options.accentColors.Length; i++)
+                    {
+                        if (options.accentColors[i].title == effect.option)
+                        {
+                            odds.primaryAccentColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.accentColors), i);
+                        }
+                    }
+                }
+            }
+            else if (effect.location == GeneLocation.secondary)
+            {
+                if (effect.geneAspect == GeneAspect.pattern)
+                {
+                    for (int i = 0; i < options.secondaryFeaturePatterns.Length; i++)
+                    {
+                        if (options.secondaryFeaturePatterns[i].title == effect.option)
+                        {
+                            odds.secondaryPatternRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.secondaryFeaturePatterns, false), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.mainColor)
+                {
+                    for (int i = 0; i < options.baseColors.Length; i++)
+                    {
+                        if (options.baseColors[i].title == effect.option)
+                        {
+                            odds.secondaryBaseColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.baseColors), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.accentColor)
+                {
+                    for (int i = 0; i < options.accentColors.Length; i++)
+                    {
+                        if (options.accentColors[i].title == effect.option)
+                        {
+                            odds.secondaryAccentColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.accentColors), i);
+                        }
+                    }
+                }
+            }
+            else if (effect.location == GeneLocation.tertiary)
+            {
+                if (effect.geneAspect == GeneAspect.pattern)
+                {
+                    for (int i = 0; i < options.tertiaryFeaturePatterns.Length; i++)
+                    {
+                        if (options.tertiaryFeaturePatterns[i].title == effect.option)
+                        {
+                            odds.tertiaryPatternRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.tertiaryFeaturePatterns, false), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.mainColor)
+                {
+                    for (int i = 0; i < options.baseColors.Length; i++)
+                    {
+                        if (options.baseColors[i].title == effect.option)
+                        {
+                            odds.tertiaryBaseColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.baseColors), i);
+                        }
+                    }
+                }
+                else if (effect.geneAspect == GeneAspect.accentColor)
+                {
+                    for (int i = 0; i < options.accentColors.Length; i++)
+                    {
+                        if (options.accentColors[i].title == effect.option)
+                        {
+                            odds.tertiaryAccentColorRarity = CreatureUtility.AdjustOdds(GeneticsToIntArray(options.accentColors), i);
+                        }
+                    }
+                }
             }
         }
 

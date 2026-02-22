@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class LootableItem : SaveableBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Possible items that could be picked up here.")]
     private LootTable table;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Reference to the player.")]
     private GameObjectVariable playerRef;
 
-    [SerializeField]
+    [SerializeField, Tooltip("World sprite that displays the lootable.")]
     private SpriteRenderer lootRenderer;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Event that fires the current play time in seconds.")]
     private IntEvent ticker;
 
-    [SerializeField]
+    [SerializeField, Tooltip("After the loot is picked up, how many seconds until it should spawn a new loot item?")]
     private int interval;
 
     private Lootable loot;
@@ -47,12 +47,14 @@ public class LootableItem : SaveableBehaviour
     /// </summary>
     public void Pickup()
     {
+        // if the item isn't available, correct its visibility and don't do anything else.
         if (!available)
         {
             lootRenderer.gameObject.SetActive(false);
             return;
         }
 
+        // add item returns false if the player's inventory is full
         if (playerRef.Value.GetComponent<Inventory>().AddItem(loot.item, loot.amount))
         {
             lootRenderer.gameObject.SetActive(false);
@@ -75,8 +77,7 @@ public class LootableItem : SaveableBehaviour
             return;
         }
 
-        // if the time elapsed since the last initialization is greater than the interval
-        // and the item has been looted
+        // if the time elapsed since the last pickup is greater than the interval
         if (seconds - lastInterval > interval && !available)
         {
             // respawn the item

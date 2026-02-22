@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Used to control the pauze state of the game
+/// </summary>
 public enum GameState
 {
     Overworld,

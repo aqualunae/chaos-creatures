@@ -15,7 +15,7 @@ public class InventorySlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI amountField;
 
-    [SerializeField]
+    [SerializeField, Tooltip("List of items that can be used to obtain usable data from saveable data.")]
     private ItemListVariable masterList;
 
     private int slotIndex;
