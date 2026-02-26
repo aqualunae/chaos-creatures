@@ -103,7 +103,6 @@ public class ItemStorageWindow : InventoryWindow
     /// <param name="index">Slot index of item</param>
     protected override void MoveItem(int index)
     {
-        Debug.Log(index);
         // only swap if two different slots were selected
         if (index == selectedIndex)
         {

@@ -44,7 +44,7 @@ public class InputHandler : MonoBehaviour
             }
             else if (direction != Vector2.zero)
             {
-                GetComponent<Mover>().MoveContinuous(direction);
+                GetComponent<Mover>().Move(direction);
             }
         }
     }

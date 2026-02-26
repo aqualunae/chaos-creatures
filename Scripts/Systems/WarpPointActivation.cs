@@ -45,7 +45,7 @@ public class WarpPointActivation : MonoBehaviour
         if (objectWarping.CompareTag("Player"))
         {
             // if they're warping to a location that isn't in this scene
-            if (!target.SceneName.Equals(SceneManager.GetActiveScene().name))
+            if (!string.IsNullOrEmpty(target.SceneName) && !target.SceneName.Equals(SceneManager.GetActiveScene().name))
             {
                 // set the entrance point to the target and load that scene
                 entrancePoint.Value = target;

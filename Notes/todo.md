@@ -202,18 +202,27 @@
 - added creature overview window, equipment panel, equipment slot, and bracelet renderer
 - standardized item colors
 
+### Week of February 19
+
+- refactored movement to be on update
+- fixed: hedgefrogs never appear in the adoption window
+
 ## Next Up
 
 ### Issues
 
-- possibly fixed: loading in the hyper arcade and then moving to campgrounds causes a crash sometimes
+- loading in the hyper arcade and then moving to campgrounds causes a crash sometimes
+    - check if the entrance point variable is being misused
 - storage item slot indices display incorrectly
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-- pressing multiple movement buttons at once can sometimes result in unexpected behaviour
+
 
 ### Features
 
+- trainer battles
+
+- name creatures
 - handle friendship when party is full
 - creature storage
     - attached to tent
@@ -224,6 +233,7 @@
 - item use logic
     - separate healing items from combat items?
 - creature equipment
+    - add and remove charms
 - implement item drag
 - removing item from inventory:
     - delete it

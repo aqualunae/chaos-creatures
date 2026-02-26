@@ -20,7 +20,10 @@ public class WarpPointAssignment : MonoBehaviour
             return;
         }
 
-        warpPoint.Position = exitPoint.transform.position;
-        warpPoint.SceneName = gameObject.scene.name;
+        if (Application.isEditor)
+        {
+            warpPoint.Position = exitPoint.transform.position;
+            warpPoint.SceneName = gameObject.scene.name;
+        }
     }
 }

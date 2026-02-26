@@ -25,10 +25,8 @@ public class Mover : SaveableBehaviour
 
     private bool gamePauzed = false;
 
-    // We only want to be moving in one direction at a time, so the movement is always assigned to the same coroutine.
-    private Coroutine movementCR;
-    private Coroutine multiMovementCR;
-    private bool moveKeyHeld = false;
+    private Vector3 nextPosition;
+    private bool isMoving = false;
     private Vector3 gridDirection;
     private Vector3 gridSize;
     private Vector3 aimLocation;
@@ -52,6 +50,7 @@ public class Mover : SaveableBehaviour
         aimLocation = transform.position;
         aimDirection = Vector3.zero;
         gamePauzedEvent.AddListener(TogglePauze);
+        isMoving = false;
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -63,10 +62,7 @@ public class Mover : SaveableBehaviour
 
     private void OnDisable()
     {
-        if (movementCR != null)
-        {
-            StopCoroutine(movementCR);
-        }
+        Stop();
         gamePauzedEvent.RemoveListener(TogglePauze);
     }
 
@@ -75,72 +71,57 @@ public class Mover : SaveableBehaviour
     /// </summary>
     public void Move(Vector2 direction)
     {
-        if (direction == Vector2.zero || gamePauzed)
+        if (gamePauzed)
         {
             return;
         }
 
         aimDirection = new Vector3(direction.x, direction.y);
         gridDirection = aimDirection * gridSize.x;
-        if (movementCR != null)
-        {
-            StopCoroutine(movementCR);
-        }
-        movementCR = StartCoroutine(SingleMovement());
+        isMoving = true;
+        nextPosition = transform.position;
     }
 
-    // Moves the object towards direction until it's close enough to round up and jump the gap.
-    private IEnumerator SingleMovement()
+    
+
+    private void Update()
     {
-        Vector3 originalPosition = transform.position;
-        Vector3 snappedPosition = gridRef.Value.CellToWorld(gridRef.Value.WorldToCell(originalPosition + gridDirection)) + (gridSize * 0.5f);
-        while (Vector2.Distance(transform.position, snappedPosition) > gapCloseDistance)
+        // if the player is still moving towards the next position
+        if ((stopAtNextSafePosition || isMoving) && Vector2.Distance(transform.position, nextPosition) > gapCloseDistance)
         {
             transform.Translate(speed * Time.deltaTime * gridDirection);
-            yield return new WaitForEndOfFrame();
         }
-        
-        transform.position = snappedPosition;
-
-        // the aim direction is the tile past the object in the same direction it was moving
-        aimLocation = transform.position + gridDirection;
-
-        // tell any listeners that the player has moved
-        lastPosition = transform.position;
-        movementEvent.Invoke(lastPosition);
-
-        // since the player has moved, they're no longer at the entrance point, so it's no longer relevant
-        entrancePoint.Value = null;
-        yield return null;
-    }
-
-    public void MoveContinuous(Vector2 direction)
-    {
-        if (direction == Vector2.zero || gamePauzed)
+        else if (isMoving || stopAtNextSafePosition)
         {
-            return;
-        }
+            // if the player is close enough to the next position
+            // snap them
+            transform.position = nextPosition;
 
-        aimDirection = new Vector3(direction.x, direction.y);
-        gridDirection = aimDirection * gridSize.x;
-        if (movementCR != null)
-        {
-            StopCoroutine(movementCR);
-        }
-        moveKeyHeld = true;
-        multiMovementCR = StartCoroutine(MultiMovement());
-    }
+            // the aim direction is the tile past the object in the same direction it was moving
+            aimLocation = transform.position + gridDirection;
 
-    private IEnumerator MultiMovement()
-    {
-        int safetyCounter = 50;
-        do
-        {
-            yield return movementCR = StartCoroutine(SingleMovement());
-            safetyCounter--;
+            // tell any listeners that the player has moved
+            lastPosition = transform.position;
+            movementEvent.Invoke(lastPosition);
+
+            // since the player has moved, they're no longer at the entrance point, so it's no longer relevant
+            // entrancePoint.Value = null;
+
+            // if the next position has not been calculated and the player's move keys are held
+            // (aim direction is the player's movement keys)
+            if (aimDirection.magnitude > 0.1f && !stopAtNextSafePosition)
+            {
+                
+                // calculate the next position
+                // the next position is always snapped to grid, as this makes interaction detection easier
+                nextPosition = gridRef.Value.CellToWorld(gridRef.Value.WorldToCell(transform.position + gridDirection)) + (gridSize * 0.5f);
+            }
+            else
+            {
+                stopAtNextSafePosition = false;
+                isMoving = false;
+            }
         }
-        while (moveKeyHeld && safetyCounter > 0);
-        yield return null;
     }
 
     /// <summary>
@@ -152,23 +133,23 @@ public class Mover : SaveableBehaviour
         Stop();
     }
 
+    private bool stopAtNextSafePosition = false;
+
     public void SlowStop()
     {
-        moveKeyHeld = false;
+        // called when the movement keys are released
+        // set the movement direction to zero
+        stopAtNextSafePosition = true;
+        isMoving = false;
     }
 
     public void Stop()
     {
-        moveKeyHeld = false;
-        if (multiMovementCR != null)
-        {
-            StopCoroutine(multiMovementCR);
-        }
-        if (movementCR != null)
-        {
-            StopCoroutine(movementCR);
-        }
+        // called on collision or disable
+        // snap to the last safe position and reset the next position
         transform.position = lastPosition;
+        nextPosition = lastPosition;
+        isMoving = false;
     }
 
     #region Saving

@@ -36,7 +36,7 @@ public class Item : ScriptableObject
     protected Sprite sprite;
 
     [SerializeField, Tooltip("Color to apply to the item. Set to white if the sprite is pre-colored.")]
-    protected ColorTitle color = ColorTitle.white;
+    protected ColorTitle color = ColorTitle.White;
 
     public string Title
     {

@@ -12,9 +12,11 @@ public class StartGame : MonoBehaviour
 
     public void LoadGame()
     {
-        entrancePoint.Value = target;
-        SceneManager.LoadScene("Campgrounds", LoadSceneMode.Single);
-        // StartCoroutine(LoadFirstScene());
+        if (!string.IsNullOrEmpty(target.SceneName))
+        {
+            entrancePoint.Value = target;
+            SceneManager.LoadScene("Campgrounds", LoadSceneMode.Single);
+        }
     }
 
     private IEnumerator LoadFirstScene()
