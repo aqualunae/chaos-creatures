@@ -55,14 +55,17 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("Event used to change the state of the game.")]
     private GameStateEvent pauzeEvent;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Sprite swapper that affects skills targeting the player.")]
     private SpriteSwapper playerSkillSwapper;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Sprite swapper that affects skills targeting the opponent.")]
     private SpriteSwapper opponentSkillSwapper;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Reference to the audio source.")]
     private GameObjectVariable audioRef;
+
+    [SerializeField, Tooltip("Event that is fired when the player makes progress in the game.")]
+    private StringEvent progressionTrigger;
 
     private SaveableCreature player;
     private SaveableCreature opponent;
@@ -73,6 +76,8 @@ public class CombatWindow : MonoBehaviour
     private Button[] actionButtons;
     private Button endCombatButton;
     private AudioSource audioSource;
+    private Party opponentParty;
+    private string opponentName;
     
     /// <summary>
     /// Get the creature that is currently in combat for the player.
@@ -145,15 +150,32 @@ public class CombatWindow : MonoBehaviour
     /// <param name="opponent">Creature that the player is in combat against.</param>
     public void Initialize(SaveableCreature opponent)
     {
-        // Initialize the opponent
         this.opponent = opponent;
+
+        UpdateLog($"You've encountered a hostile { opponent.species }!");
+
+        Initialize();
+    }
+
+    public void Initialize(Party opponentParty)
+    {
+        this.opponent = opponentParty.GetByIndex(0);
+        this.opponentParty = opponentParty;
+        opponentName = opponentParty.GetComponent<Dialogue>().CharacterName;
+
+        UpdateLog($"{ opponentName } sent out { opponent.creatureName }!");
+
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        // Initialize the opponent
         opponentSpecies = speciesList.GetSpecies(opponent.species);
         opponentRenderer.Initialize(opponentSpecies, opponent.details);
         opponentDetails.Initialize(opponent);
         opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats);
         opponentRenderer.gameObject.SetActive(true);
-
-        log.text = $"You've encountered a hostile {opponent.species}!";
 
         RefreshPlayer();
 
@@ -200,6 +222,7 @@ public class CombatWindow : MonoBehaviour
     private void OnDisable()
     {
         logUpdateEvent.RemoveListener(UpdateLog);
+        endCombatButton.onClick.RemoveListener(HealOpponent);
         pauzeEvent.Invoke(GameState.Overworld);
     }
 
@@ -360,17 +383,40 @@ public class CombatWindow : MonoBehaviour
             player.stats.exp = leftoverExp;
             player.level++;
             victoryLog += "Level up!";
+
+            progressionTrigger.Invoke($"Level: {player.level}");
         }
 
         // hide the opponent renderer to show they're no longer able to fight
         opponentRenderer.gameObject.SetActive(false);
 
-        // wait for the player to read the log
-        UpdateLog(victoryLog);
-        EndCombat(true);
-    }
+        // check if the opponent has a next creature available
+        if (opponentParty != null)
+        {
+            SaveableCreature[] healthyCreatures = opponentParty.Creatures.Values.Where(creature => creature?.stats.currentHP > 0).ToArray();
+            if (healthyCreatures.Length > 0)
+            {
+                opponent = healthyCreatures[0];
+                UpdateLog($"{ opponentName } sent out { opponent.creatureName }!");
+                Initialize();
+            }
+            else
+            {
+                progressionTrigger.Invoke($"Victory: { opponentName }");
 
-    
+                UpdateLog(victoryLog);
+                EndCombat(true);
+            }
+        }
+        else
+        {
+            progressionTrigger.Invoke("Victory: Random Encounter");
+
+            UpdateLog(victoryLog);
+            EndCombat(true);
+        }
+        
+    }
 
     /// <summary>
     /// Disable all buttons and then turn the Flee button into an End button.
@@ -397,9 +443,18 @@ public class CombatWindow : MonoBehaviour
         endCombatButton.interactable = true;
         endCombatButton.GetComponentInChildren<TextMeshProUGUI>().text = "End";
         endCombatButton.Select();
+        endCombatButton.onClick.AddListener(HealOpponent);
         if (!victory)
         {
             endCombatButton.onClick.AddListener(ConfirmDefeat);
+        }
+    }
+
+    private void HealOpponent()
+    {
+        if (opponentParty != null)
+        {
+            opponentParty.HealAll();
         }
     }
 
@@ -428,6 +483,8 @@ public class CombatWindow : MonoBehaviour
         }
         else
         {
+            progressionTrigger.Invoke("Defeat");
+
             // if there are no healthy creatures, the player is defeated
             defeatLog += " You don't have any more creatures that are able to fight.";
             EndCombat(false);

@@ -179,6 +179,33 @@ public class Party : SaveableBehaviour
         {
             creatures.Add(i, null);
         }
+
+        // if there are preset party creatures, add them to the party
+        if (presetParty.Length > 0)
+        {
+            for (int i = 0; i < presetParty.Length; i++)
+            {
+                // create the creature
+                SaveableCreature creature = new SaveableCreature()
+                {
+                    species = presetParty[i].Species.Species,
+                    creatureName = presetParty[i].CreatureName,
+                    level = presetParty[i].Level,
+                    stats = presetParty[i].Stats,
+                    details = presetParty[i].Details,
+                    equipment = null
+                };
+
+                // increase its stats to be level appropriate
+                for (int level = 0; level < creature.level; level++)
+                {
+                    creature.stats = presetParty[i].Species.IncrementStats(creature.stats);
+                }
+
+                // add it to the party
+                creatures[i] = creature;
+            }
+        }
     }
 
     /// <summary>

@@ -16,13 +16,18 @@ public class DialogueWindow : MonoBehaviour
     [SerializeField]
     private GameStateEvent pauzeEvent;
 
+    [SerializeField]
+    private Button challengeButton;
+
     private string[] dialogueLines;
     private int currentLine;
 
-    public void Initialize(string[] lines, string source = null)
+    public void Initialize(string[] lines, string source = null, bool enableChallenge = false)
     {
         // turn off the plaque that renders the name field if there is no name
         nameField.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(source));
+
+        challengeButton.gameObject.SetActive(enableChallenge);
 
         // assign text to fields
         nameField.text = source;

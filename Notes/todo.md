@@ -207,6 +207,14 @@
 - refactored movement to be on update
 - fixed: hedgefrogs never appear in the adoption window
 
+- added progression system and progression checker
+- updated combat window to call progression triggers appropriately
+- updated party to automatically level preset party creatures
+- added progression system reference to scene initializer
+- updated dialogue and dialogue window to have a challenge option
+- implemented character encounter
+- updated initialize combat window to accept an opponent party OR a random creature
+
 ## Next Up
 
 ### Issues
@@ -216,11 +224,14 @@
 - storage item slot indices display incorrectly
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-
+- progression checker fires before progression system loads
 
 ### Features
 
 - trainer battles
+    - pacing of sending out the opponent's next creature is off
+    - opponent quote on victory or defeat
+    - do not allow fleeing from trainer battles, or heal opponent when you do
 
 - name creatures
 - handle friendship when party is full

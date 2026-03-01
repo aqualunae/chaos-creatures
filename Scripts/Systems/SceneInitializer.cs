@@ -28,6 +28,12 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private GameStateEvent pauzeEvent;
 
+    [SerializeField]
+    private GameObjectVariable progressionRef;
+
+    [SerializeField]
+    private ProgressionSystem progressionSystem;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
@@ -35,6 +41,7 @@ public class SceneInitializer : MonoBehaviour
         // assign system variables
         gridRef.Value = grid;
         audioRef.Value = audioSource.gameObject;
+        progressionRef.Value = progressionSystem.gameObject;
 
         // get rid of ghosts
         if (playerRef.Value != null)

@@ -18,7 +18,7 @@ public class CreatureInstance : ScriptableObject
     [SerializeField]
     private int level;
 
-    [SerializeField]
+    [SerializeField, Tooltip("Base stats at level 1")]
     private Stats stats;
 
     [SerializeField]
