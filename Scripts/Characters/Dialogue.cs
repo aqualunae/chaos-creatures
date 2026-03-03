@@ -17,7 +17,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField]
     private GameObjectVariable opponentRef;
 
-    private bool challengeEnabled = true;
+    private bool challengeEnabled = false;
 
     public string CharacterName
     {

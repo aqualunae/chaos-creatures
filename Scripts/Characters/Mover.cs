@@ -105,7 +105,7 @@ public class Mover : SaveableBehaviour
             movementEvent.Invoke(lastPosition);
 
             // since the player has moved, they're no longer at the entrance point, so it's no longer relevant
-            // entrancePoint.Value = null;
+            entrancePoint.Value = null;
 
             // if the next position has not been calculated and the player's move keys are held
             // (aim direction is the player's movement keys)

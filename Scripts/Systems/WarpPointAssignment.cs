@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 [ExecuteInEditMode]
 public class WarpPointAssignment : MonoBehaviour
@@ -14,8 +12,10 @@ public class WarpPointAssignment : MonoBehaviour
     // start not awake so that the scene is loaded before this is called
     private void Start()
     {
-        // if for whatever reason the scene is not loaded, don't touch the warp point
-        if (string.IsNullOrEmpty(gameObject.scene.name))
+        #if UNITY_EDITOR
+
+        // if for whatever reason the scene or the object is not loaded, don't touch the warp point
+        if (string.IsNullOrEmpty(gameObject.scene.name) || !gameObject.activeInHierarchy)
         {
             return;
         }
@@ -25,5 +25,7 @@ public class WarpPointAssignment : MonoBehaviour
             warpPoint.Position = exitPoint.transform.position;
             warpPoint.SceneName = gameObject.scene.name;
         }
+
+        #endif
     }
 }

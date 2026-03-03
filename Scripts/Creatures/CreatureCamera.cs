@@ -13,6 +13,9 @@ public class CreatureCamera : MonoBehaviour
     [SerializeField, Tooltip("Size in pixels of the texture to be rendered.")]
     private Vector3Int imageDimensions = new(64, 64, 1);
 
+    [SerializeField]
+    private Shader shader;
+
     private void Awake()
     {
         // get the camera that this component is attached to
@@ -28,7 +31,7 @@ public class CreatureCamera : MonoBehaviour
         camera.targetTexture = texture;
 
         // create a new material using the texture
-        Material material = new(Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default"))
+        Material material = new(shader)
         {
             mainTexture = texture
         };

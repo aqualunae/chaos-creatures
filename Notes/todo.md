@@ -215,16 +215,21 @@
 - implemented character encounter
 - updated initialize combat window to accept an opponent party OR a random creature
 
+- fixed: progression checker fires before progression system loads
+- menu stats displays victory and loss count
+- guide mentions the possibility of challenging him later
+- fixed: shader for creature cameras not included in build
+
 ## Next Up
 
 ### Issues
 
 - loading in the hyper arcade and then moving to campgrounds causes a crash sometimes
     - check if the entrance point variable is being misused
+    - current attempt to fix: only call warp point assignment if gameobject.activeinhierarchy
 - storage item slot indices display incorrectly
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-- progression checker fires before progression system loads
 
 ### Features
 

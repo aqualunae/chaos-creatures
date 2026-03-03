@@ -13,9 +13,15 @@ public class ProgressionSystem : SaveableBehaviour
     // internal list of whether tracked flags have fired
     private List<bool> flags;
 
+    [System.Serializable]
+    public class ProgressionStats
+    {
+        public int victoryCount;
+        public int defeatCount;
+    }
+
     // player stats
-    private int victoryCount;
-    private int defeatCount;
+    private ProgressionStats stats;
 
     private void Start()
     {
@@ -39,11 +45,11 @@ public class ProgressionSystem : SaveableBehaviour
 
         if (trigger.Contains("Victory"))
         {
-            victoryCount++;
+            stats.victoryCount++;
         }
         else if (trigger.Equals("Defeat"))
         {
-            defeatCount++;
+            stats.defeatCount++;
         }
     }
 
@@ -71,6 +77,11 @@ public class ProgressionSystem : SaveableBehaviour
         return false;
     }
 
+    public ProgressionStats GetStats()
+    {
+        return stats;
+    }
+
     /// <summary>
     /// If new items are added to the tracked flags, add them to the list of whether they've fired, and assume they have not.
     /// </summary>
@@ -90,8 +101,7 @@ public class ProgressionSystem : SaveableBehaviour
     public class ProgressionSaveData
     {
         public List<bool> flags;
-        public int victoryCount;
-        public int defeatCount;
+        public ProgressionStats stats;
     }
 
     public override void OnNewGame()
@@ -103,8 +113,11 @@ public class ProgressionSystem : SaveableBehaviour
             flags.Add(false);
         }
 
-        victoryCount = 0;
-        defeatCount = 0;
+        stats = new ProgressionStats()
+        {
+            victoryCount = 0,
+            defeatCount = 0
+        };
     }
 
     public override Saveable OnSave()
@@ -112,8 +125,7 @@ public class ProgressionSystem : SaveableBehaviour
         ProgressionSaveData saveData = new ProgressionSaveData()
         {
             flags = this.flags,
-            victoryCount = this.victoryCount,
-            defeatCount = this.defeatCount
+            stats = this.stats
         };
 
         string data = JsonUtility.ToJson(saveData);
@@ -133,8 +145,7 @@ public class ProgressionSystem : SaveableBehaviour
         // load saved data
         ProgressionSaveData saveData = JsonUtility.FromJson<ProgressionSaveData>(saveable.data);
         flags = saveData.flags;
-        victoryCount = saveData.victoryCount;
-        defeatCount = saveData.defeatCount;
+        stats = saveData.stats;
 
         // check if new flags have been added
         AddNewFlags();
