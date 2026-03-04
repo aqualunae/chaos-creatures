@@ -19,6 +19,11 @@ public class WarpPointActivation : MonoBehaviour
     // in theory, this could be an npc, but right now only player warping is implemented
     private GameObject objectWarping;
 
+    private void OnEnable()
+    {
+        GetComponentInChildren<InteractionIndicator>(true).SetText(target.SceneName);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // when an object enters the warp point

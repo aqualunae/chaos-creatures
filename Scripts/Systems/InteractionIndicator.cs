@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -36,5 +37,11 @@ public class InteractionIndicator : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         popup.SetActive(false);
+    }
+
+    public void SetText(string text)
+    {
+        TextMeshProUGUI textField = GetComponentInChildren<TextMeshProUGUI>(true);
+        textField.text = string.IsNullOrEmpty(text)? "NULL" : text.Replace("_", " ");
     }
 }

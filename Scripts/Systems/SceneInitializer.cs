@@ -34,6 +34,9 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private ProgressionSystem progressionSystem;
 
+    [SerializeField]
+    private WarpPoint[] warpPoints;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
@@ -66,5 +69,10 @@ public class SceneInitializer : MonoBehaviour
         }
 
         pauzeEvent.Invoke(GameState.Overworld);
+
+        foreach (WarpPoint point in warpPoints)
+        {
+            Debug.Log(point.SceneName);
+        }
     }
 }
