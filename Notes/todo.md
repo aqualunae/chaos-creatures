@@ -229,6 +229,8 @@
 - adjusted audio to prevent track from resetting on opening and closing menus
 - added background music to the start menu
 - added more randomized creatures to the spawn table
+- updated the warp self component to work cross-map
+- fixed keyboard navigation on stats panel of pauze menu
 
 ## Next Up
 
