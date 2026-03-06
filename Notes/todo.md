@@ -225,6 +225,11 @@
     - only call warp point assignment if gameobject.activeinhierarchy
     - set warp points to dirty in the editor
 
+- implemented skill details using the selection listener
+- adjusted audio to prevent track from resetting on opening and closing menus
+- added background music to the start menu
+- added more randomized creatures to the spawn table
+
 ## Next Up
 
 ### Issues

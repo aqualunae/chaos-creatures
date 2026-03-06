@@ -19,6 +19,7 @@ public class PauzeGame : MonoBehaviour
     private AudioClip combatMusic;
 
     private AudioClip overworldMusic;
+    private GameState gameState;
 
     private void Awake()
     {
@@ -31,28 +32,37 @@ public class PauzeGame : MonoBehaviour
     {
         if (state == GameState.Overworld)
         {
+            // in the overworld, use the player action map and disable the pauze menu
             playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
             pauzeMenu.SetActive(false);
         }
         else 
         {
+            // in all other states, use the ui action map
             playerRef.Value.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+
+            // enable the pauze menu if needed
             if (state == GameState.PauzeMenu)
             {
                 pauzeMenu.SetActive(true);
             }
         }
 
+        // if the game state is currently combat
         if (state == GameState.CombatWindow)
         {
             audioSource.clip = combatMusic;
+            audioSource.Play();
         }
-        else
+        // if the most recent gamestate was combat
+        else if (gameState == GameState.CombatWindow)
         {
             audioSource.clip = overworldMusic;
+            audioSource.Play();
         }
-
-        audioSource.Play();
+        
+        // save the current game state so it can be compared to the next game state
+        gameState = state;
     }
 
     // If the pauze state needs to be toggled, invoke the listener.

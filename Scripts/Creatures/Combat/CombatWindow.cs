@@ -67,6 +67,9 @@ public class CombatWindow : MonoBehaviour
     [SerializeField, Tooltip("Event that is fired when the player makes progress in the game.")]
     private StringEvent progressionTrigger;
 
+    [SerializeField]
+    private SkillDetails skillDetails;
+
     private SaveableCreature player;
     private SaveableCreature opponent;
     private List<SkillButton> skillButtons;
@@ -78,6 +81,7 @@ public class CombatWindow : MonoBehaviour
     private AudioSource audioSource;
     private Party opponentParty;
     private string opponentName;
+    private Skill[] playerSkills;
     
     /// <summary>
     /// Get the creature that is currently in combat for the player.
@@ -133,11 +137,11 @@ public class CombatWindow : MonoBehaviour
 
         // Show what skills the player has available.
         skillButtons = new List<SkillButton>();
-        Skill[] playerSkills = playerSpecies.GetSkills(player.level);
+        playerSkills = playerSpecies.GetSkills(player.level);
         for (int i = 0; i < playerSkills.Length; i++)
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
-            button.Initialize(playerSkills[i]);
+            button.Initialize(playerSkills[i], i);
             skillButtons.Add(button);
         }
 
@@ -273,6 +277,7 @@ public class CombatWindow : MonoBehaviour
         // if it's the opponent's turn and the opponent is able to fight, start their turn
         if (!state && opponent.stats.currentHP > 0)
         {
+            skillDetails.Initialize(null);
             StartCoroutine(OpponentSkill());
         }
     }
@@ -333,9 +338,11 @@ public class CombatWindow : MonoBehaviour
     /// <summary>
     /// The player selects a skill and uses it. Called by Skill Button primarily.
     /// </summary>
-    /// <param name="skill">Skill to use</param>
-    public void PlayerSkill(Skill skill)
+    /// <param name="index">Index of skill to use</param>
+    public void PlayerSkill(int index)
     {
+        Skill skill = playerSkills[index];
+
         SaveableCreature skillTarget = skill.TargetSelf ? player : opponent;
 
         // Apply skill effects
@@ -438,6 +445,7 @@ public class CombatWindow : MonoBehaviour
         {
             skillButtons[i].GetComponent<Button>().interactable = false;
         }
+        skillDetails.Initialize(null);
 
         // update and select the button that ends combat
         endCombatButton.interactable = true;
@@ -646,5 +654,21 @@ public class CombatWindow : MonoBehaviour
         // switching creatures consumes a turn; it is now the opponent's turn
         // when the player is switching creatures as a result of being defeated, a speed contest should occur
         TogglePlayerTurn(false);
+    }
+
+    /// <summary>
+    /// When a skill is selected, show its details in the Skill Details panel.
+    /// </summary>
+    /// <param name="index">Skill index.</param>
+    public void SelectSkill(int index)
+    {
+        if (playerSkills.Length > index)
+        {
+            skillDetails.Initialize(playerSkills[index]);
+        }
+        else
+        {
+            skillDetails.Initialize(null);
+        }
     }
 }

@@ -25,16 +25,16 @@ public class SkillButton : MonoBehaviour
     private StringEvent logUpdateEvent;
 
     // variables that allow the skill to be used
-    private Skill skill;
-    private CombatWindow combat;
+    private int index;
+    private SelectionListener skillListener;
 
     /// <summary>
     /// Initialize the button with skill data.
     /// </summary>
-    public void Initialize(Skill skill)
+    public void Initialize(Skill skill, int index)
     {
-        this.skill = skill;
-        combat = GetComponentInParent<CombatWindow>();
+        this.index = index;
+        skillListener = GetComponentInParent<SelectionListener>();
 
         title.text = skill.Title;
         aspect.text = skill.Aspect.ToString();
@@ -53,10 +53,15 @@ public class SkillButton : MonoBehaviour
     }
 
     /// <summary>
-    /// Activate the skill. Requires a target to be set.
+    /// Activate the skill.
     /// </summary>
     public void UseSkill()
     {
-        combat.PlayerSkill(skill);
+        skillListener.OnActivate(index);
+    }
+
+    public void SelectSkill()
+    {
+        skillListener.OnSelect(index);
     }
 }
