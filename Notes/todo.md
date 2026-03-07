@@ -1,5 +1,50 @@
 # Tasks
 
+## Next Up
+
+### Issues
+
+- storage item slot indices display incorrectly
+- opening the storage window by keyboard navigation clicks the first item instead of just selecting it
+    - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
+
+### Features
+
+- trainer battles
+    - pacing of sending out the opponent's next creature is off
+    - opponent quote on victory or defeat
+    - do not allow fleeing from trainer battles, or heal opponent when you do
+
+- name creatures
+- handle friendship when party is full
+- creature storage
+    - attached to tent
+
+- creature calls on adoption screen
+- maybe also on selection in party?
+
+- item use logic
+    - separate healing items from combat items?
+- creature equipment
+    - add and remove charms
+- implement item drag
+- removing item from inventory:
+    - delete it
+    - "slot" for discarding items
+    - confirmation popup
+- highlight item when it is being used or moved
+
+- responsive ui scaling
+- calculate and display creature rarity
+
+- menus access the save master as needed
+
+- logic for handling combat
+    - aspect influence
+    - skills that influence stats
+    - make sure stat changes are temporary
+    - first skill use to be determined by speed
+
 ## What I've Done
 
 ### Week of January 14
@@ -232,50 +277,13 @@
 - updated the warp self component to work cross-map
 - fixed keyboard navigation on stats panel of pauze menu
 
-## Next Up
+# Notes
 
-### Issues
+## Credits
 
-- storage item slot indices display incorrectly
-- opening the storage window by keyboard navigation clicks the first item instead of just selecting it
-    - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-
-### Features
-
-- trainer battles
-    - pacing of sending out the opponent's next creature is off
-    - opponent quote on victory or defeat
-    - do not allow fleeing from trainer battles, or heal opponent when you do
-
-- name creatures
-- handle friendship when party is full
-- creature storage
-    - attached to tent
-
-- creature calls on adoption screen
-- maybe also on selection in party?
-
-- item use logic
-    - separate healing items from combat items?
-- creature equipment
-    - add and remove charms
-- implement item drag
-- removing item from inventory:
-    - delete it
-    - "slot" for discarding items
-    - confirmation popup
-- highlight item when it is being used or moved
-
-- responsive ui scaling
-- calculate and display creature rarity
-
-- menus access the save master as needed
-
-- logic for handling combat
-    - aspect influence
-    - skills that influence stats
-    - make sure stat changes are temporary
-    - first skill use to be determined by speed
+- music from [Tallbeard Studios](https://tallbeard.itch.io/)
+- sound effects from [bfxr](https://www.bfxr.net/)
+- visual effects from [BDragon1727](https://bdragon1727.itch.io/1050-rpg-effects-64x64)
 
 ## Combat Flow
 
@@ -345,7 +353,6 @@
 
 - https://www.answermind.blog/unlock-unity-master-persistent-data-path-flawless-game-saves
 - https://stackoverflow.com/a/65495834
-- key cap by Arthur Shlain from <a href="https://thenounproject.com/browse/icons/term/key-cap/" target="_blank" title="key cap Icons">Noun Project</a> (CC BY 3.0)
 
 ## Pauzing
 
