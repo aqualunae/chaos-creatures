@@ -334,6 +334,80 @@
 
 - Befriending Rate:
 
+#### Creature Rarity Score
+
+- sample data for paradise wolf
+- combinations:
+    - 800 400 000
+    - 2 primary
+    - 2 secondary
+    - 2 tertiary
+    - 4 base colors x 3 usages
+    - 5 accent colors x 5 usages
+    - 7 body patterns
+    - 6 primary patterns
+    - 6 secondary patterns
+    - 2 tertiary patterns
+- weighted combinations
+    - 1.423828125e+21 = 1423828125000000000000
+    - 1/5 primary, secondary, tertiary
+    - 1/45 base color x 3 usages
+    - 1/50 accent color x 5 usages
+    - 1/100 body, primary, secondary pattern
+    - 1/10 tertiary
+- weighted combinations (without reducing)
+    - 729000000000000000000000000000 = 7.29e+29
+
+- chance of getting most common creature of species:
+    - multiply all fractions:
+        - 1.2661379039232e-4 = 0.00012661379039232 = 1 in 7898
+    - multiply all numbers on each side, then divide:
+        - 38050725888000000000000000/729000000000000000000000000000 = 3.8050725888e+25/7.29e+29 = 114688/2197265625 = 5.219578311111111e-5 = 0.00005219578311111111 = 1 in 19,158.63582066127
+    - add all numbers on each side, then divide:
+        - 790/1470 = 0.5374149659863946 = 1 in 1.860759493670886 = score of 1
+    
+- chance of getting rarest creature of species:
+    - multiply all fractions:
+        - 1.2288e-22 = 0.00000000000000000000012288 = 1 in 8138020833333333000000
+    - multiply all numbers on each side, then divide:
+        - 122880000/729000000000000000000000000000 = 1 in 5932617187500000000000 = 5.9326171875e+21 = 1.2288e+8/7.29e+29
+    - add all numbers on each side, then divide:
+        - 137/1470 = 0.0931972789115646 = 1 in 10.72992700729927 = score of 10
+
+- chance of getting most common creature of species:
+    - 80/100 fluffy tail
+    - 80/100 angel wings
+    - 60/100 spiky hair
+    - 60/90 body & primary black base
+    - 60/90 secondary black base
+    - 60/90 tertiary black base
+    - 40/100 body red accent
+    - 40/100 eyes red
+    - 40/100 primary red accent (?)
+    - 40/100 secondary red accent
+    - 40/100 tertiary red accent
+    - 40/100 body points
+    - 40/100 primary points
+    - 40/100 secondary points
+    - 70/100 tertiary solid
+
+- chance of getting rarest creature of species:
+    - 20/100 claw tail
+    - 20/100 demon wings
+    - 40/100 curly hair
+    - 2/90 body & primary pink base
+    - 2/90 secondary pink base
+    - 2/90 tertiary pink base
+    - 2/100 body pink accent
+    - 2/100 eyes pink
+    - 2/100 primary pink accent (?)
+    - 2/100 secondary pink accent
+    - 2/100 tertiary pink accent
+    - 1/100 body heartbreak
+    - 1/100 primary heartbreak
+    - 1/100 secondary heartbreak
+    - 30/100 tertiary stripes
+
 ## Save Flow
 
 - source of truth: central save system
