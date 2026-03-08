@@ -265,6 +265,8 @@
 - guide mentions the possibility of challenging him later
 - fixed: shader for creature cameras not included in build
 
+### Week of March 4
+
 - fixed(?): loading in the hyper arcade and then moving to campgrounds causes a crash sometimes
     - check if the entrance point variable is being misused
     - only call warp point assignment if gameobject.activeinhierarchy
@@ -276,6 +278,8 @@
 - added more randomized creatures to the spawn table
 - updated the warp self component to work cross-map
 - fixed keyboard navigation on stats panel of pauze menu
+
+- calculated and implemented creature rarity score
 
 # Notes
 

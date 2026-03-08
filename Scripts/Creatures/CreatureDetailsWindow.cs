@@ -13,6 +13,9 @@ public class CreatureDetailsWindow : MonoBehaviour
     private TextMeshProUGUI speciesField;
 
     [SerializeField]
+    private TextMeshProUGUI rarityField;
+
+    [SerializeField]
     private TextMeshProUGUI eyesField;
 
     [SerializeField]
@@ -59,6 +62,8 @@ public class CreatureDetailsWindow : MonoBehaviour
 
         nameField.text = creature.creatureName;
         speciesField.text = creature.species;
+        rarityField.text = $"{species.GetRarityScore(creature.details)} star";
+
         eyesField.text = $"{species.GetColorTitle(false, creature.details.eyeColorIndex)} Eyes";
         bodyPatternField.text = species.GetFeatureTitle(GeneLocation.body, FeatureRarity.dominant, creature.details.body.patternIndex);
         bodyColorsField.text = $"{species.GetColorTitle(true, creature.details.body.baseColorIndex)}/{species.GetColorTitle(false, creature.details.body.accentColorIndex)}";

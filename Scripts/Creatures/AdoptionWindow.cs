@@ -79,7 +79,6 @@ public class AdoptionWindow : MonoBehaviour
         {
             // do not select the same option twice
             int index = UnityEngine.Random.Range(0, optionsList.Count);
-            Debug.Log(index);
             SaveableCreature creature = optionsList[index].GetRandomCreature();
             optionsList.RemoveAt(index);
 

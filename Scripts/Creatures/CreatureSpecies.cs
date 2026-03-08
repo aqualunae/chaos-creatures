@@ -441,6 +441,116 @@ public class CreatureSpecies : ScriptableObject
         return odds;
     }
 
+    private int GetSpeciesRarity()
+    {
+        int count = 0;
+
+        // features (shapes)
+        foreach(Feature feature in primary)
+        {
+            count += feature.chance;
+        }
+        foreach(Feature feature in secondary)
+        {
+            count += feature.chance;
+        }
+        foreach (Feature feature in tertiary)
+        {
+            count += feature.chance;
+        }
+
+        // colors
+        foreach (GeneColor color in options.baseColors)
+        {
+            count += color.chance;
+            if (!primaryUsesBodyColor)
+            {
+                count += color.chance;
+            }
+            if (!secondaryUsesBodyColor)
+            {
+                count += color.chance;
+            }
+            if (!tertiaryUsesBodyColor)
+            {
+                count += color.chance;
+            }
+        }
+        foreach (GeneColor color in options.accentColors)
+        {
+            // body, primary, secondary, tertiary, and eyes
+            count += color.chance * 5;
+        }
+
+        // patterns
+        foreach (Feature pattern in options.bodyPatterns)
+        {
+            count += pattern.chance;
+        }
+        foreach (Feature pattern in options.primaryFeaturePatterns)
+        {
+            count += pattern.chance;
+        }
+        foreach (Feature pattern in options.secondaryFeaturePatterns)
+        {
+            count += pattern.chance;
+        }
+        foreach (Feature pattern in options.tertiaryFeaturePatterns)
+        {
+            count += pattern.chance;
+        }
+        
+        return count;
+    }
+
+    public int GetRarityScore(CreatureDetails details)
+    {
+        int count = 0;
+
+        // features (shapes)
+        count += primary.First(feature => feature.rarity == details.primary.rarity).chance;
+        count += secondary.First(feature => feature.rarity == details.secondary.rarity).chance;
+        count += tertiary.First(feature => feature.rarity == details.tertiary.rarity).chance;
+
+        // colors
+        count += options.baseColors[details.body.baseColorIndex].chance;
+        if (!primaryUsesBodyColor)
+        {
+            count += options.baseColors[details.primary.baseColorIndex].chance;
+        }
+        if (!secondaryUsesBodyColor)
+        {
+            count += options.baseColors[details.secondary.baseColorIndex].chance;
+        }
+        if (!tertiaryUsesBodyColor)
+        {
+            count += options.baseColors[details.tertiary.baseColorIndex].chance;
+        }
+        count += options.accentColors[details.eyeColorIndex].chance;
+        count += options.accentColors[details.body.accentColorIndex].chance;
+        count += options.accentColors[details.primary.accentColorIndex].chance;
+        count += options.accentColors[details.secondary.accentColorIndex].chance;
+        count += options.accentColors[details.tertiary.accentColorIndex].chance;
+
+        // patterns
+        count += options.bodyPatterns[details.body.patternIndex].chance;
+        count += options.primaryFeaturePatterns[details.primary.patternIndex].chance;
+        count += options.secondaryFeaturePatterns[details.secondary.patternIndex].chance;
+        count += options.tertiaryFeaturePatterns[details.tertiary.patternIndex].chance;
+
+        float rarity = (float)count / (float)GetSpeciesRarity();
+        rarity = rarity != 0 ? 1 / rarity : 1;
+        float remappedRarity = Remap(rarity, 1, 10, 1, 25);
+        // note: rarity may not need to be remapped once pairing is implemented
+
+        return (int)Mathf.Round(remappedRarity);
+    }
+
+    // https://discussions.unity.com/t/re-map-a-number-from-one-range-to-another/465623
+    public float Remap (float value, float from1, float to1, float from2, float to2) {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
+
     /// <summary>
     /// Get randomized stats for a level 1 creature of this species.
     /// </summary>
