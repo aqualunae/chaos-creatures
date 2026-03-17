@@ -27,8 +27,13 @@
 
 - name creatures
 - handle friendship when party is full
+
 - creature storage
-    - attached to tent
+    - message to player when moving last creature out of party
+    - text displaying when storage is empty
+    - action buttons disable when switching windows
+    - implement creature release
+    - check scrollbar
 
 - save to local storage -> player prefs
     - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
@@ -296,6 +301,10 @@
 - fixed keyboard navigation on stats panel of pauze menu
 
 - calculated and implemented creature rarity score
+
+### Week of March 11
+
+- implemented creature storage (attached to tent)
 
 # Notes
 
