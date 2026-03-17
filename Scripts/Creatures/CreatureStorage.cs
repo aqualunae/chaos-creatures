@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Inventory))]
-public class ItemStorage : MonoBehaviour
+[RequireComponent(typeof(Party))]
+public class CreatureStorage : MonoBehaviour
 {
     [SerializeField, Tooltip("Reference that the storage window will check when opening.")]
     private GameObjectVariable storageRef;
 
     [SerializeField, Tooltip("The storage window itself.")]
-    private ItemStorageWindow storageWindow;
+    private CreatureStorageWindow storageWindow;
 
     /// <summary>
     /// Set this object as the active storage object and open the storage window.

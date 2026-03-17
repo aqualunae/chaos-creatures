@@ -8,6 +8,16 @@
 - opening the storage window by keyboard navigation clicks the first item instead of just selecting it
     - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
 
+#### Path Feedback
+
+"a few more little cues here and there i think would basically be enough for me. a clear outline of the, idk? hit box? of whatever i need to click on, or the label also being clickable. a "return to combat" label in the menu."
+
+- "challenge" is misspelled in the dialogue
+- labels should be clickable as well as what they're labelling
+- clickable area of tent is too small
+- going to a panel other than skills and fleeing combat prevents the use of skills in subsequent combat instances, until you change scenes
+- add "return" button to combat party screen
+
 ### Features
 
 - trainer battles
@@ -19,6 +29,9 @@
 - handle friendship when party is full
 - creature storage
     - attached to tent
+
+- save to local storage -> player prefs
+    - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
 
 - creature calls on adoption screen
 - maybe also on selection in party?
@@ -32,12 +45,15 @@
     - delete it
     - "slot" for discarding items
     - confirmation popup
+- scroll on storage window
 - highlight item when it is being used or moved
 
 - responsive ui scaling
-- calculate and display creature rarity
+    - canvas scaler & set transforms to stretch as needed
 
-- menus access the save master as needed
+- creature pairing
+
+- menus access the save master as needed?
 
 - logic for handling combat
     - aspect influence

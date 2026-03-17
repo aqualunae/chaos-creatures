@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using Unity.VisualScripting;
@@ -21,6 +22,11 @@ public class Party : SaveableBehaviour
     public Dictionary<int, SaveableCreature> Creatures
     {
         get => creatures;
+    }
+
+    public int CreatureCount
+    {
+        get => creatures.Count(slot => slot.Value != null);
     }
 
     /// <summary>
