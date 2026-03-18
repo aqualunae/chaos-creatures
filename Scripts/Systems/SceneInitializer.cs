@@ -37,6 +37,12 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private WarpPoint[] warpPoints;
 
+    [SerializeField]
+    private Party creatureStorage;
+
+    [SerializeField]
+    private GameObjectVariable creatureStorageRef;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
@@ -45,6 +51,7 @@ public class SceneInitializer : MonoBehaviour
         gridRef.Value = grid;
         audioRef.Value = audioSource.gameObject;
         progressionRef.Value = progressionSystem.gameObject;
+        creatureStorageRef.Value = creatureStorage.gameObject;
 
         // get rid of ghosts
         if (playerRef.Value != null)

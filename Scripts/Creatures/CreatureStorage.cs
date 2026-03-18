@@ -3,9 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Party))]
 public class CreatureStorage : MonoBehaviour
 {
-    [SerializeField, Tooltip("Reference that the storage window will check when opening.")]
-    private GameObjectVariable storageRef;
-
     [SerializeField, Tooltip("The storage window itself.")]
     private CreatureStorageWindow storageWindow;
 
@@ -14,7 +11,6 @@ public class CreatureStorage : MonoBehaviour
     /// </summary>
     public void OpenStorage()
     {
-        storageRef.Value = gameObject;
         storageWindow.gameObject.SetActive(true);
     }
 }

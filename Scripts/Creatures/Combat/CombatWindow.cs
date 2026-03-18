@@ -142,6 +142,7 @@ public class CombatWindow : MonoBehaviour
         {
             SkillButton button = Instantiate(skillButton, skillsContainer.transform);
             button.Initialize(playerSkills[i], i);
+            button.GetComponent<Button>().interactable = true;
             skillButtons.Add(button);
         }
 

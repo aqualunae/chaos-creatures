@@ -138,7 +138,7 @@ public class CreatureStorageWindow : MonoBehaviour
         // if moving the creature would mean the player's party is empty, don't do it
         if (viewingParty && party.CreatureCount <= 1)
         {
-            Debug.Log("Cannot remove all creatures from party.");
+            label.text = "Cannot remove all creatures from party.";
             return;
         }
 
@@ -182,6 +182,10 @@ public class CreatureStorageWindow : MonoBehaviour
     {
         viewingParty = !viewingParty;
         label.text = viewingParty ? "Your party creatures." : "Creatures in storage";
+        for (int i = 0; i < actionButtons.Length; i++)
+        {
+            actionButtons[i].interactable = false;
+        }
         Initialize();
     }
 

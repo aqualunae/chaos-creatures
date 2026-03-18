@@ -12,10 +12,7 @@
 
 "a few more little cues here and there i think would basically be enough for me. a clear outline of the, idk? hit box? of whatever i need to click on, or the label also being clickable. a "return to combat" label in the menu."
 
-- "challenge" is misspelled in the dialogue
 - labels should be clickable as well as what they're labelling
-- clickable area of tent is too small
-- going to a panel other than skills and fleeing combat prevents the use of skills in subsequent combat instances, until you change scenes
 - add "return" button to combat party screen
 
 ### Features
@@ -29,11 +26,8 @@
 - handle friendship when party is full
 
 - creature storage
-    - message to player when moving last creature out of party
     - text displaying when storage is empty
-    - action buttons disable when switching windows
     - implement creature release
-    - check scrollbar
 
 - save to local storage -> player prefs
     - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
@@ -50,7 +44,6 @@
     - delete it
     - "slot" for discarding items
     - confirmation popup
-- scroll on storage window
 - highlight item when it is being used or moved
 
 - responsive ui scaling
@@ -305,6 +298,19 @@
 ### Week of March 11
 
 - implemented creature storage (attached to tent)
+
+- fixed: going to a panel other than skills and fleeing combat prevents the use of skills in subsequent combat instances, until you change scenes
+- fixed: clickable area of tent is too small
+- fixed: "challenge" is misspelled in the dialogue
+- disable storage action buttons when switching windows
+- message to player when moving last creature out of party
+- moved creature storage from tent to doghouse
+
+### Week of March 18
+
+- fixed: scrollbars don't appear on storage (required content fitter component)
+- fixed: custom rendered materials don't obey masks (added stencil to shader)
+- fixed: make space for scrollbar on inventory storage
 
 # Notes
 

@@ -57,11 +57,19 @@ public class SkillButton : MonoBehaviour
     /// </summary>
     public void UseSkill()
     {
+        if (skillListener == null)
+        {
+            skillListener = GetComponentInParent<SelectionListener>();
+        }
         skillListener.OnActivate(index);
     }
 
     public void SelectSkill()
     {
+        if (skillListener == null)
+        {
+            skillListener = GetComponentInParent<SelectionListener>();
+        }
         skillListener.OnSelect(index);
     }
 }
