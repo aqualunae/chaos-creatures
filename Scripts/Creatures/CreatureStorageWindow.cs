@@ -53,7 +53,7 @@ public class CreatureStorageWindow : MonoBehaviour
         {
             slots = new List<CreatureSlot>();
         }
-        Initialize();
+        SwitchView(false);
     }
 
     /// <summary>
@@ -112,6 +112,26 @@ public class CreatureStorageWindow : MonoBehaviour
     }
 
     /// <summary>
+    /// Centers the selected creature in the scroll rect.
+    /// </summary>
+    /// <param name="target">Creature slot to center</param>
+    private void SnapTo(CreatureSlot target)
+    {
+        Canvas.ForceUpdateCanvases();
+
+        ScrollRect scrollRect = slotContainer.GetComponentInParent<ScrollRect>();
+
+        Vector2 viewportLocalPosition = scrollRect.viewport.localPosition;
+        Vector2 childLocalPosition   = target.transform.localPosition;
+        Vector2 result = new Vector2(
+            0 - (viewportLocalPosition.x + childLocalPosition.x),
+            scrollRect.content.localPosition.y
+        );
+
+        scrollRect.content.localPosition = result;
+    }
+
+    /// <summary>
     /// Set the selected creature by index.
     /// </summary>
     public void Select(int index)
@@ -121,6 +141,8 @@ public class CreatureStorageWindow : MonoBehaviour
         {
             actionButtons[i].interactable = true;
         }
+
+        SnapTo(slots[index]);
     }
 
     /// <summary>
@@ -143,9 +165,15 @@ public class CreatureStorageWindow : MonoBehaviour
         }
 
         // otherwise, if there's space in the target party, move it
+        string target = viewingParty ? "storage" : "your party";
         if (opposite.AddToParty(movingCreature))
         {
             currentView.RemoveFromParty(selectedIndex);
+            label.text = $"{ movingCreature.creatureName } has been moved to { target }.";
+        }
+        else
+        {
+            label.text = $"There's no more room in { target }.";
         }
 
         // redraw slots
@@ -159,9 +187,10 @@ public class CreatureStorageWindow : MonoBehaviour
     {
         Party currentView = viewingParty ? party : storage;
 
-        if (selectedIndex == -1 || currentView.CreatureCount <= selectedIndex)
+        if (selectedIndex == -1)
         {
             Debug.Log("No valid creature selected");
+            label.text = "Select a creature first to view their details.";
             return;
         }
 
@@ -173,6 +202,10 @@ public class CreatureStorageWindow : MonoBehaviour
             overviewWindow.gameObject.SetActive(true);
             main.SetActive(false);
         }
+        else
+        {
+            label.text = "Select a creature first to view their details.";
+        }
     }
 
     /// <summary>
@@ -180,8 +213,16 @@ public class CreatureStorageWindow : MonoBehaviour
     /// </summary>
     public void SwitchView()
     {
-        viewingParty = !viewingParty;
-        label.text = viewingParty ? "Your party creatures." : "Creatures in storage";
+        SwitchView(!viewingParty);
+    }
+
+    private void SwitchView(bool view)
+    {
+        viewingParty = view;
+
+        Party currentView = viewingParty ? party : storage;
+        string count = $"({ currentView.CreatureCount }/{ currentView.Creatures.Count })";
+        label.text = viewingParty ? $"Your party creatures { count }" : $"Creatures in storage { count }";
         for (int i = 0; i < actionButtons.Length; i++)
         {
             actionButtons[i].interactable = false;
@@ -189,7 +230,7 @@ public class CreatureStorageWindow : MonoBehaviour
         Initialize();
     }
 
-    public void Focus()
+    public void GoToActions()
     {
         actionButtons[0].Select();
     }

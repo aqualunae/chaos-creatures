@@ -1,4 +1,5 @@
 using Assets.Scripts.Creatures;
+using TMPro;
 using UnityEngine;
 
 public class CreatureOverviewWindow : MonoBehaviour
@@ -18,9 +19,13 @@ public class CreatureOverviewWindow : MonoBehaviour
     [SerializeField]
     private SpeciesListVariable speciesList;
 
+    [SerializeField]
+    private TextMeshProUGUI nameField;
+
     public void Initialize(SaveableCreature creature)
     {
         CreatureSpecies species = speciesList.GetSpecies(creature.species);
+        nameField.text = creature.creatureName;
         creatureRenderer.Initialize(species, creature.details);
         visualStats.Initialize(creature);
         combatStats.Initialize("Combat", creature.species, creature.level, creature.stats);

@@ -105,8 +105,12 @@ public class CombatWindow : MonoBehaviour
     /// <returns>True if successful</returns>
     public bool BefriendCreature()
     {
-        bool success = playerRef.Value.GetComponent<Party>().AddToParty(opponent);
-        return success;
+        return playerRef.Value.GetComponent<Party>().AddToParty(opponent);
+    }
+
+    public bool StoreCreature()
+    {
+        return playerRef.Value.GetComponent<Party>().AddToStorage(opponent);
     }
 
     /// <summary>
@@ -607,9 +611,15 @@ public class CombatWindow : MonoBehaviour
                 itemWasUsed = true;
                 EndCombat(true);
             }
+            else if (StoreCreature())
+            {
+                log += " It was added to your storage.";
+                itemWasUsed = true;
+                EndCombat(true);
+            }
             else
             {
-                log += " But there's no room in your party!";
+                log += " But there's no room in your storage!";
                 TogglePlayerTurn(false);
             }
         }

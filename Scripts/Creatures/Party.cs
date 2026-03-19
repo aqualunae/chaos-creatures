@@ -16,6 +16,9 @@ public class Party : SaveableBehaviour
     [SerializeField, Tooltip("Pre-established creatures in the party.")]
     private CreatureInstance[] presetParty;
 
+    [SerializeField]
+    private GameObjectVariable storageRef;
+
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
     private Dictionary<int, SaveableCreature> creatures;
 
@@ -58,6 +61,11 @@ public class Party : SaveableBehaviour
             }
         }
         return false;
+    }
+
+    public bool AddToStorage(SaveableCreature creature)
+    {
+        return storageRef.Value.GetComponent<Party>().AddToParty(creature);
     }
 
     /// <summary>

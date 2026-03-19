@@ -82,6 +82,8 @@ public class ItemStorageWindow : InventoryWindow
             selectedItem = inventory.Items[index];
         }
 
+        SnapTo(index);
+
         // render item details
         if (selectedItem != null)
         {
@@ -190,5 +192,26 @@ public class ItemStorageWindow : InventoryWindow
     public override void UseItem(int index)
     {
         MoveItem(index);
+    }
+
+    /// <summary>
+    /// Centers the selected item in the scroll rect.
+    /// </summary>
+    /// <param name="target">Slot to center</param>
+    protected override void SnapTo(int index)
+    {
+        Canvas.ForceUpdateCanvases();
+        InventorySlot target = slots[index];
+
+        ScrollRect scrollRect = index < inventory.Items.Count ? slotContainer.GetComponentInParent<ScrollRect>() : storageSlotContainer.GetComponentInParent<ScrollRect>();
+
+        Vector2 viewportLocalPosition = scrollRect.viewport.localPosition;
+        Vector2 childLocalPosition   = target.transform.localPosition;
+        Vector2 result = new Vector2(
+            scrollRect.content.localPosition.x,
+            0 - (viewportLocalPosition.y + childLocalPosition.y)
+        );
+
+        scrollRect.content.localPosition = result;
     }
 }

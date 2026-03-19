@@ -119,6 +119,7 @@ public class InventoryWindow : MonoBehaviour
             return;
         }
 
+        SnapTo(index);
         InventoryItem selectedItem = inventory.Items[index];
         if (selectedItem != null)
         {
@@ -193,5 +194,26 @@ public class InventoryWindow : MonoBehaviour
 
         // refresh inventory to display changes
         Initialize();
+    }
+
+    /// <summary>
+    /// Centers the selected item in the scroll rect.
+    /// </summary>
+    /// <param name="index">Slot index to center</param>
+    protected virtual void SnapTo(int index)
+    {
+        Canvas.ForceUpdateCanvases();
+        InventorySlot target = slots[index];
+
+        ScrollRect scrollRect = slotContainer.GetComponentInParent<ScrollRect>();
+
+        Vector2 viewportLocalPosition = scrollRect.viewport.localPosition;
+        Vector2 childLocalPosition   = target.transform.localPosition;
+        Vector2 result = new Vector2(
+            scrollRect.content.localPosition.x,
+            0 - (viewportLocalPosition.y + childLocalPosition.y)
+        );
+
+        scrollRect.content.localPosition = result;
     }
 }

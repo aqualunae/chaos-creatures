@@ -23,11 +23,13 @@
     - do not allow fleeing from trainer battles, or heal opponent when you do
 
 - name creatures
-- handle friendship when party is full
 
 - creature storage
     - text displaying when storage is empty
     - implement creature release
+
+- party window and combat party window have a fixed slot count
+    - refactor them to draw the slots so that party size can be changed more easily
 
 - save to local storage -> player prefs
     - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
@@ -310,7 +312,14 @@
 
 - fixed: scrollbars don't appear on storage (required content fitter component)
 - fixed: custom rendered materials don't obey masks (added stencil to shader)
-- fixed: make space for scrollbar on inventory storage
+- fixed: not enough space for scrollbar on inventory storage
+
+- focusing a creature on the storage page now scrolls to that creature
+- fixed: keyboard trap when viewing creature details
+- creatures befriended while party is full are now sent to storage, space allowing
+- improved visible logging on creature storage, including actions and slot count
+- updated selection listener and creature slot interactions
+- added scroll-ability to party window and combat party window
 
 # Notes
 
@@ -462,6 +471,7 @@
 
 - https://www.answermind.blog/unlock-unity-master-persistent-data-path-flawless-game-saves
 - https://stackoverflow.com/a/65495834
+- https://stackoverflow.com/questions/30766020/how-to-scroll-to-a-specific-element-in-scrollrect-with-unity-ui
 
 ## Pauzing
 

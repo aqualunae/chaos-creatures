@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Assets.Scripts.Creatures;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PartyWindow : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class PartyWindow : MonoBehaviour
 
     [SerializeField]
     protected CreatureOverviewWindow overviewWindow;
+
+    [SerializeField]
+    protected TextMeshProUGUI logField;
 
     protected Party party;
     protected bool toggle = true;
@@ -46,13 +51,28 @@ public class PartyWindow : MonoBehaviour
                 slots[i].gameObject.SetActive(false);
             }
         }
+
+        string count = $"({ party.CreatureCount }/{ party.Creatures.Count })";
+        if (logField != null)
+        {
+            logField.text = $"Your party creatures { count }";
+        }
     }
 
     /// <summary>
-    /// Select a creature.
+    /// Center a creature within the scroll view.
+    /// </summary>
+    /// <param name="index">Index of slot to center</param>
+    public void CenterCreature(int index)
+    {
+        SnapTo(slots[index]);
+    }
+
+    /// <summary>
+    /// View a creature's details.
     /// </summary>
     /// <param name="index">Creature slot selected</param>
-    public virtual void Select(int index)
+    public void ViewDetails(int index)
     {
         // prepares it for swapping slots
         // party.Select(index);
@@ -74,5 +94,25 @@ public class PartyWindow : MonoBehaviour
         {
             slots[i].ToggleDetails(toggle);
         }
+    }
+
+    /// <summary>
+    /// Centers the selected creature in the scroll rect.
+    /// </summary>
+    /// <param name="target">Creature slot to center</param>
+    private void SnapTo(CreatureSlot target)
+    {
+        Canvas.ForceUpdateCanvases();
+
+        ScrollRect scrollRect = slots[0].GetComponentInParent<ScrollRect>();
+
+        Vector2 viewportLocalPosition = scrollRect.viewport.localPosition;
+        Vector2 childLocalPosition   = target.transform.localPosition;
+        Vector2 result = new Vector2(
+            0 - (viewportLocalPosition.x + childLocalPosition.x),
+            scrollRect.content.localPosition.y
+        );
+
+        scrollRect.content.localPosition = result;
     }
 }

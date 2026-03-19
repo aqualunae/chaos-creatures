@@ -149,7 +149,6 @@ public class ProgressionSystem : SaveableBehaviour
 
         // check if new flags have been added
         AddNewFlags();
-        Debug.Log(flags.Count);
     }
 
     #endregion

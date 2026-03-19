@@ -8,7 +8,7 @@ public class CombatPartyWindow : PartyWindow
     /// Handle selecting a creature during combat, which sends them out to fight.
     /// </summary>
     /// <param name="index">Slot index of the party creature to send out.</param>
-    public override void Select(int index)
+    public void SendToCombat(int index)
     {
         // get the combat window and selected creature
         CombatWindow combatWindow = GetComponentInParent<CombatWindow>();

@@ -45,6 +45,11 @@ public class CreatureSlot : MonoBehaviour
         GetComponentInParent<SelectionListener>().OnSelect(index);
     }
 
+    public void Activate()
+    {
+        GetComponentInParent<SelectionListener>().OnActivate(index);
+    }
+
     /// <summary>
     /// Switch view between combat details and visual details.
     /// </summary>
