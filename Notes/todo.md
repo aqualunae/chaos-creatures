@@ -22,20 +22,20 @@
     - opponent quote on victory or defeat
     - do not allow fleeing from trainer battles, or heal opponent when you do
 
+- creature pairing
+    - animation when pairing creatures
+    - animation when hatching creature egg
+
 - name creatures
 
 - creature storage
     - text displaying when storage is empty
-    - implement creature release
 
-- party window and combat party window have a fixed slot count
-    - refactor them to draw the slots so that party size can be changed more easily
-
-- save to local storage -> player prefs
+- save to local storage - player prefs
     - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
 
 - creature calls on adoption screen
-- maybe also on selection in party?
+- maybe also on selection in party
 
 - item use logic
     - separate healing items from combat items?
@@ -47,11 +47,10 @@
     - "slot" for discarding items
     - confirmation popup
 - highlight item when it is being used or moved
+- items that affect local genetic probability
 
 - responsive ui scaling
     - canvas scaler & set transforms to stretch as needed
-
-- creature pairing
 
 - menus access the save master as needed?
 
@@ -314,12 +313,18 @@
 - fixed: custom rendered materials don't obey masks (added stencil to shader)
 - fixed: not enough space for scrollbar on inventory storage
 
+- updated world object artwork to allow color selection
 - focusing a creature on the storage page now scrolls to that creature
 - fixed: keyboard trap when viewing creature details
 - creatures befriended while party is full are now sent to storage, space allowing
 - improved visible logging on creature storage, including actions and slot count
 - updated selection listener and creature slot interactions
 - added scroll-ability to party window and combat party window
+
+- refactor party window and combat party window to draw the slots so that party size can be changed
+- refactor party window, combat party window, and creature storage window to be related and consistent
+- implement creature pairing
+- implement creature release
 
 # Notes
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using TMPro;
 using UnityEngine;
@@ -51,35 +52,49 @@ public class CombatStats : MonoBehaviour
     /// <summary>
     /// Pass in creature data so it can be rendered in the Combat Stats panel.
     /// </summary>
-    public void Initialize(string name, string species, int level, Stats stats)
+    public void Initialize(SaveableCreature creature)
     {
         // name, species, and level
         nameField.text = name;
-        speciesField.text = species;
+        speciesField.text = creature.species;
+        this.level = creature.level;
         levelField.text = $"Lvl {level}";
 
-        // values that will be used to calculate health
-        maxHealth = (int)stats.hp;
-        previousHealth = stats.currentHP;
-        currentHealth = stats.currentHP;
+        if (level > 0)
+        {
+            Stats stats = creature.stats;
+            // values that will be used to calculate health
+            maxHealth = (int)stats.hp;
+            previousHealth = stats.currentHP;
+            currentHealth = stats.currentHP;
 
-        // health rendering
-        healthField.text = $"{(int)stats.currentHP}/{(int)maxHealth} HP";
-        healthSlider.minValue = 0;
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = stats.currentHP;
+            // health rendering
+            healthField.text = $"{(int)stats.currentHP}/{(int)maxHealth} HP";
+            healthSlider.gameObject.SetActive(true);
+            healthSlider.minValue = 0;
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = stats.currentHP;
 
-        // values that will be used to calculate experience on victory
-        maxExperience = CreatureUtility.GetExperienceThreshold(level);
-        previousExperience = stats.exp;
-        currentExperience = stats.exp;
-        this.level = level;
-
-        // experience rendering
-        experienceField.text = $"{stats.exp}/{maxExperience} EXP";
-        experienceSlider.minValue = 0;
-        experienceSlider.maxValue = maxExperience;
-        experienceSlider.value = stats.exp;
+            // values that will be used to calculate experience on victory
+            maxExperience = CreatureUtility.GetExperienceThreshold(level);
+            previousExperience = stats.exp;
+            currentExperience = stats.exp;
+            
+            // experience rendering
+            experienceField.gameObject.SetActive(true);
+            experienceField.text = $"{stats.exp}/{maxExperience} EXP";
+            experienceSlider.gameObject.SetActive(true);
+            experienceSlider.minValue = 0;
+            experienceSlider.maxValue = maxExperience;
+            experienceSlider.value = stats.exp;
+        }
+        else
+        {
+            healthField.text = $"{ creature.details.eggSteps }/{ CreatureUtility.EggSteps } steps";
+            healthSlider.gameObject.SetActive(false);
+            experienceField.gameObject.SetActive(false);
+            experienceSlider.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

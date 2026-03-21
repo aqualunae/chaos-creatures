@@ -7,11 +7,14 @@ using UnityEngine.UI;
 
 public class PartyWindow : MonoBehaviour
 {
-    [SerializeField]
-    protected CreatureSlot[] slots;
+    [SerializeField, Tooltip("Where should slots be placed?")]
+    protected GameObject slotContainer;
+
+    [SerializeField, Tooltip("Creature slot prefab to instantiate.")]
+    protected GameObject slotPrefab;
 
     [SerializeField]
-    protected GameObjectVariable playerRef;
+    protected GameObjectVariable partyOwner;
 
     [SerializeField]
     protected CreatureOverviewWindow overviewWindow;
@@ -19,18 +22,107 @@ public class PartyWindow : MonoBehaviour
     [SerializeField]
     protected TextMeshProUGUI logField;
 
+    [SerializeField]
+    protected GameObject actionMenu;
+
+    [SerializeField]
+    protected GameObject main;
+
     protected Party party;
-    protected bool toggle = true;
+    protected bool showCombat = true;
+    protected List<CreatureSlot> slots;
+    protected int selectedIndex = -1;
+    protected Button[] actionButtons;
+
+    [SerializeField]
+    private TextMeshProUGUI moveModeLabel;
+
+    protected bool moveMode = false;
+    protected bool pairMode = false;
+
+    /// <summary>
+    /// Decides whether to move a creature or focus the action buttons.
+    /// Called when a creature is clicked or focused when an accept key is pressed.
+    /// </summary>
+    public void OnEnter()
+    {
+        if (moveMode)
+        {
+            MoveCreature();
+        }
+        else if (pairMode)
+        {
+            PairCreature();
+        }
+        else
+        {
+            GoToActions();
+        }
+    }
+
+    /// <summary>
+    /// Toggles move mode.
+    /// </summary>
+    public void ToggleMoveMode()
+    {
+        moveMode = !moveMode;
+        moveModeLabel.text = moveMode ? "Move Mode: ON" : "Move Mode: OFF";
+    }
+
+    protected virtual void OnEnable()
+    {
+        Initialize();
+    }
 
     /// <summary>
     /// Initializes the party window with creatures from the player's party.
     /// </summary>
-    protected void OnEnable()
+    public void Initialize()
     {
-        party = playerRef.Value.GetComponent<Party>();
+        actionButtons = actionMenu.GetComponentsInChildren<Button>();
+        for (int i = 0; i < actionButtons.Length; i++)
+        {
+            actionButtons[i].interactable = false;
+        }
+
+        if (moveModeLabel != null)
+        {
+            moveModeLabel.GetComponentInParent<Button>().interactable = true;
+            moveMode = false;
+            moveModeLabel.text = "Move Mode: OFF";
+        }
+
+        selectedIndex = -1;
+
+        party = partyOwner.Value.GetComponent<Party>();
+        if (slots == null)
+        {
+            slots = new List<CreatureSlot>();
+        }
         Refresh();
+        WriteLog();
 
         gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// If slots already exist, discard them.
+    /// </summary>
+    protected void PurgeSlots()
+    {
+        if (slots != null && slots.Count > 0)
+        {
+            for (int i = slots.Count - 1; i >= 0; i--)
+            {
+                slots[i].gameObject.SetActive(false);
+                slots.RemoveAt(i);
+            }
+        }
+    }
+
+    protected virtual Party GetParty()
+    {
+        return party;
     }
 
     /// <summary>
@@ -38,20 +130,44 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     protected virtual void Refresh()
     {
-        Dictionary<int, SaveableCreature> creatures = party.Creatures;
-        for (int i = 0; i < slots.Length; i++)
+        // purge old slots
+        PurgeSlots();
+
+        Dictionary<int, SaveableCreature> creatures = GetParty().Creatures;
+
+        // add party slots
+        for (int i = 0; i < creatures.Count; i++)
         {
+            GameObject slotObject = Instantiate(slotPrefab, slotContainer.transform);
+            CreatureSlot slot = slotObject.GetComponent<CreatureSlot>();
+            slots.Add(slot);
+
             if (creatures[i] != null)
             {
-                slots[i].gameObject.SetActive(true);
-                slots[i].Initialize(creatures[i], i);
+                slot.gameObject.SetActive(true);
+                slot.Initialize(creatures[i], i);
             }
             else
             {
-                slots[i].gameObject.SetActive(false);
+                slot.gameObject.SetActive(false);
             }
         }
 
+        if (selectedIndex != -1)
+        {
+            slots[selectedIndex].Focus();
+        }
+        else
+        {
+            main.GetComponent<SelectFirst>().Select();
+        }
+    }
+
+    /// <summary>
+    /// Writes a log to the header displaying the party creature capacity.
+    /// </summary>
+    protected virtual void WriteLog()
+    {
         string count = $"({ party.CreatureCount }/{ party.Creatures.Count })";
         if (logField != null)
         {
@@ -65,23 +181,47 @@ public class PartyWindow : MonoBehaviour
     /// <param name="index">Index of slot to center</param>
     public void CenterCreature(int index)
     {
+        selectedIndex = index;
+        for (int i = 0; i < actionButtons.Length; i++)
+        {
+            actionButtons[i].interactable = true;
+        }
+
         SnapTo(slots[index]);
     }
 
     /// <summary>
     /// View a creature's details.
     /// </summary>
-    /// <param name="index">Creature slot selected</param>
-    public void ViewDetails(int index)
+    public void ViewDetails()
     {
-        // prepares it for swapping slots
-        // party.Select(index);
-        // Refresh();
+        if (selectedIndex == -1)
+        {
+            Debug.Log("No valid creature selected");
+            logField.text = "Select a creature first to view their details.";
+            return;
+        }
 
-        SaveableCreature creature = party.GetByIndex(index);
-        overviewWindow.Initialize(creature);
-        overviewWindow.gameObject.SetActive(true);
-        gameObject.SetActive(false);
+        SaveableCreature creature = GetCreature();
+
+        if (creature != null)
+        {
+            overviewWindow.Initialize(creature);
+            overviewWindow.gameObject.SetActive(true);
+            main.SetActive(false);
+        }
+        else
+        {
+            logField.text = "Select a creature first to view their details.";
+        }
+    }
+
+    /// <summary>
+    /// Get the currently selected creature.
+    /// </summary>
+    protected virtual SaveableCreature GetCreature()
+    {
+        return party.GetByIndex(selectedIndex);
     }
 
     /// <summary>
@@ -89,18 +229,26 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     public void ToggleDetails()
     {
-        toggle = !toggle;
-        for (int i = 0; i < slots.Length; i++)
+        showCombat = !showCombat;
+        for (int i = 0; i < slots.Count; i++)
         {
-            slots[i].ToggleDetails(toggle);
+            slots[i].ToggleDetails(showCombat);
         }
+    }
+
+    /// <summary>
+    /// Focuses the first action button.
+    /// </summary>
+    public void GoToActions()
+    {
+        actionButtons[0].Select();
     }
 
     /// <summary>
     /// Centers the selected creature in the scroll rect.
     /// </summary>
     /// <param name="target">Creature slot to center</param>
-    private void SnapTo(CreatureSlot target)
+    protected void SnapTo(CreatureSlot target)
     {
         Canvas.ForceUpdateCanvases();
 
@@ -114,5 +262,91 @@ public class PartyWindow : MonoBehaviour
         );
 
         scrollRect.content.localPosition = result;
+    }
+
+    /// <summary>
+    /// Tells the party to prepare a creature for swapping slots,
+    /// or swap if a creature is already prepared.
+    /// </summary>
+    public virtual void MoveCreature()
+    {
+        party.Select(selectedIndex);
+        Refresh();
+        WriteLog();
+    }
+
+    /// <summary>
+    /// Tells the party to prepare a creature for pairing,
+    /// or execute pairing if a creature is already prepared.
+    /// </summary>
+    public void PairCreature()
+    {
+        SaveableCreature result = party.Pair(selectedIndex);
+        if (result == null)
+        {
+            logField.text = "Those creatures aren't compatible.";
+            pairMode = false;
+        }
+        else if (result.Equals(GetCreature()))
+        {
+            logField.text = $"Pair { result.creatureName } with which other creature?";
+            pairMode = true;
+        }
+        else
+        {
+            // TODO: add animation
+
+            string walkText = "Walk with it to see what's inside!";
+            if (party.AddToParty(result))
+            {
+                logField.text = $"An egg was added to your party! { walkText }";
+            }
+            else if (party.AddToStorage(result))
+            {
+                logField.text = $"An egg was added to storage! { walkText }";
+            }
+            else
+            {
+                logField.text = "You don't have space to pair creatures right now!";
+            }
+            pairMode = false;
+        }
+
+        Refresh();
+    }
+
+    protected bool confirmRelease = false;
+
+    [SerializeField]
+    protected TextMeshProUGUI releaseField;
+
+    public virtual void ReleaseCreature()
+    {
+        if (selectedIndex == -1)
+        {
+            return;
+        }
+
+        if (!confirmRelease)
+        {
+            releaseField.text = $"Release { GetCreature().creatureName }?";
+            confirmRelease = true;
+        }
+        else if (party.CreatureCount == 1)
+        {
+            logField.text = "You can't release your only party creature.";
+            confirmRelease = false;
+            releaseField.text = "Release";
+        }
+        else
+        {
+            logField.text = $"{ GetCreature().creatureName } has been released to the wild. Goodbye!";
+            party.RemoveFromParty(selectedIndex);
+            confirmRelease = false;
+            releaseField.text = "Release";
+            selectedIndex = -1;
+
+            Refresh();
+        }
     }
 }

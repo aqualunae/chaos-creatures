@@ -11,4 +11,9 @@ public class SelectFirst : MonoBehaviour
     {
         selectFirst.Select();
     }
+
+    public void Select()
+    {
+        selectFirst.Select();
+    }
 }

@@ -19,6 +19,12 @@ public class Party : SaveableBehaviour
     [SerializeField]
     private GameObjectVariable storageRef;
 
+    [SerializeField]
+    private SpeciesListVariable speciesList;
+
+    [SerializeField, Tooltip("Event that is fired when the player moves.")]
+    private Vector3Event movementEvent;
+
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
     private Dictionary<int, SaveableCreature> creatures;
 
@@ -153,24 +159,84 @@ public class Party : SaveableBehaviour
         creatures[first] = secondCreature;
     }
 
-    /// <summary>
-    /// Not used; where is the egg going?
-    /// </summary>
-    public bool PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
+    public SaveableCreature Pair(int index)
     {
-        // if (creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
-        // {
-        //     if (creatures[firstCreatureIndex].Species.Equals(creatures[secondCreatureIndex].Species))
-        //     {
-        //         CreatureEgg egg = labelledEggs[creatures[firstCreatureIndex].Species];
-        //         CreatureEgg instantiatedEgg = Instantiate(egg);
-        //         instantiatedEgg.InitializePair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
-        //         instantiatedEgg.transform.localScale = Vector2.one;
-        //         instantiatedEgg.transform.position = new Vector2(0.48f, -0.32f);
-        //         return true;
-        //     }
-        // }
-        return false;
+        if (selectedIndex == -1)
+        {
+            selectedIndex = index;
+            return creatures[index];
+        }
+        else
+        {
+            SaveableCreature child = PairPartyCreatures(selectedIndex, index);
+            selectedIndex = -1;
+            return child;
+        }
+    }
+
+    /// <summary>
+    /// Generate an offspring based on two parent creatures.
+    /// </summary>
+    private SaveableCreature PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
+    {
+        if (firstCreatureIndex != secondCreatureIndex && creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
+        {
+            string speciesName = creatures[firstCreatureIndex].species;
+            if (speciesName.Equals(creatures[secondCreatureIndex].species))
+            {
+                CreatureSpecies species = speciesList.GetSpecies(speciesName);
+                GeneticOdds childOdds = species.GetGeneticOdds(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
+                CreatureDetails childDetails = CreatureUtility.GetDetails(childOdds, true);
+                Stats stats = species.GetBaseStats();
+                Equipment equipment = new Equipment()
+                {
+                    braceletStyle = creatures[firstCreatureIndex].equipment.braceletStyle,
+                    baseColorTitle = creatures[firstCreatureIndex].equipment.baseColorTitle,
+                    accentColorTitle = creatures[secondCreatureIndex].equipment.accentColorTitle,
+                    charms = new string[3]
+                };
+                SaveableCreature child = new SaveableCreature()
+                {
+                    species = speciesName,
+                    creatureName = speciesName,
+                    level = 0,
+                    stats = stats,
+                    details = childDetails,
+                    equipment = equipment
+                };
+
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private void Start()
+    {
+        if (movementEvent != null)
+        {
+            movementEvent.AddListener(OnMove);
+        }
+    }
+
+    /// <summary>
+    /// Reduce egg step count for all party eggs.
+    /// Notify that one has hatched, if applicable.
+    /// </summary>
+    private void OnMove(Vector3 position)
+    {
+        for (int i = 0; i < partySize; i++)
+        {
+            if (creatures[i] != null && creatures[i].details.eggSteps > 0)
+            {
+                creatures[i].details.eggSteps--;
+                if (creatures[i].details.eggSteps == 0)
+                {
+                    creatures[i].level = 1;
+                    Debug.Log("Hatched!");
+                }
+            }
+        }
     }
 
     #region Saving

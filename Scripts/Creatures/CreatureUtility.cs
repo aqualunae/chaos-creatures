@@ -6,23 +6,34 @@ using System;
 
 public static class CreatureUtility
 {
+    private static readonly int eggSteps = 20;
+
+    public static int EggSteps
+    {
+        get => eggSteps;
+    }
+
     /// <summary>
-    /// Bias the odds in favor of one or two indices. If the indices match, the effect is increased.
+    /// Bias the odds in favor of one index, or the higher of two indices.
+    /// If the indices match, the effect is increased.
+    /// Higher indices than the indices passed in will be unaffected.
     /// </summary>
+    /// <param name="defaultOdds">An array of the chances of each option, pre-sorted from most common to rarest.</param>
     public static int[] AdjustOdds(int[] defaultOdds, int firstIndex, int secondIndex = -1)
     {
         int[] adjustedOdds = new int[defaultOdds.Length];
+        int higherIndex = secondIndex > firstIndex ? secondIndex : firstIndex;
         for (int i = 0; i < defaultOdds.Length; i++)
         {
             if (i == firstIndex && i == secondIndex)
             {
                 adjustedOdds[i] = defaultOdds[i] * 5;
             }
-            else if (i == firstIndex || i == secondIndex)
+            else if (i == higherIndex)
             {
                 adjustedOdds[i] = defaultOdds[i] * 2;
             }
-            else
+            else if (i < higherIndex)
             {
                 adjustedOdds[i] = (int)(defaultOdds[i] * 0.6);
             }
@@ -55,7 +66,7 @@ public static class CreatureUtility
     /// Get the genetic details of a creature based on given odds.
     /// </summary>
     /// <param name="odds">Chance of each possibility</param>
-    public static CreatureDetails GetDetails(GeneticOdds odds)
+    public static CreatureDetails GetDetails(GeneticOdds odds, bool isEgg = false)
     {
         int eyeColorIndex = WeightedRandom(odds.eyeColorRarity);
 
@@ -136,7 +147,8 @@ public static class CreatureUtility
             body = body,
             primary = primary,
             secondary = secondary,
-            tertiary = tertiary
+            tertiary = tertiary,
+            eggSteps = isEgg ? eggSteps : 0
         };
     }
 

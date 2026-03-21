@@ -129,6 +129,7 @@ namespace Assets.Scripts.Creatures
         public Trait primary;
         public Trait secondary;
         public Trait tertiary;
+        public int eggSteps = 0;
     }
 
     /// <summary>

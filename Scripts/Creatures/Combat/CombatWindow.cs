@@ -123,7 +123,7 @@ public class CombatWindow : MonoBehaviour
         for (int i = 0; i < playerParty.Creatures.Count; i++)
         {
             player = playerParty.GetByIndex(i);
-            if (player.stats.currentHP > 0)
+            if (player.stats.currentHP > 0 && player.level > 0)
             {
                 break;
             }
@@ -133,7 +133,7 @@ public class CombatWindow : MonoBehaviour
         playerSpecies = speciesList.GetSpecies(player.species);
         playerRenderer.Initialize(playerSpecies, player.details);
         playerDetails.Initialize(player);
-        playerStats.Initialize(player.creatureName, player.species, player.level, player.stats);
+        playerStats.Initialize(player);
         playerRenderer.FlipFacing();
 
         // remove skill buttons from a previous creature or combat instance
@@ -183,7 +183,7 @@ public class CombatWindow : MonoBehaviour
         opponentSpecies = speciesList.GetSpecies(opponent.species);
         opponentRenderer.Initialize(opponentSpecies, opponent.details);
         opponentDetails.Initialize(opponent);
-        opponentStats.Initialize(opponent.creatureName, opponent.species, opponent.level, opponent.stats);
+        opponentStats.Initialize(opponent);
         opponentRenderer.gameObject.SetActive(true);
 
         RefreshPlayer();
@@ -487,7 +487,7 @@ public class CombatWindow : MonoBehaviour
         
         // get the number of creatures the player has that are able to enter combat
         Party playerParty = playerRef.Value.GetComponent<Party>();
-        SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature?.stats.currentHP > 0).ToArray();
+        SaveableCreature[] healthyCreatures = playerParty.Creatures.Values.Where(creature => creature?.stats.currentHP > 0 && creature?.level > 0).ToArray();
         if (healthyCreatures.Length > 0)
         {
             // if there are healthy creatures remaining, open the party tab

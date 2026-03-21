@@ -28,7 +28,7 @@ public class CombatPartyWindow : PartyWindow
             Debug.Log("Invalid selection index");
         }
         // if the creature is healthy and ready to fight
-        else if (selectedCreature.stats.currentHP > 0)
+        else if (selectedCreature.stats.currentHP > 0 && selectedCreature.level > 0)
         {
             // party.Select() needs to be called twice
             // first to select the first slot
@@ -47,24 +47,40 @@ public class CombatPartyWindow : PartyWindow
         }
     }
 
+    public void SendToCombat()
+    {
+        if (selectedIndex != -1)
+        {
+            SendToCombat(selectedIndex);
+        }
+    }
+
     /// <summary>
     /// Rerender all slots.
     /// </summary>
     protected override void Refresh()
     {
+        // purge old slots
+        PurgeSlots();
+
         Dictionary<int, SaveableCreature> creatures = party.Creatures;
-        for (int i = 0; i < slots.Length; i++)
+
+        // add party slots
+        for (int i = 0; i < creatures.Count; i++)
         {
+            GameObject slotObject = Instantiate(slotPrefab, slotContainer.transform);
+            CreatureSlot slot = slotObject.GetComponent<CreatureSlot>();
+            slots.Add(slot);
+
             if (creatures[i] != null)
             {
-                slots[i].gameObject.SetActive(true);
-
+                slot.gameObject.SetActive(true);
                 // third parameter makes creatures with 0 HP non-selectable
-                slots[i].Initialize(creatures[i], i, creatures[i].stats.currentHP > 0);
+                slot.Initialize(creatures[i], i, creatures[i].stats.currentHP > 0 && creatures[i].level > 0);
             }
             else
             {
-                slots[i].gameObject.SetActive(false);
+                slot.gameObject.SetActive(false);
             }
         }
     }

@@ -4,47 +4,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreatureStorageWindow : MonoBehaviour
+public class CreatureStorageWindow : PartyWindow
 {
-    [SerializeField, Tooltip("Object that has a party. Generally the player.")]
-    private GameObjectVariable partyOwner;
-
-    [SerializeField, Tooltip("Where should slots be placed?")]
-    private GameObject slotContainer;
-
-    [SerializeField, Tooltip("Creature slot prefab to instantiate.")]
-    private GameObject slotPrefab;
-
     [SerializeField, Tooltip("Reference to the party that is being opened for storage.")]
     private GameObjectVariable storageRef;
 
     [SerializeField, Tooltip("Event that lets us pauze the game.")]
     private GameStateEvent pauzeEvent;
 
-    [SerializeField]
-    private CreatureOverviewWindow overviewWindow;
-
-    [SerializeField]
-    private Button[] actionButtons;
-
-    [SerializeField]
-    private TextMeshProUGUI label;
-
-    [SerializeField]
-    private GameObject main;
-
-    private Party party;
     private Party storage;
-    private List<CreatureSlot> slots;
     private bool viewingParty = false;
-    private int selectedIndex = -1;
-    private bool showCombat = true;
 
     /// <summary>
     /// Get party references, create slots list, initialize.
     /// </summary>
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        actionButtons = actionMenu.GetComponentsInChildren<Button>();
+
+        selectedIndex = -1;
+        
         pauzeEvent.Invoke(GameState.StorageWindow);
         storage = storageRef.Value.GetComponent<Party>();
 
@@ -64,91 +43,15 @@ public class CreatureStorageWindow : MonoBehaviour
         pauzeEvent.Invoke(GameState.Overworld);
     }
 
-    /// <summary>
-    /// If slots already exist, discard them.
-    /// </summary>
-    private void PurgeSlots()
+    protected override Party GetParty()
     {
-        if (slots != null && slots.Count > 0)
-        {
-            for (int i = slots.Count - 1; i >= 0; i--)
-            {
-                slots[i].gameObject.SetActive(false);
-                slots.RemoveAt(i);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Draw slots of party or storage.
-    /// </summary>
-    private void Initialize()
-    {
-        // purge old slots
-        PurgeSlots();
-
-        Party currentView = viewingParty ? party : storage;
-
-        // add party slots
-        for (int i = 0; i < currentView.Creatures.Count; i++)
-        {
-            GameObject slotObject = Instantiate(slotPrefab, slotContainer.transform);
-            CreatureSlot slot = slotObject.GetComponent<CreatureSlot>();
-            slots.Add(slot);
-
-            if (currentView.Creatures[i] != null)
-            {
-                slot.gameObject.SetActive(true);
-                slot.Initialize(currentView.Creatures[i], i);
-            }
-            else
-            {
-                slot.gameObject.SetActive(false);
-            }
-        }
-        
-        // select first slot
-        slots[0].GetComponentInChildren<Button>().Select();
-    }
-
-    /// <summary>
-    /// Centers the selected creature in the scroll rect.
-    /// </summary>
-    /// <param name="target">Creature slot to center</param>
-    private void SnapTo(CreatureSlot target)
-    {
-        Canvas.ForceUpdateCanvases();
-
-        ScrollRect scrollRect = slotContainer.GetComponentInParent<ScrollRect>();
-
-        Vector2 viewportLocalPosition = scrollRect.viewport.localPosition;
-        Vector2 childLocalPosition   = target.transform.localPosition;
-        Vector2 result = new Vector2(
-            0 - (viewportLocalPosition.x + childLocalPosition.x),
-            scrollRect.content.localPosition.y
-        );
-
-        scrollRect.content.localPosition = result;
-    }
-
-    /// <summary>
-    /// Set the selected creature by index.
-    /// </summary>
-    public void Select(int index)
-    {
-        selectedIndex = index;
-        for (int i = 0; i < actionButtons.Length; i++)
-        {
-            actionButtons[i].interactable = true;
-        }
-
-        SnapTo(slots[index]);
+        return viewingParty ? party : storage;
     }
 
     /// <summary>
     /// Move the creature from party to storage or vice versa.
     /// </summary>
-    public void MoveCreature()
+    public override void MoveCreature()
     {
         // establish which party you're displaying
         Party currentView = viewingParty ? party : storage;
@@ -160,7 +63,7 @@ public class CreatureStorageWindow : MonoBehaviour
         // if moving the creature would mean the player's party is empty, don't do it
         if (viewingParty && party.CreatureCount <= 1)
         {
-            label.text = "Cannot remove all creatures from party.";
+            logField.text = "Cannot remove all creatures from party.";
             return;
         }
 
@@ -169,43 +72,26 @@ public class CreatureStorageWindow : MonoBehaviour
         if (opposite.AddToParty(movingCreature))
         {
             currentView.RemoveFromParty(selectedIndex);
-            label.text = $"{ movingCreature.creatureName } has been moved to { target }.";
+            logField.text = $"{ movingCreature.creatureName } has been moved to { target }.";
         }
         else
         {
-            label.text = $"There's no more room in { target }.";
+            logField.text = $"There's no more room in { target }.";
         }
 
         // redraw slots
-        Initialize();
+        Refresh();
+
+        main.GetComponent<SelectFirst>().Select();
     }
 
     /// <summary>
-    /// Switch to the creature details window for the selected creature.
+    /// Get the currently selected creature.
     /// </summary>
-    public void ViewDetails()
+    protected override SaveableCreature GetCreature()
     {
         Party currentView = viewingParty ? party : storage;
-
-        if (selectedIndex == -1)
-        {
-            Debug.Log("No valid creature selected");
-            label.text = "Select a creature first to view their details.";
-            return;
-        }
-
-        SaveableCreature creature = currentView.GetByIndex(selectedIndex);
-
-        if (creature != null)
-        {
-            overviewWindow.Initialize(creature);
-            overviewWindow.gameObject.SetActive(true);
-            main.SetActive(false);
-        }
-        else
-        {
-            label.text = "Select a creature first to view their details.";
-        }
+        return currentView.GetByIndex(selectedIndex);
     }
 
     /// <summary>
@@ -219,31 +105,55 @@ public class CreatureStorageWindow : MonoBehaviour
     private void SwitchView(bool view)
     {
         viewingParty = view;
+        selectedIndex = -1;
 
         Party currentView = viewingParty ? party : storage;
-        string count = $"({ currentView.CreatureCount }/{ currentView.Creatures.Count })";
-        label.text = viewingParty ? $"Your party creatures { count }" : $"Creatures in storage { count }";
         for (int i = 0; i < actionButtons.Length; i++)
         {
             actionButtons[i].interactable = false;
         }
-        Initialize();
-    }
-
-    public void GoToActions()
-    {
-        actionButtons[0].Select();
+        Refresh();
+        WriteLog();
     }
 
     /// <summary>
-    /// Toggles between combat details and visual details.
+    /// Writes a log to the header displaying which party is being viewed and its creature capacity.
     /// </summary>
-    public void ToggleDetails()
+    protected override void WriteLog()
     {
-        showCombat = !showCombat;
-        for (int i = 0; i < slots.Count; i++)
+        Party currentView = viewingParty ? party : storage;
+        string count = $"({ currentView.CreatureCount }/{ currentView.Creatures.Count })";
+        logField.text = viewingParty ? $"Your party creatures { count }" : $"Creatures in storage { count }";
+    }
+
+    public override void ReleaseCreature()
+    {
+        if (selectedIndex == -1)
         {
-            slots[i].ToggleDetails(showCombat);
+            return;
+        }
+
+        Party currentView = viewingParty ? party : storage;
+
+        if (!confirmRelease)
+        {
+            releaseField.text = $"Release { GetCreature().creatureName }?";
+            confirmRelease = true;
+        }
+        else if (viewingParty && party.CreatureCount == 1)
+        {
+            logField.text = "You can't release your only party creature.";
+            confirmRelease = false;
+            releaseField.text = "Release";
+        }
+        else
+        {
+            logField.text = $"{ GetCreature().creatureName } has been released to the wild. Goodbye!";
+            currentView.RemoveFromParty(selectedIndex);
+            confirmRelease = false;
+            releaseField.text = "Release";
+
+            Refresh();
         }
     }
 }

@@ -32,7 +32,7 @@ public class CreatureSlot : MonoBehaviour
 
         CreatureSpecies species = speciesList.GetSpecies(creature.species);
         creatureRenderer.Initialize(species, creature.details);
-        combatStats.Initialize(creature.creatureName, creature.species, creature.level, creature.stats);
+        combatStats.Initialize(creature);
         visualStats.Initialize(creature);
         renderTarget.interactable = canSelect;
     }
@@ -48,6 +48,11 @@ public class CreatureSlot : MonoBehaviour
     public void Activate()
     {
         GetComponentInParent<SelectionListener>().OnActivate(index);
+    }
+
+    public void Focus()
+    {
+        renderTarget.Select();
     }
 
     /// <summary>

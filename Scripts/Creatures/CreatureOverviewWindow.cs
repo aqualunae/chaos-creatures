@@ -28,7 +28,7 @@ public class CreatureOverviewWindow : MonoBehaviour
         nameField.text = creature.creatureName;
         creatureRenderer.Initialize(species, creature.details);
         visualStats.Initialize(creature);
-        combatStats.Initialize("Combat", creature.species, creature.level, creature.stats);
+        combatStats.Initialize(creature);
         equipmentPanel.Initialize(creature.equipment);
     }
 }

@@ -35,6 +35,9 @@ public class CreatureRenderer : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer eyeShine;
 
+    [SerializeField]
+    private Sprite eggSprite;
+
     private CreatureSpecies species;
     private CreatureDetails details;
     private SpeciesOptions options;
@@ -51,7 +54,15 @@ public class CreatureRenderer : MonoBehaviour
         options = inSpecies.Options;
 
         Validate();
-        DrawCreature();
+
+        if (details.eggSteps > 0)
+        {
+            DrawEgg();
+        }
+        else
+        {
+            DrawCreature();
+        }
     }
 
     /// <summary>
@@ -188,6 +199,22 @@ public class CreatureRenderer : MonoBehaviour
         tertiaryPattern.sprite = species.GetSprite(GeneLocation.tertiary, details.tertiary.rarity, details.tertiary.patternIndex);
         tertiaryPattern.color = species.GetColor(false, details.tertiary.accentColorIndex);
         tertiaryPattern.sortingOrder = species.GetSortOrder(GeneLocation.tertiary, false); 
+    }
+
+    public void DrawEgg()
+    {
+        bodyBase.sprite = eggSprite;
+        bodyBase.color = species.EggColor;
+
+        eyeBase.color = Color.clear;
+        eyeShine.color = Color.clear;
+        bodyPattern.color = Color.clear;
+        primaryBase.color = Color.clear;
+        primaryPattern.color = Color.clear;
+        secondaryBase.color = Color.clear;
+        secondaryPattern.color = Color.clear;
+        tertiaryBase.color = Color.clear;
+        tertiaryPattern.color = Color.clear;
     }
 
     /// <summary>
