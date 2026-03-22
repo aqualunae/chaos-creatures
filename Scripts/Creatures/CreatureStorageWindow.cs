@@ -25,6 +25,7 @@ public class CreatureStorageWindow : PartyWindow
         selectedIndex = -1;
         
         pauzeEvent.Invoke(GameState.StorageWindow);
+        pauzeEvent.AddListener(PauzeListener);
         storage = storageRef.Value.GetComponent<Party>();
 
         party = partyOwner.Value.GetComponent<Party>();
@@ -32,6 +33,11 @@ public class CreatureStorageWindow : PartyWindow
         {
             slots = new List<CreatureSlot>();
         }
+        
+        main.SetActive(true);
+        overviewWindow.gameObject.SetActive(false);
+        nameField.gameObject.SetActive(false);
+
         SwitchView(false);
     }
 
@@ -40,7 +46,16 @@ public class CreatureStorageWindow : PartyWindow
     /// </summary>
     private void OnDisable()
     {
+        pauzeEvent.RemoveListener(PauzeListener);
         pauzeEvent.Invoke(GameState.Overworld);
+    }
+
+    private void PauzeListener(GameState state)
+    {
+        if (state == GameState.Overworld)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     protected override Party GetParty()

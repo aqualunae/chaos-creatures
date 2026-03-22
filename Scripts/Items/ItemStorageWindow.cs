@@ -23,6 +23,7 @@ public class ItemStorageWindow : InventoryWindow
     protected override void OnEnable()
     {
         pauzeEvent.Invoke(GameState.StorageWindow);
+        pauzeEvent.AddListener(PauzeListener);
         storage = storageRef.Value.GetComponent<Inventory>();
         base.OnEnable();
     }
@@ -32,7 +33,16 @@ public class ItemStorageWindow : InventoryWindow
     /// </summary>
     private void OnDisable()
     {
+        pauzeEvent.RemoveListener(PauzeListener);
         pauzeEvent.Invoke(GameState.Overworld);
+    }
+
+    private void PauzeListener(GameState state)
+    {
+        if (state == GameState.Overworld)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

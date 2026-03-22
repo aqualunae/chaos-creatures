@@ -79,6 +79,10 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
+        main.SetActive(true);
+        overviewWindow.gameObject.SetActive(false);
+        nameField.gameObject.SetActive(false);
+
         actionButtons = actionMenu.GetComponentsInChildren<Button>();
         for (int i = 0; i < actionButtons.Length; i++)
         {
@@ -346,6 +350,29 @@ public class PartyWindow : MonoBehaviour
             releaseField.text = "Release";
             selectedIndex = -1;
 
+            Refresh();
+        }
+    }
+
+    [SerializeField]
+    protected NameField nameField;
+
+    public void DisplayNameField()
+    {
+        if (selectedIndex != -1 && nameField != null)
+        {
+            nameField.gameObject.SetActive(true);
+            nameField.Initialize(GetCreature(), selectedIndex);
+        }
+    }
+
+    public void ChangeName(int index, string input)
+    {
+        bool success = GetParty().ChangeName(index, input);
+        logField.text = success ? $"Your creature's new name is {input}!" : $"{input} doesn't work well as a name.";
+        if (success)
+        {
+            nameField.gameObject.SetActive(false);
             Refresh();
         }
     }

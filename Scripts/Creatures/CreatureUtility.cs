@@ -3,6 +3,7 @@ using Assets.Scripts.Creatures;
 using Assets.Scripts.Creatures.Combat;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 public static class CreatureUtility
 {
@@ -160,5 +161,18 @@ public static class CreatureUtility
     public static int GetExperienceThreshold(int level)
     {
         return (int)Math.Pow(level * 5, 3) - (int)Math.Pow((level - 1) * 5, 3);
+    }
+
+    /// <summary>
+    /// Determines whether a string can be allowed as a name or similar.
+    /// </summary>
+    /// <param name="input">String to test</param>
+    /// <returns>True if safe</returns>
+    public static bool IsStringSafe(string input)
+    {
+        // allow alphanumeric characters, hyphen, apostrophe, tilde, period, exclaimation point, question mark
+        // maximum string length: 20
+        Regex regex = new Regex(@"^[a-zA-Z0-9-'~!.?]+$");
+        return regex.IsMatch(input) && input.Length <= 20;
     }
 }

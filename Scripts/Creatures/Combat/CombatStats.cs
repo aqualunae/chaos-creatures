@@ -55,7 +55,7 @@ public class CombatStats : MonoBehaviour
     public void Initialize(SaveableCreature creature)
     {
         // name, species, and level
-        nameField.text = name;
+        nameField.text = creature.creatureName;
         speciesField.text = creature.species;
         this.level = creature.level;
         levelField.text = $"Lvl {level}";

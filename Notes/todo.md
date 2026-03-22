@@ -27,9 +27,11 @@
     - animation when hatching creature egg
 
 - name creatures
+    - when befriending them
+    - when hatching them
 
 - creature storage
-    - text displaying when storage is empty
+    - display text when storage is empty
 
 - save to local storage - player prefs
     - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
@@ -321,10 +323,14 @@
 - updated selection listener and creature slot interactions
 - added scroll-ability to party window and combat party window
 
-- refactor party window and combat party window to draw the slots so that party size can be changed
-- refactor party window, combat party window, and creature storage window to be related and consistent
-- implement creature pairing
-- implement creature release
+- refactored party window and combat party window to draw the slots so that party size can be changed
+- refactored party window, combat party window, and creature storage window to be related and consistent
+- implemented creature pairing
+- implemented creature release
+
+- implemented creature naming
+- fixed: party windows don't close when pauze key is hit, and become impossible to interact with
+- fixed: party windows not return to their default state when opened after hitting the pauze key to close them
 
 # Notes
 

@@ -239,6 +239,22 @@ public class Party : SaveableBehaviour
         }
     }
 
+    /// <summary>
+    /// Changes the name of a creature.
+    /// </summary>
+    /// <param name="index">Index of the creature</param>
+    /// <param name="input">String to be its new name</param>
+    /// <returns>True if successful</returns>
+    public bool ChangeName(int index, string input)
+    {
+        if (creatures[index] != null && CreatureUtility.IsStringSafe(input))
+        {
+            creatures[index].creatureName = input;
+            return true;
+        }
+        return false;
+    }
+
     #region Saving
 
     // CreatureInstances don't save correctly, so they need to be converted to SaveableCreatures.
