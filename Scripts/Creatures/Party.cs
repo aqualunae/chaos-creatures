@@ -25,6 +25,12 @@ public class Party : SaveableBehaviour
     [SerializeField, Tooltip("Event that is fired when the player moves.")]
     private Vector3Event movementEvent;
 
+    [SerializeField, Tooltip("Event that is fired when the player makes progress in the game.")]
+    private StringEvent progressionTrigger;
+
+    [SerializeField]
+    private GameObjectVariable eventWindowRef;
+
     // Dictionary specifically so that there can be empty slots, for example if a specific creature is removed.
     private Dictionary<int, SaveableCreature> creatures;
 
@@ -233,7 +239,10 @@ public class Party : SaveableBehaviour
                 if (creatures[i].details.eggSteps == 0)
                 {
                     creatures[i].level = 1;
-                    Debug.Log("Hatched!");
+                    progressionTrigger.Invoke($"Hatch { creatures[i].species }");
+                    EventWindow eventWindow = eventWindowRef.Value.GetComponent<EventWindow>();
+                    eventWindow.Hatch(this, i);
+                    eventWindow.gameObject.SetActive(true);
                 }
             }
         }

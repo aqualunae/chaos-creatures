@@ -5,22 +5,22 @@ using UnityEngine.UI;
 public class DialogueWindow : MonoBehaviour
 {
     [SerializeField]
-    private TextMeshProUGUI nameField;
+    protected TextMeshProUGUI nameField;
 
     [SerializeField]
-    private TextMeshProUGUI dialogueField;
+    protected TextMeshProUGUI dialogueField;
 
     [SerializeField]
-    private Button nextButton;
+    protected Button nextButton;
 
     [SerializeField]
-    private GameStateEvent pauzeEvent;
+    protected GameStateEvent pauzeEvent;
 
     [SerializeField]
-    private Button challengeButton;
+    protected Button challengeButton;
 
-    private string[] dialogueLines;
-    private int currentLine;
+    protected string[] dialogueLines;
+    protected int currentLine;
 
     public void Initialize(string[] lines, string source = null, bool enableChallenge = false)
     {
@@ -42,7 +42,7 @@ public class DialogueWindow : MonoBehaviour
         pauzeEvent.AddListener(Escape);
     }
 
-    public void Next()
+    public virtual void Next()
     {
         // show the next line of dialogue
         currentLine++;
@@ -57,7 +57,7 @@ public class DialogueWindow : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         // unpauze
         pauzeEvent.RemoveListener(Escape);

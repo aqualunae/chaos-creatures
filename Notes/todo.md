@@ -24,11 +24,9 @@
 
 - creature pairing
     - animation when pairing creatures
-    - animation when hatching creature egg
 
 - name creatures
     - when befriending them
-    - when hatching them
 
 - creature storage
     - display text when storage is empty
@@ -332,6 +330,11 @@
 - fixed: party windows don't close when pauze key is hit, and become impossible to interact with
 - fixed: party windows not return to their default state when opened after hitting the pauze key to close them
 
+- updated accent font
+- updated button styling
+- added window and animation when a creature egg hatches
+- a creature hatching automatically prompts for a name
+
 # Notes
 
 ## Credits
@@ -339,6 +342,7 @@
 - music from [Tallbeard Studios](https://tallbeard.itch.io/)
 - sound effects from [bfxr](https://www.bfxr.net/)
 - visual effects from [BDragon1727](https://bdragon1727.itch.io/1050-rpg-effects-64x64)
+- accent font from [Impallari Type @ Google](https://fonts.google.com/specimen/Caveat+Brush?preview.script=Latn)
 
 ## Combat Flow
 

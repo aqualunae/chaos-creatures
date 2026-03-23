@@ -54,15 +54,16 @@ public class CombatStats : MonoBehaviour
     /// </summary>
     public void Initialize(SaveableCreature creature)
     {
-        // name, species, and level
-        nameField.text = creature.creatureName;
+        // species and level
         speciesField.text = creature.species;
         this.level = creature.level;
         levelField.text = $"Lvl {level}";
 
         if (level > 0)
         {
+            nameField.text = creature.creatureName;
             Stats stats = creature.stats;
+
             // values that will be used to calculate health
             maxHealth = (int)stats.hp;
             previousHealth = stats.currentHP;
@@ -90,7 +91,8 @@ public class CombatStats : MonoBehaviour
         }
         else
         {
-            healthField.text = $"{ creature.details.eggSteps }/{ CreatureUtility.EggSteps } steps";
+            nameField.text = "Egg";
+            healthField.text = $"{ CreatureUtility.EggSteps - creature.details.eggSteps }/{ CreatureUtility.EggSteps } steps";
             healthSlider.gameObject.SetActive(false);
             experienceField.gameObject.SetActive(false);
             experienceSlider.gameObject.SetActive(false);

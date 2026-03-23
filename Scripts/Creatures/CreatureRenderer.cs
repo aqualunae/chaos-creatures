@@ -201,7 +201,7 @@ public class CreatureRenderer : MonoBehaviour
         tertiaryPattern.sortingOrder = species.GetSortOrder(GeneLocation.tertiary, false); 
     }
 
-    public void DrawEgg()
+    private void DrawEgg()
     {
         bodyBase.sprite = eggSprite;
         bodyBase.color = species.EggColor;

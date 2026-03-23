@@ -47,7 +47,7 @@ public class ProgressionSystem : SaveableBehaviour
         {
             stats.victoryCount++;
         }
-        else if (trigger.Equals("Defeat"))
+        else if (trigger.Contains("Defeat"))
         {
             stats.defeatCount++;
         }

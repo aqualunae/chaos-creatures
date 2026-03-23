@@ -80,8 +80,8 @@ public class PartyWindow : MonoBehaviour
     public void Initialize()
     {
         main.SetActive(true);
-        overviewWindow.gameObject.SetActive(false);
-        nameField.gameObject.SetActive(false);
+        overviewWindow?.gameObject.SetActive(false);
+        nameField?.gameObject.SetActive(false);
 
         actionButtons = actionMenu.GetComponentsInChildren<Button>();
         for (int i = 0; i < actionButtons.Length; i++)
@@ -246,6 +246,10 @@ public class PartyWindow : MonoBehaviour
     public void GoToActions()
     {
         actionButtons[0].Select();
+        if (selectedIndex != -1)
+        {
+            slots[selectedIndex].ToggleSelection(true);
+        }
     }
 
     /// <summary>
@@ -335,6 +339,10 @@ public class PartyWindow : MonoBehaviour
         {
             releaseField.text = $"Release { GetCreature().creatureName }?";
             confirmRelease = true;
+            if (selectedIndex != -1)
+            {
+                slots[selectedIndex].ToggleSelection(true);
+            }
         }
         else if (party.CreatureCount == 1)
         {
@@ -363,7 +371,16 @@ public class PartyWindow : MonoBehaviour
         {
             nameField.gameObject.SetActive(true);
             nameField.Initialize(GetCreature(), selectedIndex);
+            ToggleActions(false);
         }
+    }
+
+    public void DisplayNameField(int index)
+    {
+        CenterCreature(index);
+        nameField.gameObject.SetActive(true);
+        nameField.Initialize(GetCreature(), index);
+        ToggleActions(false);
     }
 
     public void ChangeName(int index, string input)
@@ -373,7 +390,16 @@ public class PartyWindow : MonoBehaviour
         if (success)
         {
             nameField.gameObject.SetActive(false);
+            ToggleActions(true);
             Refresh();
+        }
+    }
+
+    private void ToggleActions(bool state)
+    {
+        foreach (Button button in actionButtons)
+        {
+            button.interactable = state;
         }
     }
 }

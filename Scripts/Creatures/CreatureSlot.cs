@@ -17,6 +17,9 @@ public class CreatureSlot : MonoBehaviour
     private Button renderTarget;
 
     [SerializeField]
+    private Image selectionSprite;
+
+    [SerializeField]
     private SpeciesListVariable speciesList;
 
     private int index;
@@ -63,5 +66,12 @@ public class CreatureSlot : MonoBehaviour
     {
         combatStats.gameObject.SetActive(state);
         visualStats.gameObject.SetActive(!state);
+    }
+
+    private Color visible = new Color(1, 1, 1, 0.6f);
+
+    public void ToggleSelection(bool selected)
+    {
+        selectionSprite.color = selected ? visible : Color.clear;
     }
 }

@@ -43,6 +43,12 @@ public class SceneInitializer : MonoBehaviour
     [SerializeField]
     private GameObjectVariable creatureStorageRef;
 
+    [SerializeField]
+    private EventWindow eventWindow;
+
+    [SerializeField]
+    private GameObjectVariable eventWindowRef;
+
     private GameObject instantiatedPlayer;
 
     private void Awake()
@@ -52,6 +58,7 @@ public class SceneInitializer : MonoBehaviour
         audioRef.Value = audioSource.gameObject;
         progressionRef.Value = progressionSystem.gameObject;
         creatureStorageRef.Value = creatureStorage.gameObject;
+        eventWindowRef.Value = eventWindow.gameObject;
 
         // get rid of ghosts
         if (playerRef.Value != null)

@@ -232,17 +232,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "7821cb21-d512-422f-adf3-b402c1e0654e",
-                    "path": "<Keyboard>/backspace",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Pauze",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "One Modifier",
                     "id": "6ad400d7-9af7-4e48-9fc9-f09ecf332f2c",
                     "path": "OneModifier",
@@ -675,17 +664,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Pauze",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4d6aa07a-00e3-43f1-8c78-42d804b22ad7",
-                    "path": "<Keyboard>/backspace",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
                     "action": "Pauze",
                     "isComposite": false,
                     "isPartOfComposite": false

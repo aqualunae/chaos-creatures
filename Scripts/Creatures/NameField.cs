@@ -39,6 +39,8 @@ public class NameField : MonoBehaviour
         titleField.text = $"Renaming { creature.creatureName }";
         speciesField.text = creature.species;
         levelField.text = $"Lvl { creature.level }";
+
+        inputField.Select();
     }
 
     public void OnConfirm()
