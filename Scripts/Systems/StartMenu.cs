@@ -24,15 +24,6 @@ public class StartMenu : MonoBehaviour
     [SerializeField]
     private Button loadGame;
 
-    /// <summary>
-    /// Combines the persistent data path, filename, and JSON extension.
-    /// </summary>
-    /// <returns>Full filepath of the save data.</returns>
-    private string GetSavePath()
-    {
-        return $"{Path.Combine(Application.persistentDataPath, filename.Value)}.json";
-    }
-
     private void Awake()
     {
         // dispose of ghosts
@@ -45,13 +36,13 @@ public class StartMenu : MonoBehaviour
         GetComponent<InputSystemUIInputModule>().actionsAsset.actionMaps[1].Enable();
 
         // set the load game button to disabled if there is no save data
-        loadGame.interactable = File.Exists(GetSavePath());
+        loadGame.interactable = File.Exists(SaveSystem.GetSavePath());
     }
 
     public void LoadGame()
     {
         // find and load the player's current scene
-        StreamReader reader = new StreamReader(GetSavePath());
+        StreamReader reader = new StreamReader(SaveSystem.GetSavePath());
         string jsonSaveData = reader.ReadToEnd();
         SaveSystem.SaveMaster saveMaster = JsonUtility.FromJson<SaveSystem.SaveMaster>(jsonSaveData);
         string playerSceneName = JsonUtility.FromJson<Mover.MoverSaveData>(saveMaster.saveables.Find(saveable => saveable.id.Contains("Player-Mover")).data).sceneName;
@@ -62,11 +53,11 @@ public class StartMenu : MonoBehaviour
     public void NewGame()
     {
         // get rid of previous save data
-        if (File.Exists(GetSavePath()))
+        if (File.Exists(SaveSystem.GetSavePath()))
         {
             // todo: ask for confirmation
             // todo: multiple save slots
-            File.Delete(GetSavePath());
+            File.Delete(SaveSystem.GetSavePath());
         }
 
         // initialize the player at the campgrounds entrance point

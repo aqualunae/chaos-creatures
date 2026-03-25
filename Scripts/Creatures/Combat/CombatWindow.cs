@@ -123,7 +123,7 @@ public class CombatWindow : MonoBehaviour
         for (int i = 0; i < playerParty.Creatures.Count; i++)
         {
             player = playerParty.GetByIndex(i);
-            if (player.stats.currentHP > 0 && player.level > 0)
+            if (player != null && player.stats.currentHP > 0 && player.level > 0)
             {
                 break;
             }

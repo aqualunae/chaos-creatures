@@ -57,7 +57,10 @@ public class SceneInitializer : MonoBehaviour
         gridRef.Value = grid;
         audioRef.Value = audioSource.gameObject;
         progressionRef.Value = progressionSystem.gameObject;
-        creatureStorageRef.Value = creatureStorage.gameObject;
+        if (creatureStorage != null)
+        {
+            creatureStorageRef.Value = creatureStorage.gameObject;
+        }
         eventWindowRef.Value = eventWindow.gameObject;
 
         // get rid of ghosts

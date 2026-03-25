@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class SaveSystem : MonoBehaviour
 {
-    [SerializeField, Tooltip("Name of the file to be saved. Do not include extension or path.")]
-    private StringVariable filename;
-
     [SerializeField, Tooltip("Event called when something happens to progress the game.")]
     private SaveEvent trigger;
 
@@ -18,14 +15,33 @@ public class SaveSystem : MonoBehaviour
     }
 
     private SaveMaster saveMaster;
+    private static readonly string filename = "ccdata";
 
     /// <summary>
     /// Combines the persistent data path, filename, and JSON extension.
     /// </summary>
     /// <returns>Full filepath of the save data.</returns>
-    private string GetSavePath()
+    public static string GetSavePath()
     {
-        return $"{Path.Combine(Application.persistentDataPath, filename.Value)}.json";
+        string savePath = Application.persistentDataPath;
+
+        #if UNITY_WEBGL
+        savePath = "idbfs/Chaos_Creatures_Data";
+        #endif
+
+        if (!Directory.Exists(savePath))
+        {
+            Directory.CreateDirectory(savePath);
+        }
+
+        string filepath = $"{Path.Combine(savePath, filename)}.txt";
+
+        // if (!File.Exists(filepath))
+        // {
+        //     File.CreateText(filepath);
+        // }
+
+        return filepath;
     }
 
     /// <summary>
@@ -44,9 +60,12 @@ public class SaveSystem : MonoBehaviour
             saveables = saveables
         };
         string saveData = JsonUtility.ToJson(saveMaster);
-        StreamWriter writer = new StreamWriter(GetSavePath());
-        writer.Write(saveData);
-        writer.Close();
+
+        File.WriteAllText(GetSavePath(), saveData);
+
+        // StreamWriter writer = new StreamWriter(GetSavePath());
+        // writer.Write(saveData);
+        // writer.Close();
     }
 
     /// <summary>
@@ -54,8 +73,9 @@ public class SaveSystem : MonoBehaviour
     /// </summary>
     public void OnLoad()
     {
-        StreamReader reader = new StreamReader(GetSavePath());
-        string jsonSaveData = reader.ReadToEnd();
+        // StreamReader reader = new StreamReader(GetSavePath());
+        // string jsonSaveData = reader.ReadToEnd();
+        string jsonSaveData = File.ReadAllText(GetSavePath());
         saveMaster = JsonUtility.FromJson<SaveMaster>(jsonSaveData);
         HashSet<SaveableBehaviour> saveableBehaviors = SaveableBehaviour.Instances;
         foreach(SaveableBehaviour saveableBehavior in saveableBehaviors)
@@ -73,7 +93,7 @@ public class SaveSystem : MonoBehaviour
                 saveableBehavior.OnNewGame();
             }
         }
-        reader.Close();
+        // reader.Close();
     }
 
     private void Awake()
@@ -115,6 +135,7 @@ public class SaveSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        Debug.Log("disabled");
         OnSave();
     }
 }

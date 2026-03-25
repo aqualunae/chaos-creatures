@@ -335,6 +335,10 @@
 - added window and animation when a creature egg hatches
 - a creature hatching automatically prompts for a name
 
+- fixed: saving does not work in the web build
+- fixed: the player sometimes loads into the thicket collider tilemap and becomes trapped
+- forced web build to use custom indexeddb path so that data is not inaccessible when build updates (in theory)
+
 # Notes
 
 ## Credits

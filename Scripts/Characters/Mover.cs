@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class Mover : SaveableBehaviour
 {
@@ -82,7 +83,8 @@ public class Mover : SaveableBehaviour
         nextPosition = transform.position;
     }
 
-    
+    bool inCollision = false;
+    int trappedForUpdates = 0;
 
     private void Update()
     {
@@ -122,6 +124,14 @@ public class Mover : SaveableBehaviour
                 isMoving = false;
             }
         }
+        else if (inCollision)
+        {
+            trappedForUpdates++;
+            if (trappedForUpdates > 50)
+            {
+                EscapeTrap();
+            }
+        }
     }
 
     /// <summary>
@@ -130,7 +140,14 @@ public class Mover : SaveableBehaviour
     /// <param name="collision">Object that this object is colliding with.</param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        inCollision = true;
         Stop();
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        trappedForUpdates = 0;
+        inCollision = false;
     }
 
     private bool stopAtNextSafePosition = false;
@@ -185,6 +202,27 @@ public class Mover : SaveableBehaviour
         };
 
         return saveable;
+    }
+
+    /// <summary>
+    /// Checks if this object is touching any tilemap colliders.
+    /// If it is, warps it to a safe point.
+    /// </summary>
+    private void EscapeTrap()
+    {
+        if (TryGetComponent<BoxCollider2D>(out var colliderSelf) && TryGetComponent<WarpSelf>(out var warpSelf))
+        {
+            TilemapCollider2D[] tilemapColliders = gridRef.Value.GetComponentsInChildren<TilemapCollider2D>();
+            foreach (TilemapCollider2D collider in tilemapColliders)
+            {
+                if (collider.IsTouching(colliderSelf))
+                {
+                    warpSelf.WarpToTarget();
+                    trappedForUpdates = 0;
+                    break;
+                }
+            }
+        }
     }
 
     public override void OnLoad(Saveable saveable)
