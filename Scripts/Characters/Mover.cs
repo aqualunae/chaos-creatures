@@ -25,13 +25,14 @@ public class Mover : SaveableBehaviour
     private GridVariable gridRef;
 
     private bool gamePauzed = false;
-
     private Vector3 nextPosition;
     private bool isMoving = false;
     private Vector3 gridDirection;
     private Vector3 gridSize;
     private Vector3 aimLocation;
     private Vector3 aimDirection;
+
+    private CharacterAnimator animator;
 
     public Vector3 AimLocation
     {
@@ -52,6 +53,8 @@ public class Mover : SaveableBehaviour
         aimDirection = Vector3.zero;
         gamePauzedEvent.AddListener(TogglePauze);
         isMoving = false;
+
+        animator = GetComponentInChildren<CharacterAnimator>();
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -79,8 +82,10 @@ public class Mover : SaveableBehaviour
 
         aimDirection = new Vector3(direction.x, direction.y);
         gridDirection = aimDirection * gridSize.x;
-        isMoving = true;
         nextPosition = transform.position;
+
+        isMoving = true;
+        animator?.Movement(direction);
     }
 
     bool inCollision = false;
@@ -157,7 +162,9 @@ public class Mover : SaveableBehaviour
         // called when the movement keys are released
         // set the movement direction to zero
         stopAtNextSafePosition = true;
+
         isMoving = false;
+        animator?.Movement(Vector2.zero);
     }
 
     public void Stop()
@@ -166,7 +173,9 @@ public class Mover : SaveableBehaviour
         // snap to the last safe position and reset the next position
         transform.position = lastPosition;
         nextPosition = lastPosition;
+
         isMoving = false;
+        animator?.Movement(Vector2.zero);
     }
 
     #region Saving

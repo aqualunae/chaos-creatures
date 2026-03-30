@@ -22,6 +22,12 @@
     - opponent quote on victory or defeat
     - do not allow fleeing from trainer battles, or heal opponent when you do
 
+- cutscenes can be done as animation
+    - https://www.youtube.com/watch?v=dS3gAxJGkhs
+
+- textmeshpro elements can have rich text
+    - https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichTextSupportedTags.html
+
 - creature pairing
     - animation when pairing creatures
 
@@ -31,11 +37,11 @@
 - creature storage
     - display text when storage is empty
 
-- save to local storage - player prefs
-    - https://discussions.unity.com/t/how-do-i-save-the-game-progress-in-webgl/851849/10
-
 - creature calls on adoption screen
 - maybe also on selection in party
+
+- text that is revealed one char at a time, with sound
+    - option to skip to end of line
 
 - item use logic
     - separate healing items from combat items?
@@ -47,7 +53,10 @@
     - "slot" for discarding items
     - confirmation popup
 - highlight item when it is being used or moved
-- items that affect local genetic probability
+- held items that affect genetic probability
+    - spawn rates
+    - chance of resembling parent
+    - chance of same pattern/color across multiple parts
 
 - responsive ui scaling
     - canvas scaler & set transforms to stretch as needed
@@ -338,6 +347,14 @@
 - fixed: saving does not work in the web build
 - fixed: the player sometimes loads into the thicket collider tilemap and becomes trapped
 - forced web build to use custom indexeddb path so that data is not inaccessible when build updates (in theory)
+
+### Week of March 25
+
+- added player movement animations
+- added mountain map
+- added ladders as warp points
+- implemented species: hollowyrm and petalpaw
+- updated randomized creatures
 
 # Notes
 
