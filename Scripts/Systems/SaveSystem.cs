@@ -135,7 +135,6 @@ public class SaveSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        Debug.Log("disabled");
         OnSave();
     }
 }

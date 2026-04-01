@@ -10,7 +10,9 @@ public enum GameState
     CombatWindow,
     AdoptionWindow,
     DialogueWindow,
-    StorageWindow
+    StorageWindow,
+    Cutscene,
+    SkipCutscene
 }
 
 [System.Serializable, CreateAssetMenu(fileName = "Event ", menuName = "Events/Game State")]

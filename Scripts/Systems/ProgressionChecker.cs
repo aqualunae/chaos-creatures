@@ -7,7 +7,7 @@ public class ProgressionChecker : MonoBehaviour
     public class Check
     {
         public string flag;
-        public UnityEvent result;
+        public UnityEvent<int> result;
     }
 
     [SerializeField]
@@ -16,19 +16,34 @@ public class ProgressionChecker : MonoBehaviour
     [SerializeField]
     private GameObjectVariable progressionRef;
 
+    [SerializeField, Tooltip("Event that is fired when the player makes progress in the game.")]
+    private StringEvent progressionTrigger;
+
     private void Start()
     {
         CheckFlags();
+        progressionTrigger.AddListener(CheckFlags);
     }
 
     private void CheckFlags()
     {
         ProgressionSystem progression = progressionRef.Value.GetComponent<ProgressionSystem>();
-        foreach(Check check in checks)
+        for (int i = 0; i < checks.Length; i++)
         {
-            if (progression.CheckFlag(check.flag))
+            if (progression.CheckFlag(checks[i].flag))
             {
-                check.result.Invoke();
+                checks[i].result.Invoke(i);
+            }
+        }
+    }
+
+    private void CheckFlags(string trigger)
+    {
+        for (int i = 0; i < checks.Length; i++)
+        {
+            if (checks[i].flag.Equals(trigger))
+            {
+                checks[i].result.Invoke(i);
             }
         }
     }

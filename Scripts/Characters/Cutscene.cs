@@ -3,11 +3,42 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Cutscene", menuName = "World/Cutscene")]
 public class Cutscene : ScriptableObject
 {
-    // cutscene title (might be displayed to player)
-    // cutscene id (used to label animations)
-    // triggers that unlock the cutscene (string)
-    // conditions that activate the cutscene (scene)
-    // array of keyframes
-    // each containing: one or more lines of dialogue, optional animation
-    // objects to instantiate for animation
+    [SerializeField, Tooltip("Title may be displayed to the player")]
+    private string title;
+
+    [SerializeField, Tooltip("ID_keyframeIndex is used to label animations")]
+    private string id;
+
+    [System.Serializable]
+    public class Keyframe
+    {
+        public string source;
+        public string[] lines;
+    }
+
+    [SerializeField, Tooltip("Dialogue and movements")]
+    private Keyframe[] keyframes;
+
+    [SerializeField, Tooltip("Actors to control for the cutscene")]
+    private GameObject[] actors;
+
+    public string Title
+    {
+        get => title;
+    }
+
+    public string ID
+    {
+        get => id;
+    }
+
+    public Keyframe[] Keyframes
+    {
+        get => keyframes;
+    }
+
+    public GameObject[] Actors
+    {
+        get => actors;
+    }
 }

@@ -64,7 +64,7 @@ public class DialogueWindow : MonoBehaviour
         pauzeEvent.Invoke(GameState.Overworld);
     }
 
-    public void Escape(GameState state)
+    public virtual void Escape(GameState state)
     {
         // if the pauze key is pressed during dialogue, close the dialogue window
         if (state == GameState.Overworld)

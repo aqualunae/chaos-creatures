@@ -66,6 +66,10 @@ public class InputHandler : MonoBehaviour
             {
                 gamePauzed = GameState.Overworld;
             }
+            else if (gamePauzed == GameState.Cutscene)
+            {
+                gamePauzed = GameState.SkipCutscene;
+            }
             else if (gamePauzed == GameState.Overworld)
             {
                 gamePauzed = GameState.PauzeMenu;

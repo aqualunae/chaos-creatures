@@ -7,13 +7,6 @@
     - opponent quote on victory or defeat
     - do not allow fleeing from trainer battles, or heal opponent when you do
 
-- cutscenes can be done as animation
-    - https://www.youtube.com/watch?v=dS3gAxJGkhs
-- text that is revealed one char at a time, with sound
-    - option to skip to end of line
-- textmeshpro elements can have rich text
-    - https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichTextSupportedTags.html
-
 - name creatures
     - when befriending them
 - creature storage
@@ -23,6 +16,11 @@
     - animation when pairing creatures
 - creature calls on adoption screen
 - maybe also on selection in party
+
+- add "return" button to combat party screen
+- labels should be clickable as well as what they're labelling
+- responsive ui scaling
+    - canvas scaler & set transforms to stretch as needed
 
 - item use logic
     - separate healing items from combat items?
@@ -39,10 +37,12 @@
     - chance of resembling parent
     - chance of same pattern/color across multiple parts
 
-- add "return" button to combat party screen
-- labels should be clickable as well as what they're labelling
-- responsive ui scaling
-    - canvas scaler & set transforms to stretch as needed
+- cutscenes can be done as animation
+    - https://www.youtube.com/watch?v=dS3gAxJGkhs
+- text that is revealed one char at a time, with sound
+    - option to skip to end of line
+- textmeshpro elements can have rich text
+    - https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichTextSupportedTags.html
 
 - logic for handling combat
     - aspect influence
@@ -342,6 +342,7 @@
 - updated randomized creatures
 
 - added animations and sounds to hollowyrm and petalpaw skills
+- added cutscene system
 
 # Notes
 
