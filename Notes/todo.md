@@ -2,21 +2,6 @@
 
 ## Next Up
 
-### Issues
-
-- storage item slot indices display incorrectly
-- opening the storage window by keyboard navigation clicks the first item instead of just selecting it
-    - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
-
-#### Path Feedback
-
-"a few more little cues here and there i think would basically be enough for me. a clear outline of the, idk? hit box? of whatever i need to click on, or the label also being clickable. a "return to combat" label in the menu."
-
-- labels should be clickable as well as what they're labelling
-- add "return" button to combat party screen
-
-### Features
-
 - trainer battles
     - pacing of sending out the opponent's next creature is off
     - opponent quote on victory or defeat
@@ -24,24 +9,20 @@
 
 - cutscenes can be done as animation
     - https://www.youtube.com/watch?v=dS3gAxJGkhs
-
+- text that is revealed one char at a time, with sound
+    - option to skip to end of line
 - textmeshpro elements can have rich text
     - https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichTextSupportedTags.html
 
-- creature pairing
-    - animation when pairing creatures
-
 - name creatures
     - when befriending them
-
 - creature storage
     - display text when storage is empty
 
+- creature pairing
+    - animation when pairing creatures
 - creature calls on adoption screen
 - maybe also on selection in party
-
-- text that is revealed one char at a time, with sound
-    - option to skip to end of line
 
 - item use logic
     - separate healing items from combat items?
@@ -58,16 +39,20 @@
     - chance of resembling parent
     - chance of same pattern/color across multiple parts
 
+- add "return" button to combat party screen
+- labels should be clickable as well as what they're labelling
 - responsive ui scaling
     - canvas scaler & set transforms to stretch as needed
-
-- menus access the save master as needed?
 
 - logic for handling combat
     - aspect influence
     - skills that influence stats
     - make sure stat changes are temporary
     - first skill use to be determined by speed
+
+- storage item slot indices display incorrectly
+- opening the storage window by keyboard navigation clicks the first item instead of just selecting it
+    - moving initialization functions from onenable to start prevents them from running when the window is reopened, but does prevent the first item from being clicked
 
 ## What I've Done
 
@@ -355,6 +340,8 @@
 - added ladders as warp points
 - implemented species: hollowyrm and petalpaw
 - updated randomized creatures
+
+- added animations and sounds to hollowyrm and petalpaw skills
 
 # Notes
 

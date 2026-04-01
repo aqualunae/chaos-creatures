@@ -4,7 +4,7 @@ using Assets.Scripts.Creatures.Combat;
 using UnityEngine;
 using static Item;
 
-[CreateAssetMenu(fileName = "Skill ", menuName = "Scriptable Objects/Skill")]
+[CreateAssetMenu(fileName = "Skill ", menuName = "Combat/Skill")]
 public class Skill : ScriptableObject
 {
     [SerializeField, Tooltip("Skill title.")]
