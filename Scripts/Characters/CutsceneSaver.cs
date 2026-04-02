@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CutscenePlayer))]
 public class CutsceneSaver : SaveableBehaviour
 {
     [SerializeField, Tooltip("List of cutscenes for this scene")]
     private Cutscene[] cutscenes;
+
+    [SerializeField]
+    private CutscenePlayer cutscenePlayer;
 
     // title and toggle when a cutscene has been played
     private Dictionary<string, bool> cutsceneHistory;
@@ -22,8 +24,9 @@ public class CutsceneSaver : SaveableBehaviour
 
         // find and play the cutscene
         Cutscene cutscene = cutscenes[index];
-        gameObject.SetActive(true);
-        GetComponent<CutscenePlayer>().PlayCutscene(cutscene);
+        cutscenePlayer.gameObject.SetActive(true);
+        cutscenePlayer.PlayCutscene(cutscene);
+        cutsceneHistory[cutscenes[index].Title] = true;
     }
 
     #region Saving
@@ -43,6 +46,7 @@ public class CutsceneSaver : SaveableBehaviour
 
     public override void OnNewGame()
     {
+        Debug.Log("new game");
         cutsceneHistory = new Dictionary<string, bool>();
         foreach (Cutscene cutscene in cutscenes)
         {

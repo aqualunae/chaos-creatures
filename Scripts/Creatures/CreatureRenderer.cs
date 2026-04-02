@@ -217,6 +217,22 @@ public class CreatureRenderer : MonoBehaviour
         tertiaryPattern.color = Color.clear;
     }
 
+    public void DrawEgg(CreatureSpecies species)
+    {
+        bodyBase.sprite = eggSprite;
+        bodyBase.color = species.EggColor;
+
+        eyeBase.color = Color.clear;
+        eyeShine.color = Color.clear;
+        bodyPattern.color = Color.clear;
+        primaryBase.color = Color.clear;
+        primaryPattern.color = Color.clear;
+        secondaryBase.color = Color.clear;
+        secondaryPattern.color = Color.clear;
+        tertiaryBase.color = Color.clear;
+        tertiaryPattern.color = Color.clear;
+    }
+
     /// <summary>
     /// Flip all sprite renderers on the horizontal axis.
     /// </summary>

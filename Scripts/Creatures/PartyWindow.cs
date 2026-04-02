@@ -225,7 +225,7 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     protected virtual SaveableCreature GetCreature()
     {
-        return party.GetByIndex(selectedIndex);
+        return GetParty().GetByIndex(selectedIndex);
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     public void PairCreature()
     {
-        SaveableCreature result = party.Pair(selectedIndex);
+        SaveableCreature result = GetParty().Pair(selectedIndex);
         if (result == null)
         {
             logField.text = "Those creatures aren't compatible.";
@@ -302,14 +302,12 @@ public class PartyWindow : MonoBehaviour
         }
         else
         {
-            // TODO: add animation
-
             string walkText = "Walk with it to see what's inside!";
-            if (party.AddToParty(result))
+            if (party.AddToParty(result) != -1)
             {
                 logField.text = $"An egg was added to your party! { walkText }";
             }
-            else if (party.AddToStorage(result))
+            else if (party.AddToStorage(result) != -1)
             {
                 logField.text = $"An egg was added to storage! { walkText }";
             }

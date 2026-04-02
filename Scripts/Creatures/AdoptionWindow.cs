@@ -31,6 +31,9 @@ public class AdoptionWindow : MonoBehaviour
     [SerializeField, Tooltip("Event that is fired when the player makes progress in the game.")]
     private StringEvent progressionTrigger;
 
+    [SerializeField]
+    private IntEvent nameEvent;
+
     private SaveableCreature[] creatures;
     private bool toggle = true;
     private int selection = -1;
@@ -124,17 +127,19 @@ public class AdoptionWindow : MonoBehaviour
     /// </summary>
     public void ConfirmSelection()
     {
-        // todo: let player name creature
-
         // add the selected creature to the player's party
         Party playerParty = playerRef.Value.GetComponent<Party>();
         playerParty.AddToParty(creatures[selection]);
+
+        // pauzeEvent.Invoke(GameState.Overworld);
 
         // tell the progression system that a new game has been started and the cutscene can be played
         progressionTrigger.Invoke("New Game");
 
         // close the window
-        pauzeEvent.Invoke(GameState.Overworld);
         gameObject.SetActive(false);
+
+        // trigger the name creature event
+        nameEvent.Invoke(0);
     }
 }

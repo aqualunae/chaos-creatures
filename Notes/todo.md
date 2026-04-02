@@ -5,20 +5,13 @@
 - trainer battles
     - pacing of sending out the opponent's next creature is off
     - opponent quote on victory or defeat
-    - do not allow fleeing from trainer battles, or heal opponent when you do
 
-- name creatures
-    - when befriending them
-- creature storage
-    - display text when storage is empty
-
-- creature pairing
-    - animation when pairing creatures
+- when pairing storage creatures, return to storage window
+    
 - creature calls on adoption screen
 - maybe also on selection in party
 
-- add "return" button to combat party screen
-- labels should be clickable as well as what they're labelling
+- adjust label interaction distance
 - responsive ui scaling
     - canvas scaler & set transforms to stretch as needed
 
@@ -39,6 +32,7 @@
 
 - cutscenes can be done as animation
     - https://www.youtube.com/watch?v=dS3gAxJGkhs
+    - search npcs by tag instead of by prefab
 - text that is revealed one char at a time, with sound
     - option to skip to end of line
 - textmeshpro elements can have rich text
@@ -343,6 +337,13 @@
 
 - added animations and sounds to hollowyrm and petalpaw skills
 - added cutscene system
+
+### Week of April 1
+
+- name creatures when befriending them or adopting them
+- do not allow fleeing from trainer battles
+- labels clickable as well as what they're labelling
+- animation when pairing creatures
 
 # Notes
 

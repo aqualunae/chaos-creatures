@@ -18,6 +18,18 @@ public class PauzeGame : MonoBehaviour
     [SerializeField]
     private AudioClip combatMusic;
 
+    [SerializeField]
+    private IntEvent namePartyEvent;
+
+    [SerializeField]
+    private PartyWindow partyWindow;
+
+    [SerializeField]
+    private IntEvent nameStorageEvent;
+
+    [SerializeField]
+    private PartyWindow creatureStorageWindow;
+
     private AudioClip overworldMusic;
     private GameState gameState;
 
@@ -25,6 +37,22 @@ public class PauzeGame : MonoBehaviour
     {
         pauzeEvent.AddListener(TogglePauzeByListener);
         overworldMusic = audioSource.clip;
+        namePartyEvent.AddListener(NamePartyCreature);
+        nameStorageEvent.AddListener(NameStorageCreature);
+    }
+
+    private void NamePartyCreature(int index)
+    {
+        pauzeEvent.Invoke(GameState.PauzeMenu);
+        partyWindow.gameObject.SetActive(true);
+        partyWindow.DisplayNameField(index);
+    }
+
+    private void NameStorageCreature(int index)
+    {
+        pauzeEvent.Invoke(GameState.StorageWindow);
+        creatureStorageWindow.gameObject.SetActive(true);
+        creatureStorageWindow.DisplayNameField(index);
     }
 
     // Only allow the pauze state to be toggled by the listener. Otherwise it results in unpredictable behaviour.
@@ -74,5 +102,7 @@ public class PauzeGame : MonoBehaviour
     private void OnDisable()
     {
         pauzeEvent.RemoveListener(TogglePauzeByListener);
+        namePartyEvent.RemoveListener(NamePartyCreature);
+        nameStorageEvent.RemoveListener(NameStorageCreature);
     }
 }

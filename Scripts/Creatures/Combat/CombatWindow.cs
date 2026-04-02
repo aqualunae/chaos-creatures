@@ -70,6 +70,12 @@ public class CombatWindow : MonoBehaviour
     [SerializeField]
     private SkillDetails skillDetails;
 
+    [SerializeField]
+    private IntEvent namePartyEvent;
+
+    [SerializeField]
+    private IntEvent nameStorageEvent;
+
     private SaveableCreature player;
     private SaveableCreature opponent;
     private List<SkillButton> skillButtons;
@@ -82,6 +88,8 @@ public class CombatWindow : MonoBehaviour
     private Party opponentParty;
     private string opponentName;
     private Skill[] playerSkills;
+    private int needsPartyName;
+    private int needsStorageName;
     
     /// <summary>
     /// Get the creature that is currently in combat for the player.
@@ -103,12 +111,12 @@ public class CombatWindow : MonoBehaviour
     /// Attempt to befriend the current opponent.
     /// </summary>
     /// <returns>True if successful</returns>
-    public bool BefriendCreature()
+    public int BefriendCreature()
     {
         return playerRef.Value.GetComponent<Party>().AddToParty(opponent);
     }
 
-    public bool StoreCreature()
+    public int StoreCreature()
     {
         return playerRef.Value.GetComponent<Party>().AddToStorage(opponent);
     }
@@ -185,6 +193,8 @@ public class CombatWindow : MonoBehaviour
         opponentDetails.Initialize(opponent);
         opponentStats.Initialize(opponent);
         opponentRenderer.gameObject.SetActive(true);
+        needsPartyName = -1;
+        needsStorageName = -1;
 
         RefreshPlayer();
 
@@ -198,6 +208,10 @@ public class CombatWindow : MonoBehaviour
         for (int i = 0; i < actionButtons.Length; i++)
         {
             actionButtons[i].interactable = true;
+        }
+        if (opponentParty != null)
+        {
+            endCombatButton.interactable = false;
         }
 
         // set up logging and pauze the overworld
@@ -461,6 +475,23 @@ public class CombatWindow : MonoBehaviour
         {
             endCombatButton.onClick.AddListener(ConfirmDefeat);
         }
+        else if (needsPartyName != -1 || needsStorageName != -1)
+        {
+            endCombatButton.onClick.AddListener(NameCreature);
+        }
+    }
+
+    private void NameCreature()
+    {
+        endCombatButton.onClick.RemoveListener(NameCreature);
+        if (needsPartyName != -1)
+        {
+            namePartyEvent.Invoke(needsPartyName);
+        }
+        else if (needsStorageName != -1)
+        {
+            nameStorageEvent.Invoke(needsStorageName);
+        }
     }
 
     private void HealOpponent()
@@ -605,22 +636,27 @@ public class CombatWindow : MonoBehaviour
         // if using a bracelet was successful, handle friendship
         if (itemData is Bracelet && result.success)
         {
-            if (BefriendCreature())
+            needsPartyName = BefriendCreature();
+            if (needsPartyName != -1)
             {
                 log += " It was added to your party.";
                 itemWasUsed = true;
                 EndCombat(true);
             }
-            else if (StoreCreature())
-            {
-                log += " It was added to your storage.";
-                itemWasUsed = true;
-                EndCombat(true);
-            }
             else
             {
-                log += " But there's no room in your storage!";
-                TogglePlayerTurn(false);
+                needsStorageName = StoreCreature();
+                if (needsStorageName != -1)
+                {
+                    log += " It was added to your storage.";
+                    itemWasUsed = true;
+                    EndCombat(true);
+                }
+                else
+                {
+                    log += " But there's no room in your storage!";
+                    TogglePlayerTurn(false);
+                }
             }
         }
         // if using a bracelet was unsuccessful, the player's turn is over

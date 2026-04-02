@@ -84,7 +84,7 @@ public class CreatureStorageWindow : PartyWindow
 
         // otherwise, if there's space in the target party, move it
         string target = viewingParty ? "storage" : "your party";
-        if (opposite.AddToParty(movingCreature))
+        if (opposite.AddToParty(movingCreature) != -1)
         {
             currentView.RemoveFromParty(selectedIndex);
             logField.text = $"{ movingCreature.creatureName } has been moved to { target }.";

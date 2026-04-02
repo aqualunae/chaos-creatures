@@ -61,7 +61,7 @@ public class Party : SaveableBehaviour
     /// Add a creature instance to party.
     /// </summary>
     /// <returns>True if successful.</returns>
-    public bool AddToParty(SaveableCreature creature)
+    public int AddToParty(SaveableCreature creature)
     {
         for (int i = 0; i < partySize; i++)
         {
@@ -69,13 +69,13 @@ public class Party : SaveableBehaviour
             {
                 creatures[i] = creature;
                 saveEvent.Invoke(SaveState.Save);
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
-    public bool AddToStorage(SaveableCreature creature)
+    public int AddToStorage(SaveableCreature creature)
     {
         return storageRef.Value.GetComponent<Party>().AddToParty(creature);
     }
@@ -185,7 +185,11 @@ public class Party : SaveableBehaviour
     /// </summary>
     private SaveableCreature PairPartyCreatures(int firstCreatureIndex, int secondCreatureIndex)
     {
-        if (firstCreatureIndex != secondCreatureIndex && creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null)
+        if (
+            firstCreatureIndex != secondCreatureIndex && 
+            creatures[firstCreatureIndex] != null && creatures[secondCreatureIndex] != null &&
+            creatures[firstCreatureIndex].level > 0 && creatures[secondCreatureIndex].level > 0
+        )
         {
             string speciesName = creatures[firstCreatureIndex].species;
             if (speciesName.Equals(creatures[secondCreatureIndex].species))
@@ -204,13 +208,16 @@ public class Party : SaveableBehaviour
                 SaveableCreature child = new SaveableCreature()
                 {
                     species = speciesName,
-                    creatureName = speciesName,
+                    creatureName = $"{speciesName} Egg",
                     level = 0,
                     stats = stats,
                     details = childDetails,
                     equipment = equipment
                 };
+                EventWindow eventWindow = eventWindowRef.Value.GetComponent<EventWindow>();
+                eventWindow.Pair(creatures[firstCreatureIndex], creatures[secondCreatureIndex]);
 
+                Debug.Log(child.level);
                 return child;
             }
         }
@@ -242,7 +249,6 @@ public class Party : SaveableBehaviour
                     progressionTrigger.Invoke($"Hatch { creatures[i].species }");
                     EventWindow eventWindow = eventWindowRef.Value.GetComponent<EventWindow>();
                     eventWindow.Hatch(this, i);
-                    eventWindow.gameObject.SetActive(true);
                 }
             }
         }

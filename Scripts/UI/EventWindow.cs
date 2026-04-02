@@ -23,13 +23,14 @@ public class EventWindow : DialogueWindow
     private SpeciesListVariable speciesList;
 
     [SerializeField]
-    private PartyWindow partyWindow;
+    private IntEvent nameEvent;
 
     private string nextAnimation;
     private string nextLine;
     private bool needsName;
     private Party party;
     private int index;
+    private GameState endState;
 
     public void OnEnable()
     {
@@ -39,12 +40,14 @@ public class EventWindow : DialogueWindow
 
     public void Hatch(Party party, int index)
     {
+        endState = GameState.Overworld;
         this.party = party;
         this.index = index;
         SaveableCreature creature = party.Creatures[index];
         CreatureSpecies species = speciesList.GetSpecies(creature.species);
         eggRenderer.color = species.EggColor;
         renderer3.Initialize(species, creature.details);
+        gameObject.SetActive(true);
         animator.Play("Base.Idle");
         dialogueField.text = $"The { creature.species } egg is ready to hatch!";
         nextAnimation = "Base.Hatch";
@@ -52,16 +55,19 @@ public class EventWindow : DialogueWindow
         needsName = true;
     }
 
-    public void Pair(SaveableCreature parent1, SaveableCreature parent2)
+    public void Pair(SaveableCreature parent1, SaveableCreature parent2, bool storage = false)
     {
+        endState = storage ? GameState.StorageWindow : GameState.PauzeMenu;
         CreatureSpecies species = speciesList.GetSpecies(parent1.species);
-        eggRenderer.color = species.EggColor;
         renderer1.Initialize(species, parent1.details);
         renderer2.Initialize(species, parent2.details);
-        animator.Play("Base.Pre-Pair");
+        renderer3.DrawEgg(species);
+        gameObject.SetActive(true);
+        animator.Play("Base.PrePair");
         dialogueField.text = $"{ parent1.creatureName } and { parent2.creatureName } are ready to pair!";
         nextAnimation = "Base.Pair";
         nextLine = $"{ parent1.creatureName } and { parent2.creatureName } produced an egg!";
+        needsName = false;
     }
 
     public override void Next()
@@ -75,13 +81,18 @@ public class EventWindow : DialogueWindow
         else if (needsName)
         {
             gameObject.SetActive(false);
-            pauzeEvent.Invoke(GameState.PauzeMenu);
-            partyWindow.gameObject.SetActive(true);
-            partyWindow.DisplayNameField(index);
+            nameEvent.Invoke(index);
         }
         else
         {
             gameObject.SetActive(false);
         }
+    }
+
+    protected override void OnDisable()
+    {
+        // unpauze
+        pauzeEvent.RemoveListener(Escape);
+        pauzeEvent.Invoke(endState);
     }
 }
