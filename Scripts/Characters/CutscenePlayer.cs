@@ -28,7 +28,7 @@ public class CutscenePlayer : DialogueWindow
         // note that whether the actors are active should be controlled by the animations
         foreach (GameObject actor in cutscene.Actors)
         {
-            GameObject[] instantiatedActors = PrefabUtility.FindAllInstancesOfPrefab(actor);
+            GameObject[] instantiatedActors = new GameObject[0]; // PrefabUtility.FindAllInstancesOfPrefab(actor);
             if (instantiatedActors.Length == 0)
             {
                 Debug.Log($"Could not find {actor.name}!");

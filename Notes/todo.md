@@ -12,8 +12,8 @@
 - maybe also on selection in party
 
 - adjust label interaction distance
-- responsive ui scaling
-    - canvas scaler & set transforms to stretch as needed
+
+- implement mobile controls
 
 - item use logic
     - separate healing items from combat items?
@@ -21,14 +21,14 @@
     - add and remove charms
 - implement item drag
 - removing item from inventory:
-    - delete it
-    - "slot" for discarding items
     - confirmation popup
 - highlight item when it is being used or moved
 - held items that affect genetic probability
     - spawn rates
     - chance of resembling parent
     - chance of same pattern/color across multiple parts
+
+- update web info page
 
 - cutscenes can be done as animation
     - https://www.youtube.com/watch?v=dS3gAxJGkhs
@@ -344,6 +344,11 @@
 - do not allow fleeing from trainer battles
 - labels clickable as well as what they're labelling
 - animation when pairing creatures
+
+- responsive ui scaling
+
+- added button to discard items
+- updated build template to enable scaling
 
 # Notes
 

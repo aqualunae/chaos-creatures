@@ -15,7 +15,7 @@ public class ItemStorageWindow : InventoryWindow
     private GameStateEvent pauzeEvent;
 
     protected Inventory storage;
-    private int selectedIndex = -1;
+    private int moveIndex;
 
     /// <summary>
     /// Pauze the game, find the storage inventory, and enable the player's inventory.
@@ -93,6 +93,11 @@ public class ItemStorageWindow : InventoryWindow
         }
 
         SnapTo(index);
+        selectedIndex = index;
+        // for (int i = 0; i < slots.Count; i++)
+        // {
+        //     slots[i].SetHighlight(i == index);
+        // }
 
         // render item details
         if (selectedItem != null)
@@ -116,72 +121,72 @@ public class ItemStorageWindow : InventoryWindow
     protected override void MoveItem(int index)
     {
         // only swap if two different slots were selected
-        if (index == selectedIndex)
+        if (index == moveIndex)
         {
-            selectedIndex = -1;
+            moveIndex = -1;
             Initialize();
             slots[index].GetComponent<Button>().Select();
             return;
         }
 
         // if a slot was previously selected
-        if (selectedIndex != -1)
+        if (moveIndex != -1)
         {
             // if both slots are in the player's inventory
-            if (selectedIndex < inventory.Items.Count && index < inventory.Items.Count)
+            if (moveIndex < inventory.Items.Count && index < inventory.Items.Count)
             {
-                inventory.Move(selectedIndex);
+                inventory.Move(moveIndex);
                 inventory.Move(index);
-                selectedIndex = -1;
+                moveIndex = -1;
             }
             // if both slots are in storage
-            else if (selectedIndex >= inventory.Items.Count && index >= inventory.Items.Count)
+            else if (moveIndex >= inventory.Items.Count && index >= inventory.Items.Count)
             {
-                storage.Move(selectedIndex - inventory.Items.Count);
+                storage.Move(moveIndex - inventory.Items.Count);
                 storage.Move(index - inventory.Items.Count);
-                selectedIndex = -1;
+                moveIndex = -1;
             }
             // if the first slot is in the player's inventory and the second slot is in storage
-            else if (selectedIndex < inventory.Items.Count && index >= inventory.Items.Count)
+            else if (moveIndex < inventory.Items.Count && index >= inventory.Items.Count)
             {
-                InventoryItem playerItem = inventory.Items[selectedIndex];
+                InventoryItem playerItem = inventory.Items[moveIndex];
                 InventoryItem storageItem = storage.Items[index - inventory.Items.Count];
 
                 if (playerItem != null && playerItem.title == storageItem?.title)
                 {
                     // if the stacks are the same, merge them
                     storage.Items[index - inventory.Items.Count].amount += playerItem.amount;
-                    inventory.Items[selectedIndex] = null;
+                    inventory.Items[moveIndex] = null;
                 }
                 else
                 {
                     // otherwise, swap them
-                    inventory.Items[selectedIndex] = storageItem;
+                    inventory.Items[moveIndex] = storageItem;
                     storage.Items[index - inventory.Items.Count] = playerItem;
                 }
             }
             // if the first slot is in storage and the second slot is in the player's inventory
-            else if (selectedIndex >= inventory.Items.Count && index < inventory.Items.Count)
+            else if (moveIndex >= inventory.Items.Count && index < inventory.Items.Count)
             {
                 InventoryItem playerItem = inventory.Items[index];
-                InventoryItem storageItem = storage.Items[selectedIndex - inventory.Items.Count];
+                InventoryItem storageItem = storage.Items[moveIndex - inventory.Items.Count];
                 
                 if (playerItem != null && playerItem.title == storageItem?.title)
                 {
                     // if the stacks are the same, merge them
                     inventory.Items[index].amount += storageItem.amount;
-                    storage.Items[selectedIndex - inventory.Items.Count] = null;
+                    storage.Items[moveIndex - inventory.Items.Count] = null;
                 }
                 else
                 {
                     // otherwise, swap them
                     inventory.Items[index] = storageItem;
-                    storage.Items[selectedIndex - inventory.Items.Count] = playerItem;
+                    storage.Items[moveIndex - inventory.Items.Count] = playerItem;
                 }
             }
 
             // reset selectedIndex
-            selectedIndex = -1;
+            moveIndex = -1;
 
             // after swapping items, refresh the inventory and select the item that was most recently selected
             Initialize();
@@ -190,7 +195,7 @@ public class ItemStorageWindow : InventoryWindow
         else
         {
             // if no slot was previously selected, select this slot.
-            selectedIndex = index;
+            moveIndex = index;
         }
     }
 
@@ -223,5 +228,48 @@ public class ItemStorageWindow : InventoryWindow
         );
 
         scrollRect.content.localPosition = result;
+    }
+
+    public override void DiscardItem()
+    {
+        if (selectedIndex == -1)
+        {
+            return;
+        }
+
+        InventoryItem item;
+        string log = GetDescriptionEmpty();
+
+        if (inventory.Items.Count <= selectedIndex)
+        {
+            // if the slot index is higher than the combined total inventory
+            if ((inventory.Items.Count + storage.Items.Count) <= selectedIndex)
+            {
+                VoidSelection();
+                return;
+            }
+
+            // discard a storage item
+            item = storage.Items[selectedIndex - inventory.Items.Count];
+            if (item != null)
+            {
+                log = $"{ item.title } has been discarded.";
+                storage.RemoveStack(selectedIndex - inventory.Items.Count);
+            }
+        }
+        else
+        {
+            // discard an inventory item
+            item = inventory.Items[selectedIndex];
+            if (item != null)
+            {
+                log = $"{ item.title } has been discarded.";
+                inventory.RemoveStack(selectedIndex);
+            }
+        }
+
+        selectedIndex = -1;
+        Initialize();
+        selectedItemDescription.text = log;
     }
 }

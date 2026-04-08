@@ -44,6 +44,7 @@ public class InventoryWindow : MonoBehaviour
     protected Inventory inventory;
     protected List<InventorySlot> slots;
     protected bool inventoryIsEmpty = true;
+    protected int selectedIndex = -1;
 
     // when enabled, move items instead of using them on click
     private bool moveMode = false;
@@ -121,6 +122,11 @@ public class InventoryWindow : MonoBehaviour
 
         SnapTo(index);
         InventoryItem selectedItem = inventory.Items[index];
+        selectedIndex = index;
+        // for (int i = 0; i < slots.Count; i++)
+        // {
+        //     slots[i].SetHighlight(i == index);
+        // }
         if (selectedItem != null)
         {
             Item selectedItemData = masterList.GetItem(selectedItem.title);
@@ -151,6 +157,7 @@ public class InventoryWindow : MonoBehaviour
     protected virtual void MoveItem(int index)
     {
         inventory.Move(index);
+        selectedIndex = index;
         Initialize();
         slots[index].GetComponent<Button>().Select();
     }
@@ -185,7 +192,7 @@ public class InventoryWindow : MonoBehaviour
     {
         selectedItemSprite.color = Color.clear;
         selectedItemTitle.text = "";
-        selectedItemDescription.text = inventoryIsEmpty ? "You don't have any items yet." : "Select an item to view its details.";
+        selectedItemDescription.text = GetDescriptionEmpty();
     }
 
     public virtual void ReduceStackByOne(int index)
@@ -194,6 +201,31 @@ public class InventoryWindow : MonoBehaviour
 
         // refresh inventory to display changes
         Initialize();
+    }
+
+    protected string GetDescriptionEmpty()
+    {
+        return inventoryIsEmpty ? "You don't have any items yet." : "Select an item to view its details.";
+    }
+
+    public virtual void DiscardItem()
+    {
+        if (selectedIndex == -1)
+        {
+            return;
+        }
+
+        string log = GetDescriptionEmpty();
+        InventoryItem item = inventory.Items[selectedIndex];
+        if (item != null)
+        {
+            log = $"{ item.title } has been discarded.";
+            inventory.RemoveStack(selectedIndex);
+        }
+        
+        selectedIndex = -1;
+        Initialize();
+        selectedItemDescription.text = log;
     }
 
     /// <summary>

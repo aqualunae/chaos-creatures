@@ -21,6 +21,9 @@ public class InventorySlot : MonoBehaviour
     [SerializeField]
     private ColorListVariable colorList;
 
+    [SerializeField]
+    private Image highlight;
+
     private int slotIndex;
     private SelectionListener itemListener;
 
@@ -52,6 +55,8 @@ public class InventorySlot : MonoBehaviour
 
         // slot numbering behaves unpredictably with multiple inventories, so let's disable it for now
         slotField.text = "";
+
+        SetHighlight(false);
     }
 
     /// <summary>
@@ -68,5 +73,10 @@ public class InventorySlot : MonoBehaviour
     public void UseItem()
     {
         itemListener.OnActivate(slotIndex);
+    }
+
+    public void SetHighlight(bool state)
+    {
+        // highlight.enabled = state;
     }
 }
