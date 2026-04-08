@@ -13,7 +13,25 @@
 
 - adjust label interaction distance
 
-- implement mobile controls
+- implement mobile overworld controls
+- arrows and interact button to appear on mobile
+- change text and button size?
+
+- animations continue when in combat
+    - on entering combat, bounce back to safe tile and stop animation
+- creatures are sent out on click; why do i have a send out button?
+- flee button on combat party screen disabled
+- return buttons should be clicked on escape/pauze
+- guide can be pushed around
+- "toggle details" text doesn't fit on button
+- objects on arcade map not interactable
+- arcade entrance overlaps player
+- explain the rarity score somewhere
+- mountain entrance doesn't work
+- name creatures ui background doesn't overlay
+- increase player inventory slots
+
+- "youre the first to generate this creature genetic combo"
 
 - item use logic
     - separate healing items from combat items?
