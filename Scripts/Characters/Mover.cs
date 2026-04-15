@@ -77,6 +77,7 @@ public class Mover : SaveableBehaviour
     {
         if (gamePauzed)
         {
+            animator?.Movement(Vector2.zero);
             return;
         }
 

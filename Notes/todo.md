@@ -17,21 +17,10 @@
 - arrows and interact button to appear on mobile
 - change text and button size?
 
-- animations continue when in combat
-    - on entering combat, bounce back to safe tile and stop animation
 - creatures are sent out on click; why do i have a send out button?
 - flee button on combat party screen disabled
 - return buttons should be clicked on escape/pauze
-- guide can be pushed around
-- "toggle details" text doesn't fit on button
-- objects on arcade map not interactable
-- arcade entrance overlaps player
-- explain the rarity score somewhere
-- mountain entrance doesn't work
-- name creatures ui background doesn't overlay
-- increase player inventory slots
-
-- "youre the first to generate this creature genetic combo"
+- checking if tile has encounters doesn't work on mountain (false positives)
 
 - item use logic
     - separate healing items from combat items?
@@ -55,6 +44,7 @@
     - option to skip to end of line
 - textmeshpro elements can have rich text
     - https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichTextSupportedTags.html
+- if server: "youre the first to generate this creature genetic combo"
 
 - logic for handling combat
     - aspect influence
@@ -367,6 +357,22 @@
 
 - added button to discard items
 - updated build template to enable scaling
+
+### Week of April 8
+
+- fixed: objects on arcade map not interactable
+- item storage crates all access the same data
+- fixed: mountain entrance doesn't work
+- increased player inventory slots
+
+- fixed: issue with creature storage ref on arcade
+- fixed: name creatures ui background doesn't overlay
+- fixed: arcade entrance overlaps player
+- fixed: guide can be pushed around
+- added collector npc who explains rarity
+- fixed: npc party persists in encounter battles after npc battle
+- fixed: "toggle details" text doesn't fit on button: changed to "switch view"
+- fixed: animations continue when in combat
 
 # Notes
 

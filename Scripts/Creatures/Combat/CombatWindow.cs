@@ -168,6 +168,7 @@ public class CombatWindow : MonoBehaviour
     public void Initialize(SaveableCreature opponent)
     {
         this.opponent = opponent;
+        this.opponentParty = null;
 
         UpdateLog($"You've encountered a hostile { opponent.species }!");
 

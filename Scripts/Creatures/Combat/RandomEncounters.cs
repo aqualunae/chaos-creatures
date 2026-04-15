@@ -46,8 +46,8 @@ public class RandomEncounters : MonoBehaviour, IEventSystemHandler
     private void OnMove(Vector3 position)
     {
         // when the player moves, check whether they're on the tilemap
-        Vector3Int cellposition = tilemap.WorldToCell(position);
-        if (tilemap.HasTile(cellposition))
+        Vector3Int cellPosition = tilemap.WorldToCell(position);
+        if (tilemap.HasTile(cellPosition))
         {
             // if they are, there's a chance of starting combat
             movementElapsed++;
