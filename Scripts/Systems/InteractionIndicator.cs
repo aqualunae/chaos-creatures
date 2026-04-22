@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractionIndicator : MonoBehaviour
 {
@@ -13,6 +14,18 @@ public class InteractionIndicator : MonoBehaviour
     [SerializeField]
     private string playerTag;
 
+    [SerializeField]
+    private Image icon;
+
+    [SerializeField]
+    private Sprite desktopIcon;
+
+    [SerializeField]
+    private Sprite mobileIcon;
+
+    [SerializeField]
+    private IntVariable dprRef;
+
     private CircleCollider2D interactableField;
 
     private void Start()
@@ -24,6 +37,8 @@ public class InteractionIndicator : MonoBehaviour
         
         interactableField.isTrigger = true;
         interactableField.radius = this.radius;
+
+        icon.sprite = dprRef.Value > 1 ? mobileIcon : desktopIcon;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -19,7 +19,6 @@
 - creatures are sent out on click; why do i have a send out button?
 - flee button on combat party screen disabled
 - return buttons should be clicked on escape/pauze
-- checking if tile has encounters doesn't work on mountain (false positives)
 
 - update web info page
 
@@ -382,6 +381,13 @@
     * no, it returns Window.width & devicePixelResolution
 * mobile controls are automatically shown when DPR is greater than 1
 * make player stop moving when move buttons are released (onclick vs onpointerdown & onpointerup)
+
+### Week of April 22
+
+* hide mobile controls when not on overworld
+* add icon to mobile buttons
+* add keybind icon to interactable labels
+* add indicator when npc has something new to say
 
 # Notes
 

@@ -17,6 +17,9 @@ public class Dialogue : MonoBehaviour
     [SerializeField]
     private GameObjectVariable opponentRef;
 
+    [SerializeField]
+    private GameObject locationAlert;
+
     private bool challengeEnabled = false;
 
     public string CharacterName
@@ -42,8 +45,13 @@ public class Dialogue : MonoBehaviour
         window.Initialize(dialogueLines, dialogueSource, challengeEnabled);
     }
 
-    public void EnableChallenge()
+    public void EnableChallenge(bool state)
     {
-        challengeEnabled = true;
+        challengeEnabled = state;
+    }
+
+    public void EnableAlert(bool state)
+    {
+        locationAlert.SetActive(state);
     }
 }

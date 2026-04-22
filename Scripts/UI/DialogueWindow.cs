@@ -19,6 +19,9 @@ public class DialogueWindow : MonoBehaviour
     [SerializeField]
     protected Button challengeButton;
 
+    [SerializeField]
+    protected StringEvent progressionTrigger;
+
     protected string[] dialogueLines;
     protected int currentLine;
 
@@ -52,6 +55,7 @@ public class DialogueWindow : MonoBehaviour
         }
         else
         {
+            progressionTrigger.Invoke($"Dialogue: {nameField.text}");
             // if you're at the end, close the window
             gameObject.SetActive(false);
         }
