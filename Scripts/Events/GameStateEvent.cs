@@ -12,7 +12,8 @@ public enum GameState
     DialogueWindow,
     StorageWindow,
     Cutscene,
-    SkipCutscene
+    SkipCutscene,
+    MobileOverworld
 }
 
 [System.Serializable, CreateAssetMenu(fileName = "Event ", menuName = "Events/Game State")]

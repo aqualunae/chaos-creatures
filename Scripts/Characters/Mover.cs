@@ -61,7 +61,7 @@ public class Mover : SaveableBehaviour
 
     private void TogglePauze(GameState state)
     {
-        gamePauzed = state != GameState.Overworld;
+        gamePauzed = state != GameState.Overworld && state != GameState.MobileOverworld;
     }
 
     private void OnDisable()

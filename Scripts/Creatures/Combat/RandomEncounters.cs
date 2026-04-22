@@ -34,6 +34,7 @@ public class RandomEncounters : MonoBehaviour, IEventSystemHandler
     {
         // get the tilemap and listen for player movement
         tilemap = GetComponent<Tilemap>();
+        tilemap.RefreshAllTiles();
         movementEvent.AddListener(OnMove);
     }
 

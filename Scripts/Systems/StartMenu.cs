@@ -24,6 +24,9 @@ public class StartMenu : MonoBehaviour
     [SerializeField]
     private Button loadGame;
 
+    [SerializeField]
+    private IntVariable dprRef;
+
     private void Awake()
     {
         // dispose of ghosts
@@ -63,5 +66,12 @@ public class StartMenu : MonoBehaviour
         // initialize the player at the campgrounds entrance point
         entrancePoint.Value = target;
         SceneManager.LoadScene("Campgrounds", LoadSceneMode.Single);
+    }
+
+    // called by the webgl template to enable mobile controls
+    public void AssessDPR(int dpr)
+    {
+        Debug.Log($"DPR: {dpr}");
+        dprRef.Value = dpr;
     }
 }

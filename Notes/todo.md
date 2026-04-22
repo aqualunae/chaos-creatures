@@ -13,14 +13,15 @@
 
 - adjust label interaction distance
 
-- implement mobile overworld controls
-- arrows and interact button to appear on mobile
-- change text and button size?
+- mobile version
+    - change text and button size
 
 - creatures are sent out on click; why do i have a send out button?
 - flee button on combat party screen disabled
 - return buttons should be clicked on escape/pauze
 - checking if tile has encounters doesn't work on mountain (false positives)
+
+- update web info page
 
 - item use logic
     - separate healing items from combat items?
@@ -34,8 +35,6 @@
     - spawn rates
     - chance of resembling parent
     - chance of same pattern/color across multiple parts
-
-- update web info page
 
 - cutscenes can be done as animation
     - https://www.youtube.com/watch?v=dS3gAxJGkhs
@@ -373,6 +372,16 @@
 - fixed: npc party persists in encounter battles after npc battle
 - fixed: "toggle details" text doesn't fit on button: changed to "switch view"
 - fixed: animations continue when in combat
+
+### Week of April 15
+
+* fixed issue with random encounters where encounters were spawning on invisible residual tiles in the mountains
+
+* added preliminary mobile controls
+* does Screen.width return an accurate value on mobile?
+    * no, it returns Window.width & devicePixelResolution
+* mobile controls are automatically shown when DPR is greater than 1
+* make player stop moving when move buttons are released (onclick vs onpointerdown & onpointerup)
 
 # Notes
 

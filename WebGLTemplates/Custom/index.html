@@ -96,7 +96,8 @@
       // happening inside the engine, and you would instead like to size up
       // the canvas DOM size and WebGL render target sizes yourself.
       // config.matchWebGLToCanvasSize = false;
-
+      // config.devicePixelRatio = window.devicePixelRatio;
+      
       // If you would like all file writes inside Unity Application.persistentDataPath
       // directory to automatically persist so that the contents are remembered when
       // the user revisits the site the next time, uncomment the following line:
@@ -155,6 +156,13 @@
                 document.querySelector("#unity-fullscreen-button").onclick = () => {
                   unityInstance.SetFullscreen(1);
                 };
+
+                // if the browser exposes devicePixelRatio, use it to set whether mobile controls are visible
+                if (window.devicePixelRatio)
+                {
+                  unityInstance.SendMessage("StartMenu", "AssessDPR", window.devicePixelRatio);
+                }
+                
 
 #if DEVELOPMENT_PLAYER
                 var profile = unityProfiler.createButton(unityInstance);

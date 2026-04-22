@@ -128,6 +128,11 @@ public class InputHandler : MonoBehaviour
             return;
         }
 
+        Interact();
+    }
+
+    public void Interact()
+    {
         // get the player's facing direction
         Vector3 direction = GetComponent<Mover>().AimDirection;
 

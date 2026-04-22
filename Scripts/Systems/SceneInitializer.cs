@@ -35,9 +35,6 @@ public class SceneInitializer : MonoBehaviour
     private ProgressionSystem progressionSystem;
 
     [SerializeField]
-    private WarpPoint[] warpPoints;
-
-    [SerializeField]
     private Party creatureStorage;
 
     [SerializeField]
@@ -48,6 +45,15 @@ public class SceneInitializer : MonoBehaviour
 
     [SerializeField]
     private GameObjectVariable eventWindowRef;
+
+    [SerializeField]
+    private MobileControls mobileControls;
+
+    [SerializeField]
+    private int mobileThreshold = 500;
+
+    [SerializeField]
+    private IntVariable dprRef;
 
     private GameObject instantiatedPlayer;
 
@@ -85,11 +91,18 @@ public class SceneInitializer : MonoBehaviour
             instantiatedPlayer.transform.position = entrancePoint.Value.Position;
         }
 
-        pauzeEvent.Invoke(GameState.Overworld);
-
-        foreach (WarpPoint point in warpPoints)
+        Debug.Log($"Screen: {Screen.width} x {Screen.height}");
+        Debug.Log($"DPR: {dprRef.Value}");
+        // if (Screen.width < mobileThreshold || Screen.height < mobileThreshold || dprRef.Value > 1)
+        if (dprRef.Value > 1)
         {
-            Debug.Log(point.SceneName);
+            mobileControls.EnableMobile(true);
         }
+        else
+        {
+            mobileControls.EnableMobile(false);
+        }
+
+        pauzeEvent.Invoke(GameState.Overworld);
     }
 }
