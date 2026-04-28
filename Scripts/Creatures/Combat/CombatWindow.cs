@@ -528,7 +528,14 @@ public class CombatWindow : MonoBehaviour
         }
         else
         {
-            progressionTrigger.Invoke("Defeat");
+            if (opponentParty != null)
+            {
+                progressionTrigger.Invoke($"Defeat: { opponentName }");
+            }
+            else
+            {
+                progressionTrigger.Invoke("Defeat: Random Encounter");
+            }
 
             // if there are no healthy creatures, the player is defeated
             defeatLog += " You don't have any more creatures that are able to fight.";

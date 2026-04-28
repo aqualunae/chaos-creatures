@@ -74,6 +74,10 @@ public class CreatureStorageWindow : PartyWindow
 
         // get the creature being moved
         SaveableCreature movingCreature = currentView.GetByIndex(selectedIndex);
+        if (movingCreature == null)
+        {
+            return;
+        }
 
         // if moving the creature would mean the player's party is empty, don't do it
         if (viewingParty && party.CreatureCount <= 1)

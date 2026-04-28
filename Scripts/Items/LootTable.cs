@@ -61,6 +61,10 @@ public class LootTable : ScriptableObject
     /// <param name="index">Index of the item</param>
     public Lootable GetLootable(int index)
     {
-        return lootItems[index];
+        if (lootItems.Length > index)
+        {
+            return lootItems[index];
+        }
+        return lootItems[0];
     }
 }

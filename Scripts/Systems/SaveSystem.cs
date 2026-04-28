@@ -35,6 +35,7 @@ public class SaveSystem : MonoBehaviour
         }
 
         string filepath = $"{Path.Combine(savePath, filename)}.txt";
+        Debug.Log(filepath);
 
         // if (!File.Exists(filepath))
         // {

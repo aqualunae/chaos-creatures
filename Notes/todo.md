@@ -4,21 +4,18 @@
 
 - trainer battles
     - pacing of sending out the opponent's next creature is off
-    - opponent quote on victory or defeat
 
 - when pairing storage creatures, return to storage window
     
 - creature calls on adoption screen
-- maybe also on selection in party
 
 - adjust label interaction distance
 
 - mobile version
     - change text and button size
 
-- creatures are sent out on click; why do i have a send out button?
-- flee button on combat party screen disabled
 - return buttons should be clicked on escape/pauze
+- disable party return button when current creature has been knocked out
 
 - update web info page
 
@@ -388,6 +385,12 @@
 * add icon to mobile buttons
 * add keybind icon to interactable labels
 * add indicator when npc has something new to say
+
+* opponent quote on victory or defeat
+* fixed: after moving a creature, clicking "move" again without selecting a new creature causes a crash
+* fixed: loot table in campgrounds crashes after moving from a scene with longer loot tables
+* removed actions menu from combat party window
+* fixed: collector checks guide's progression
 
 # Notes
 

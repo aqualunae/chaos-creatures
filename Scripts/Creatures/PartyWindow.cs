@@ -278,6 +278,10 @@ public class PartyWindow : MonoBehaviour
     /// </summary>
     public virtual void MoveCreature()
     {
+        if (selectedIndex == -1)
+        {
+            return;
+        }
         party.Select(selectedIndex);
         Refresh();
         WriteLog();
