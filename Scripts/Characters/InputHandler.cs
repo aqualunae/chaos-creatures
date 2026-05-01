@@ -14,6 +14,9 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private float interactDistance = 0.32f;
 
+    [SerializeField]
+    private VoidEvent cancelEvent;
+
     // [SerializeField]
     // private VoidEvent nextEvent;
 
@@ -60,9 +63,8 @@ public class InputHandler : MonoBehaviour
                 return;
             }
 
-            // toggle between pauze menu and overworld if one of them is active
             // allow exiting from the dialogue window and storage window
-            if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.DialogueWindow || gamePauzed == GameState.StorageWindow)
+            if (gamePauzed == GameState.DialogueWindow)
             {
                 gamePauzed = GameState.Overworld;
             }
@@ -70,10 +72,19 @@ public class InputHandler : MonoBehaviour
             {
                 gamePauzed = GameState.SkipCutscene;
             }
+            // if you're in the overworld, bring up the pauze menu
             else if (gamePauzed == GameState.Overworld)
             {
                 gamePauzed = GameState.PauzeMenu;
             }
+            // the pauze menu and storage windows handle their own cancel/pauze input, don't interfere
+            else if (gamePauzed == GameState.PauzeMenu || gamePauzed == GameState.StorageWindow)
+            {
+                cancelEvent.Invoke();
+                return;
+            }
+
+            // trigger the event
             pauzeEvent.Invoke(gamePauzed);
         }
     }

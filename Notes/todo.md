@@ -14,9 +14,6 @@
 - mobile version
     - change text and button size
 
-- return buttons should be clicked on escape/pauze
-- disable party return button when current creature has been knocked out
-
 - update web info page
 
 - item use logic
@@ -391,6 +388,9 @@
 * fixed: loot table in campgrounds crashes after moving from a scene with longer loot tables
 * removed actions menu from combat party window
 * fixed: collector checks guide's progression
+
+* added cancel listener to act as "back button" in multi-level menus
+* disable party return button when current creature has been knocked out
 
 # Notes
 

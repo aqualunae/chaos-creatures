@@ -90,6 +90,7 @@ public class CombatWindow : MonoBehaviour
     private Skill[] playerSkills;
     private int needsPartyName;
     private int needsStorageName;
+    private CombatPartyWindow partyWindow;
     
     /// <summary>
     /// Get the creature that is currently in combat for the player.
@@ -201,6 +202,10 @@ public class CombatWindow : MonoBehaviour
 
         // set the actions menu position that it should be returned to when the visual details view is closed
         actionMenuLocation = actionsMenu.transform.localPosition;
+
+        // get party window and enable its return button
+        partyWindow = GetComponentInChildren<CombatPartyWindow>(true);
+        partyWindow.EnableReturn(true);
 
         // get the buttons in the actions menu and make sure they're interactable
         actionButtons = actionsMenu.GetComponentsInChildren<Button>();
@@ -523,6 +528,8 @@ public class CombatWindow : MonoBehaviour
         if (healthyCreatures.Length > 0)
         {
             // if there are healthy creatures remaining, open the party tab
+            // don't let the player close the party tab without choosing a new creature
+            partyWindow.EnableReturn(false);
             TabSwitcher switcher = actionsMenu.GetComponent<TabSwitcher>();
             switcher.AutoSwitch(2);
         }

@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using Assets.Scripts.Creatures;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatPartyWindow : PartyWindow
 {
+    [SerializeField]
+    private Button returnButton;
+
     /// <summary>
     /// Handle selecting a creature during combat, which sends them out to fight.
     /// </summary>
@@ -83,5 +87,10 @@ public class CombatPartyWindow : PartyWindow
                 slot.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void EnableReturn(bool state)
+    {
+        returnButton.interactable = state;
     }
 }
