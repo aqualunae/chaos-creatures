@@ -24,6 +24,9 @@ public class InteractionIndicator : MonoBehaviour
     private Sprite mobileIcon;
 
     [SerializeField]
+    private bool showIcon = true;
+
+    [SerializeField]
     private IntVariable dprRef;
 
     private CircleCollider2D interactableField;
@@ -39,6 +42,7 @@ public class InteractionIndicator : MonoBehaviour
         interactableField.radius = this.radius;
 
         icon.sprite = dprRef.Value > 1 ? mobileIcon : desktopIcon;
+        icon.color = showIcon ? Color.white : Color.clear;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

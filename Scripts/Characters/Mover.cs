@@ -89,21 +89,21 @@ public class Mover : SaveableBehaviour
         animator?.Movement(direction);
     }
 
-    bool inCollision = false;
-    int trappedForUpdates = 0;
+    // bool inCollision = false;
+    // int trappedForUpdates = 0;
 
     private void Update()
     {
         // if the player is still moving towards the next position
-        if ((stopAtNextSafePosition || isMoving) && Vector2.Distance(transform.position, nextPosition) > gapCloseDistance)
+        if (isMoving && Vector2.Distance(transform.position, nextPosition) > gapCloseDistance)
         {
             transform.Translate(speed * Time.deltaTime * gridDirection);
         }
-        else if (isMoving || stopAtNextSafePosition)
+        else if (isMoving)
         {
             // if the player is close enough to the next position
             // snap them
-            transform.position = nextPosition;
+            // transform.position = nextPosition;
 
             // the aim direction is the tile past the object in the same direction it was moving
             aimLocation = transform.position + gridDirection;
@@ -117,7 +117,7 @@ public class Mover : SaveableBehaviour
 
             // if the next position has not been calculated and the player's move keys are held
             // (aim direction is the player's movement keys)
-            if (aimDirection.magnitude > 0.1f && !stopAtNextSafePosition)
+            if (aimDirection.magnitude > 0.1f)
             {
                 
                 // calculate the next position
@@ -126,43 +126,42 @@ public class Mover : SaveableBehaviour
             }
             else
             {
-                stopAtNextSafePosition = false;
                 isMoving = false;
             }
         }
-        else if (inCollision)
-        {
-            trappedForUpdates++;
-            if (trappedForUpdates > 50)
-            {
-                EscapeTrap();
-            }
-        }
+        // else if (inCollision)
+        // {
+        //     trappedForUpdates++;
+        //     if (trappedForUpdates > 500)
+        //     {
+        //         EscapeTrap();
+        //     }
+        // }
     }
 
     /// <summary>
     /// When the object collides with a static object, do not let it continue in that direction.
     /// </summary>
     /// <param name="collision">Object that this object is colliding with.</param>
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        inCollision = true;
-        Stop();
-    }
+    // private void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     // inCollision = true;
+    //     Stop();
+    // }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        trappedForUpdates = 0;
-        inCollision = false;
-    }
+    // private void OnCollisionExit2D(Collision2D collision)
+    // {
+    //     trappedForUpdates = 0;
+    //     inCollision = false;
+    // }
 
-    private bool stopAtNextSafePosition = false;
+    // private bool stopAtNextSafePosition = false;
 
     public void SlowStop()
     {
         // called when the movement keys are released
         // set the movement direction to zero
-        stopAtNextSafePosition = true;
+        // stopAtNextSafePosition = true;
 
         isMoving = false;
         animator?.Movement(Vector2.zero);
@@ -172,8 +171,8 @@ public class Mover : SaveableBehaviour
     {
         // called on collision or disable
         // snap to the last safe position and reset the next position
-        transform.position = lastPosition;
-        nextPosition = lastPosition;
+        // transform.position = lastPosition;
+        // nextPosition = lastPosition;
 
         isMoving = false;
         animator?.Movement(Vector2.zero);
@@ -228,7 +227,7 @@ public class Mover : SaveableBehaviour
                 if (collider.IsTouching(colliderSelf))
                 {
                     warpSelf.WarpToTarget();
-                    trappedForUpdates = 0;
+                    // trappedForUpdates = 0;
                     break;
                 }
             }

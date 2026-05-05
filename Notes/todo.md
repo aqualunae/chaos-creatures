@@ -2,6 +2,10 @@
 
 ## Next Up
 
+- allow accented characters in names
+    - font does not include accents, would need to change font
+- z-indexing weird in some places
+
 - trainer battles
     - pacing of sending out the opponent's next creature is off
 
@@ -391,6 +395,15 @@
 
 * added cancel listener to act as "back button" in multi-level menus
 * disable party return button when current creature has been knocked out
+
+### Week of April 29
+
+* fixed: spacebar symbol appears on walk-through warp points
+* improved color-coding of healing skills
+* added outline on quantity of items
+* removed snap-to-grid logic from player movement
+* changed unstuck from an automatic event on prologued tilemap collision to a button in the pauze menu
+* prevented double-use of items during combat
 
 # Notes
 

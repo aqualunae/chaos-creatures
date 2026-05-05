@@ -48,6 +48,8 @@ public class SkillButton : MonoBehaviour
             // instead of displaying it as a negative number, we display it as a positive number in a different color, such as green
             power.text = $"{skill.Power * -1}";
             power.color = healColor;
+            title.color = healColor;
+            aspect.color = healColor;
         }
         description.text = skill.Description;
     }

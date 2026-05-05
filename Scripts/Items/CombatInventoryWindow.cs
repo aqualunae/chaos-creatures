@@ -13,6 +13,7 @@ public class CombatInventoryWindow : InventoryWindow
     private CombatWindow combatWindow;
 
     private Dictionary<int, InventoryItem> slotContents;
+    private bool usingItem;
 
     public CombatWindow GetCombatWindow()
     {
@@ -38,6 +39,8 @@ public class CombatInventoryWindow : InventoryWindow
     protected override void Initialize()
     {
         PurgeSlots();
+
+        usingItem = false;
 
         // get only the combat items
         List<InventoryItem> combatItems = new List<InventoryItem>();
@@ -114,9 +117,8 @@ public class CombatInventoryWindow : InventoryWindow
     /// <param name="index">Slot index of the item to use.</param>
     public override void UseItem(int index)
     {
-        if (slotContents.Count <= index)
+        if (usingItem || slotContents.Count <= index)
         {
-            Debug.Log("Invalid index");
             return;
         }
 
@@ -124,6 +126,7 @@ public class CombatInventoryWindow : InventoryWindow
         InventoryItem selectedItem = slotContents[index];
         if (selectedItem != null)
         {
+            usingItem = true;
             // figure out what it is
             Item itemData = masterList.GetItem(selectedItem.title);
             
